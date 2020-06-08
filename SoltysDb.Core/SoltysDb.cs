@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SoltysDb.Core
 {
-    public class SoltysDb :IDisposable
+    public class SoltysDb : IDisposable
     {
         private DatabaseData data;
         public string FileName { get; }
@@ -51,17 +51,19 @@ namespace SoltysDb.Core
 
         public string Get(string key)
         {
-            var page = data.Read(1);
-            var dataString = Encoding.Default.GetString(page.RawData).Trim('\0');
-            var keyValuePair = dataString.Split(';');
-
-            if (key != keyValuePair[0])
+            var pages = data.ReadAll();
+            foreach (var page in pages)
             {
-                throw new DbKeyNotFoundException(key);
+                var dataString = Encoding.Default.GetString(page.RawData).Trim('\0');
+                var keyValuePair = dataString.Split(';');
+
+                if (keyValuePair[0] == key)
+                {
+                    return keyValuePair[1];
+                }
             }
 
-            return keyValuePair[1];
-
+            throw new DbKeyNotFoundException(key);
         }
 
         public void Dispose()

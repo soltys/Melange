@@ -23,9 +23,9 @@ namespace SoltysDb.Core.Test
         public void Insert_Get_AllowsToInsertStringUnderKey_ReturnsEqualsValueToInserted()
         {
             var sut = new SoltysDb();
-            sut.Insert("key1", "value1");
+            sut.Insert("key3", "value3"); 
             sut.Insert("key2", "value2");
-            sut.Insert("key3", "value3");
+            sut.Insert("key1", "value1");
 
             var value = sut.Get("key1");
 

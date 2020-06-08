@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 namespace SoltysDb.Core
@@ -34,6 +36,15 @@ namespace SoltysDb.Core
             this.dataStream.Read(dataPage.RawData, 0, Page.PageSize);
 
             return dataPage;
+        }
+
+        public IEnumerable<Page> ReadAll()
+        {
+            var pageAmount = this.dataStream.Length / Page.PageSize;
+            for (int i = 0; i < pageAmount; i++)
+            {
+                yield return Read(i + 1);
+            }
         }
 
         public void Dispose()

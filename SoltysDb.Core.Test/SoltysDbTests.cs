@@ -4,8 +4,6 @@ namespace SoltysDb.Core.Test
 {
     public class SoltysDbTests
     {
-
-
         [Fact]
         public void ParameterlessContructor_CreatesInMemoryDatabase_ReturnsTrue()
         {
@@ -18,18 +16,27 @@ namespace SoltysDb.Core.Test
         {
             var sut = new SoltysDb("file.db");
             Assert.False(sut.IsInMemoryDatabase);
-            Assert.Equal("file.db",sut.FileName);
+            Assert.Equal("file.db", sut.FileName);
         }
 
         [Fact]
         public void Insert_Get_AllowsToInsertStringUnderKey_ReturnsEqualsValueToInserted()
         {
             var sut = new SoltysDb();
-            sut.Insert("key", "value");
+            sut.Insert("key1", "value1");
+            sut.Insert("key2", "value2");
+            sut.Insert("key3", "value3");
 
-            var value = sut.Get("key");
+            var value = sut.Get("key1");
 
-            Assert.Equal("value", value);
+            Assert.Equal("value1", value);
+        }
+
+        [Fact]
+        public void Get_NotInsertedValue_ThrowsKeyNotFoundException()
+        {
+            var sut = new SoltysDb();
+            Assert.Throws<DbKeyNotFoundException>(() => sut.Get("key"));
         }
     }
 }

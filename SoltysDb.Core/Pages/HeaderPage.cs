@@ -8,7 +8,7 @@ namespace SoltysDb.Core
         public HeaderPage()
         {
             var byteHeader = Encoding.ASCII.GetBytes("SOLTYSDB");
-            Array.Copy(byteHeader, rawData, byteHeader.Length);
+            Array.Copy(byteHeader, RawData, byteHeader.Length);
         }
     }
 }

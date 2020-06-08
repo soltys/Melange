@@ -46,13 +46,22 @@ namespace SoltysDb.Core
         public void Insert(string key, string value)
         {
             var w = new DatabaseWriter(data);
-            w.Write(new DataPage(Encoding.Default.GetBytes(value)));
+            w.Write(new DataPage(Encoding.Default.GetBytes($"{key};{value}")));
         }
 
         public string Get(string key)
         {
             var page = data.Read(1);
-            return Encoding.Default.GetString(page.RawData).Trim('\0'); 
+            var dataString = Encoding.Default.GetString(page.RawData).Trim('\0');
+            var keyValuePair = dataString.Split(';');
+
+            if (key != keyValuePair[0])
+            {
+                throw new DbKeyNotFoundException(key);
+            }
+
+            return keyValuePair[1];
+
         }
 
         public void Dispose()

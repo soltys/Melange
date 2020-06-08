@@ -11,7 +11,7 @@ namespace SoltysDb.Core
 
         public DataPage(byte[] data)
         {
-            Array.Copy(data, rawData, data.Length);
+            Array.Copy(data, RawData, data.Length);
         }
     }
 }

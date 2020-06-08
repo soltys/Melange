@@ -2,9 +2,7 @@
 {
     internal abstract class Page
     {
-        public const int PageSize = 128;
-        protected byte[] rawData = new byte[PageSize];
-
-        public byte[] RawData => rawData;
+        public const int PageSize = 4096;
+        public byte[] RawData { get; } = new byte[PageSize];
     }
 }

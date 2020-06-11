@@ -9,8 +9,8 @@ namespace SoltysDb.Core
 
         public Span<byte> Data
         {
-            get { return this.page.Data; }
-            set { this.page.Data = value; }
+            get => this.page.Data;
+            set => this.page.Data = value;
         }
 
         public byte[] RawData => this.page.RawData;

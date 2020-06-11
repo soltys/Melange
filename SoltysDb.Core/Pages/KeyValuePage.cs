@@ -11,19 +11,11 @@ namespace SoltysDb.Core
     {
         public Dictionary<string, string> KeyValuesStore
         {
-            get
-            {
-                var binFormatter = new BinaryFormatter();
-                var mStream = new MemoryStream(this.Data.ToArray());
-                var o = binFormatter.Deserialize(mStream);
-                return (Dictionary<string, string>) o;
-            }
+            get => KeyValueStoreSerializer.GetDictionaryFromBytes(this.Data);
             set
             {
-                var binFormatter = new BinaryFormatter();
-                var mStream = new MemoryStream();
-                binFormatter.Serialize(mStream, value);
-                mStream.ToArray().AsSpan().CopyTo(Data);
+                var dictBytes = KeyValueStoreSerializer.CovertDictionaryToBytes(value);
+                dictBytes.AsSpan().CopyTo(Data);
             }
         }
 

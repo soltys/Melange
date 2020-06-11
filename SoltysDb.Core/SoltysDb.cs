@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using SoltysDb.Core.Features.KeyValueStore;
 
 namespace SoltysDb.Core

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace SoltysDb.Core
 {
@@ -21,9 +21,12 @@ namespace SoltysDb.Core
 
         public void Write(IPage page)
         {
-            //move to end of stream
-            this.dataStream.Position = this.dataStream.Length;
+            if (page.Position == -1)
+            {
+                page.Position = (int)this.dataStream.Length;
+            }
 
+            this.dataStream.Position = page.Position;
             this.dataStream.Write(page.RawData, 0, page.RawData.Length);
         }
 
@@ -67,6 +70,20 @@ namespace SoltysDb.Core
             {
                 yield return Read(i + 1);
             }
+        }
+
+        public T FindFirst<T>() where T : class
+        {
+            var allPages = ReadAll().ToArray();
+            foreach (var page in allPages)
+            {
+                if (page is T pageFound)
+                {
+                    return pageFound;
+                }
+            }
+
+            return null;
         }
 
         public void Dispose()

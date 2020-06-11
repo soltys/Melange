@@ -12,6 +12,12 @@ namespace SoltysDb.Core
             set => this.page.Data = value;
         }
 
+        public int Position
+        {
+            get => this.page.Position;
+            set => this.page.Position = value;
+        }
+
         public byte[] RawData => this.page.RawData;
 
         public DataPage(Page page)

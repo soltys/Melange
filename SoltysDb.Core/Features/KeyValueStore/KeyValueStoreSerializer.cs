@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.NetworkInformation;
 using System.Text;
 
 namespace SoltysDb.Core
@@ -31,8 +30,10 @@ namespace SoltysDb.Core
             int keyLength = BitConverter.ToInt32(data[0..4]);
             int valueLength = BitConverter.ToInt32(data[4..8]);
 
-            var key = Encoding.Default.GetString(data.Slice(8, keyLength));
-            var value = Encoding.Default.GetString(data.Slice(8 + keyLength, valueLength));
+            const int stringsLengthMetadata = 8;
+
+            var key = Encoding.Default.GetString(data.Slice(stringsLengthMetadata, keyLength));
+            var value = Encoding.Default.GetString(data.Slice(stringsLengthMetadata + keyLength, valueLength));
 
             return new KeyValuePair<string, string>(key, value);
 
@@ -57,6 +58,8 @@ namespace SoltysDb.Core
 
         public static Dictionary<string, string> GetDictionaryFromBytes(Span<byte> bytes)
         {
+            const int stringsLengthMetadata = 8;
+
             var dictionaryLength = BitConverter.ToInt32(bytes[0..4]);
 
             Dictionary<string, string> output = new Dictionary<string, string>();
@@ -67,7 +70,7 @@ namespace SoltysDb.Core
                 var pair = GetKeyValuePairFromBytes(pairSlice);
                 byteOffset +=
                     pair.Key.Length + pair.Value.Length +
-                    8; //8 == length of metadata in each pair; 4 bytes for length of key and value
+                    stringsLengthMetadata; // length of metadata in each pair; 4 bytes for length of key and value
 
                 output.Add(pair.Key, pair.Value);
             }

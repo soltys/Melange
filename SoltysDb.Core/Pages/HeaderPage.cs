@@ -3,9 +3,9 @@ using System.Text;
 
 namespace SoltysDb.Core
 {
-    internal class HeaderPage : DataPage,IPage
+    internal class HeaderPage : DataPage
     {
-        public HeaderPage(Page page):base(page)
+        public HeaderPage(Page page) : base(page)
         {
             var byteHeader = Encoding.ASCII.GetBytes("SOLTYSDB");
             byteHeader.AsSpan().CopyTo(Data);

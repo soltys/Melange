@@ -6,7 +6,9 @@
         {
             var db = new Core.SoltysDb("file.db");
 
-            db.KV.Insert("myKey", "myValue");
+            db.KV.Insert("myKey0", "myValue11");
+            db.KV.Insert("myKey2", "myValue22");
+            db.KV.Insert("myKey3", "myValue33");
         }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SoltysDb.Core.Features.KeyValueStore
+﻿namespace SoltysDb.Core.Features.KeyValueStore
 {
     internal class KeyValueStore : Feature, IKeyValueStore
     {
@@ -12,26 +8,26 @@ namespace SoltysDb.Core.Features.KeyValueStore
 
         public void Insert(string key, string value)
         {
+            var kvPage = DatabaseData.FindFirst<KeyValuePage>() ?? new KeyValuePage(new Page());
+
             var w = new DatabaseWriter(DatabaseData);
-            var kvPage = new KeyValuePage(new Page());
-            kvPage.KeyValuesStore = new Dictionary<string, string>
-            {
-                {key, value}
-            };
+            var store = kvPage.GetStore();
+            
+            store.Add(key, value);
+
+            kvPage.SaveStore(store);
             w.Write(kvPage);
         }
 
         public string Get(string key)
         {
-            var pages = DatabaseData.ReadAll();
-            foreach (var page in pages)
+            var kvPage = DatabaseData.FindFirst<KeyValuePage>();
+            if (kvPage != null)
             {
-                if (page is KeyValuePage kvPage)
+                var store = kvPage.GetStore();
+                if (store.ContainsKey(key))
                 {
-                    if (kvPage.KeyValuesStore.ContainsKey(key))
-                    {
-                        return kvPage.KeyValuesStore[key];
-                    }
+                    return store[key];
                 }
             }
 

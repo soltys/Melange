@@ -13,5 +13,12 @@ namespace SoltysDb.Core.Test.Pages
             var page = new Page { PageType = PageType };
             Assert.Equal(expectedPageTypeByte, page.RawData[0]);
         }
+
+        [Fact]
+        public void Position_Initial_IsLessThanZero()
+        {
+            var page = new Page();
+            Assert.True(page.Position < 0 , "Position should be less than zero");
+        }
     }
 }

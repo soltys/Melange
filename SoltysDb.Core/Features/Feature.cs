@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SoltysDb.Core
+﻿namespace SoltysDb.Core
 {
     internal abstract class Feature
     {

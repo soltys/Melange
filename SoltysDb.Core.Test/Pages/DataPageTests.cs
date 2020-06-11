@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
 namespace SoltysDb.Core.Test
 {
@@ -14,7 +15,10 @@ namespace SoltysDb.Core.Test
         [Fact]
         public void RawData_ContainsDataFromConstructor()
         {
-            var sut = new DataPage(new Page(new byte[] { 2, 1, 2, 3 }));
+            var sut = new DataPage(new Page())
+            {
+                Data = new Span<byte>(new byte[] {1, 2, 3})
+            };
             Assert.Equal(Page.PageSize, sut.RawData.Length);
 
             Assert.Equal(1, sut.Data[0]);

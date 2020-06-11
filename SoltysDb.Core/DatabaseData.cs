@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using SoltysDb.Core.Pages;
 
 namespace SoltysDb.Core
 {
@@ -27,7 +28,7 @@ namespace SoltysDb.Core
             this.dataStream.Write(page.RawData, 0, page.RawData.Length);
         }
 
-        public Page Read(int pageOffset)
+        public IPage Read(int pageOffset)
         {
             var offset = Page.PageSize * pageOffset;
             this.dataStream.Position = offset;
@@ -35,10 +36,25 @@ namespace SoltysDb.Core
             var dataPage = new Page();
             this.dataStream.Read(dataPage.RawData, 0, Page.PageSize);
 
-            return dataPage;
+            return ProjectPage(dataPage); 
         }
 
-        public IEnumerable<Page> ReadAll()
+        private IPage ProjectPage(Page page)
+        {
+            switch (page.PageType)
+            {
+                case PageType.DataPage:
+                    return new DataPage(page);
+                case PageType.KeyValue:
+                    return new KeyValuePage(page);
+                case PageType.Header:
+                    return new HeaderPage(page);
+                default:
+                    return null;
+            }
+        }
+
+        public IEnumerable<IPage> ReadAll()
         {
             var pageAmount = this.dataStream.Length / Page.PageSize;
             for (int i = 0; i < pageAmount; i++)

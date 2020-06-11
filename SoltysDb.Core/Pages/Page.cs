@@ -5,22 +5,19 @@ namespace SoltysDb.Core
 {
     internal class Page
     {
-        //public PageType PageType { get; set; }
         public PageType PageType
         {
-            get
-            {
-                return (PageType)RawData[0];
-            }
-            set
-            {
-                RawData[0] = (byte)PageType;
-            }
+            get => (PageType)RawData[0];
+            set => RawData[0] = (byte)value;
         }
         public const int ReservedBytes = 1;
 
         private readonly Memory<byte> usableData;
-        public Span<byte> Data => usableData.Span;
+        public Span<byte> Data
+        {
+            get => usableData.Span;
+            set => value.CopyTo(usableData.Span);
+        }
 
         public const int PageSize = 4096;
         public byte[] RawData { get; } = new byte[PageSize];
@@ -31,10 +28,5 @@ namespace SoltysDb.Core
             usableData = new Memory<byte>(RawData, ReservedBytes, Page.PageSize - ReservedBytes);
         }
 
-        public Page(byte[] rawData)
-        {
-            Array.Copy(rawData, RawData, rawData.Length);
-            usableData = new Memory<byte>(RawData, ReservedBytes, Page.PageSize - ReservedBytes);
-        }
     }
 }

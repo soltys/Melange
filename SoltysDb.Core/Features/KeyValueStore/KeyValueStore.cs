@@ -14,8 +14,12 @@ namespace SoltysDb.Core.Features.KeyValueStore
         public void Insert(string key, string value)
         {
             var w = new DatabaseWriter(DatabaseData);
-            w.Write(new DataPage(
-                new Page(Encoding.Default.GetBytes($"{key};{value}"))));new Page(Encoding.Default.GetBytes($"{key};{value}"));
+            var kvPage = new KeyValuePage(new Page());
+            kvPage.KeyValuesStore = new Dictionary<string, string>
+            {
+                {key, value}
+            };
+            w.Write(kvPage);
         }
 
         public string Get(string key)
@@ -23,12 +27,12 @@ namespace SoltysDb.Core.Features.KeyValueStore
             var pages = DatabaseData.ReadAll();
             foreach (var page in pages)
             {
-                var dataString = Encoding.Default.GetString(page.RawData).Trim('\0');
-                var keyValuePair = dataString.Split(';');
-
-                if (keyValuePair[0] == key)
+                if (page is KeyValuePage kvPage)
                 {
-                    return keyValuePair[1];
+                    if (kvPage.KeyValuesStore.ContainsKey(key))
+                    {
+                        return kvPage.KeyValuesStore[key];
+                    }
                 }
             }
 

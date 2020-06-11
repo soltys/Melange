@@ -12,7 +12,5 @@ namespace SoltysDb.Core.Test.Pages
         {
             Assert.Throws<ArgumentNullException>(() => new KeyValuePage(null));
         }
-
-        
     }
 }

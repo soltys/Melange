@@ -7,7 +7,7 @@ namespace SoltysDb.Core.Test
     public class DatabaseDataTests
     {
         private readonly DatabaseData sut;
-        private DatabaseData SutFactory =>  new DatabaseData(new MemoryStream());
+        private DatabaseData SutFactory => new DatabaseData(new MemoryStream());
 
         public DatabaseDataTests()
         {
@@ -30,13 +30,16 @@ namespace SoltysDb.Core.Test
         [Fact]
         public void Read_AfterWrite_ReturnsEqualData()
         {
-            sut.Write(new DataPage(new Page(new byte[]{2,2,3})));
 
-            var page = sut.Read(0);
+            var dataPage = new DataPage(new Page());
+            dataPage.Data = new byte[] {1, 2, 3};
+            sut.Write(dataPage);
 
-            Assert.Equal(PageType.DataPage,page.PageType);
-            Assert.Equal(2,page.Data[0]);
-            Assert.Equal(3,page.Data[1]);
+            var page = (DataPage)sut.Read(0);
+
+            Assert.Equal(1, page.Data[0]);
+            Assert.Equal(2, page.Data[1]);
+            Assert.Equal(3, page.Data[2]);
         }
     }
 }

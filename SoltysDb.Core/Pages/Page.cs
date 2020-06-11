@@ -1,9 +1,8 @@
 ﻿using System;
-using SoltysDb.Core.Pages;
 
 namespace SoltysDb.Core
 {
-    internal class Page
+    internal class Page : IPage
     {
         public PageType PageType
         {

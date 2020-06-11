@@ -1,5 +1,4 @@
-﻿using SoltysDb.Core.Pages;
-using Xunit;
+﻿using Xunit;
 
 namespace SoltysDb.Core.Test.Pages
 {

@@ -1,5 +1,5 @@
-﻿using System.IO;
-using SoltysDb.Core.Pages;
+﻿using System;
+using System.IO;
 using Xunit;
 
 namespace SoltysDb.Core.Test
@@ -40,6 +40,17 @@ namespace SoltysDb.Core.Test
             Assert.Equal(1, page.Data[0]);
             Assert.Equal(2, page.Data[1]);
             Assert.Equal(3, page.Data[2]);
+        }
+
+        [Fact]
+        public void Read_InvalidPageType_ThrowsException()
+        {
+            var page = new Page();
+            page.RawData[0] = 200;
+
+            sut.Write(page);
+            Assert.Throws<DbInvalidOperationException>(()=>sut.Read(0));
+
         }
     }
 }

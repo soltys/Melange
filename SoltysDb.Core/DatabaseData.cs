@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using SoltysDb.Core.Pages;
 
 namespace SoltysDb.Core
 {
@@ -34,9 +33,16 @@ namespace SoltysDb.Core
             this.dataStream.Position = offset;
 
             var dataPage = new Page();
-            this.dataStream.Read(dataPage.RawData, 0, Page.PageSize);
+            int bytesRead = this.dataStream.Read(dataPage.RawData, 0, Page.PageSize);
 
-            return ProjectPage(dataPage); 
+            //Do not attempt to project a page since no data has been read
+            //TODO - throw exception here
+            if (bytesRead == 0)
+            {
+                return null;
+            }
+
+            return ProjectPage(dataPage);
         }
 
         private IPage ProjectPage(Page page)
@@ -50,7 +56,7 @@ namespace SoltysDb.Core
                 case PageType.Header:
                     return new HeaderPage(page);
                 default:
-                    return null;
+                    throw new DbInvalidOperationException("Cannot identified page type");
             }
         }
 

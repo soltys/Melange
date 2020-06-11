@@ -23,11 +23,11 @@ namespace SoltysDb.Core.Test
         public void Insert_Get_AllowsToInsertStringUnderKey_ReturnsEqualsValueToInserted()
         {
             var sut = new SoltysDb();
-            sut.Insert("key3", "value3"); 
-            sut.Insert("key2", "value2");
-            sut.Insert("key1", "value1");
+            sut.KV.Insert("key3", "value3"); 
+            sut.KV.Insert("key2", "value2");
+            sut.KV.Insert("key1", "value1");
 
-            var value = sut.Get("key1");
+            var value = sut.KV.Get("key1");
 
             Assert.Equal("value1", value);
         }
@@ -36,7 +36,7 @@ namespace SoltysDb.Core.Test
         public void Get_NotInsertedValue_ThrowsKeyNotFoundException()
         {
             var sut = new SoltysDb();
-            Assert.Throws<DbKeyNotFoundException>(() => sut.Get("key"));
+            Assert.Throws<DbKeyNotFoundException>(() => sut.KV.Get("key"));
         }
     }
 }

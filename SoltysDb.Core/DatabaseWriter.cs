@@ -9,7 +9,7 @@
             this.data = data;
         }
 
-        public void Write(Page page)
+        public void Write(IPage page)
         {
             this.data.Write(page);
         }

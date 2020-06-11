@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using SoltysDb.Core.Pages;
 using Xunit;
 
 namespace SoltysDb.Core.Test
@@ -22,20 +23,20 @@ namespace SoltysDb.Core.Test
         [Fact]
         public void Write_WritingHeaderFile_IsNewReturnsFalse()
         {
-            sut.Write(new HeaderPage());
+            sut.Write(new HeaderPage(new Page()));
             Assert.False(sut.IsNew());
         }
 
         [Fact]
         public void Read_AfterWrite_ReturnsEqualData()
         {
-            sut.Write(new DataPage(new byte[]{1,2,3}));
+            sut.Write(new DataPage(new Page(new byte[]{2,2,3})));
 
             var page = sut.Read(0);
 
-            Assert.Equal(1,page.RawData[0]);
-            Assert.Equal(2,page.RawData[1]);
-            Assert.Equal(3,page.RawData[2]);
+            Assert.Equal(PageType.DataPage,page.PageType);
+            Assert.Equal(2,page.Data[0]);
+            Assert.Equal(3,page.Data[1]);
         }
     }
 }

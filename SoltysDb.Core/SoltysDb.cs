@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using SoltysDb.Core.Features.KeyValueStore;
 
 namespace SoltysDb.Core
 {
@@ -11,6 +12,8 @@ namespace SoltysDb.Core
 
         private const string InMemoryDatabaseId = ":memory:";
         public bool IsInMemoryDatabase => FileName == InMemoryDatabaseId;
+
+        public IKeyValueStore KV { get; set; }
 
         public SoltysDb()
         {
@@ -38,34 +41,14 @@ namespace SoltysDb.Core
             if (data.IsNew())
             {
                 var writer = new DatabaseWriter(data);
-                writer.Write(new HeaderPage());
-            }
-        }
-
-
-        public void Insert(string key, string value)
-        {
-            var w = new DatabaseWriter(data);
-            w.Write(new DataPage(Encoding.Default.GetBytes($"{key};{value}")));
-        }
-
-        public string Get(string key)
-        {
-            var pages = data.ReadAll();
-            foreach (var page in pages)
-            {
-                var dataString = Encoding.Default.GetString(page.RawData).Trim('\0');
-                var keyValuePair = dataString.Split(';');
-
-                if (keyValuePair[0] == key)
-                {
-                    return keyValuePair[1];
-                }
+                writer.Write(new HeaderPage(new Page()));
             }
 
-            throw new DbKeyNotFoundException(key);
+            KV = new KeyValueStore(data);
         }
 
+
+     
         public void Dispose()
         {
             data?.Dispose();

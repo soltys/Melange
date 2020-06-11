@@ -19,7 +19,7 @@ namespace SoltysDb.Core
             return this.dataStream.Length == 0;
         }
 
-        public void Write(Page page)
+        public void Write(IPage page)
         {
             //move to end of stream
             this.dataStream.Position = this.dataStream.Length;
@@ -32,7 +32,7 @@ namespace SoltysDb.Core
             var offset = Page.PageSize * pageOffset;
             this.dataStream.Position = offset;
 
-            var dataPage = new DataPage();
+            var dataPage = new Page();
             this.dataStream.Read(dataPage.RawData, 0, Page.PageSize);
 
             return dataPage;

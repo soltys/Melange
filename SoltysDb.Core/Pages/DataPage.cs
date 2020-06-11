@@ -2,16 +2,15 @@
 
 namespace SoltysDb.Core
 {
-    internal class DataPage : Page
+    internal class DataPage : IPage
     {
-        public DataPage()
-        {
+        private readonly Page page;
+        public Span<byte> Data => this.page.Data;
+        public byte[] RawData => this.page.RawData;
 
-        }
-
-        public DataPage(byte[] data)
+        public DataPage(Page page)
         {
-            Array.Copy(data, RawData, data.Length);
+            this.page = page;
         }
     }
 }

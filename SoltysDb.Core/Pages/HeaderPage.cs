@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Text;
+using SoltysDb.Core.Pages;
 
 namespace SoltysDb.Core
 {
-    internal class HeaderPage : Page
+    internal class HeaderPage : DataPage,IPage
     {
-        public HeaderPage()
+        public HeaderPage(Page page):base(page)
         {
             var byteHeader = Encoding.ASCII.GetBytes("SOLTYSDB");
-            Array.Copy(byteHeader, RawData, byteHeader.Length);
+            byteHeader.AsSpan().CopyTo(Data);
         }
     }
 }

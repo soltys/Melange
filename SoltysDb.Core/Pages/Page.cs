@@ -2,31 +2,49 @@
 
 namespace SoltysDb.Core
 {
-    internal class Page : IPage
-    {
 
-        private const int PageTypeOffset = 0;
-        private const int PageTypeFieldSize = sizeof(PageType);
+    internal class PageMetadata : BinaryClass
+    {
+        private readonly BinaryByteField pageTypeField;
         public PageType PageType
         {
-            get => (PageType)RawData[Page.PageTypeOffset];
-            set => RawData[Page.PageTypeOffset] = (byte)value;
+            get => (PageType) this.pageTypeField.GetValue();
+            set => this.pageTypeField.SetValue((byte)value);
         }
 
-        private const int PositionOffset = Page.PageTypeFieldSize;
-        private const int PositionFieldSize = sizeof(long);
+        private readonly BinaryInt64Field positionField;
         public long Position
         {
-            get => BitConverter.ToInt32(RawData[Page.PositionOffset..(Page.PositionOffset + Page.PositionFieldSize)]);
-            set
-            {
-                var positionBytes = BitConverter.GetBytes(value);
-                Buffer.BlockCopy(positionBytes, 0, RawData, Page.PositionOffset, positionBytes.Length);
-            }
+            get => this.positionField.GetValue();
+            set => this.positionField.SetValue(value);
         }
 
-        //PageType (byte) + Position (int - 4 byte)
-        private const int ReservedBytes = Page.PageTypeFieldSize + Page.PositionFieldSize;
+        public int MetaDataEnd { get; }
+
+        public PageMetadata(byte[] metaDataBlock, int offset):base(metaDataBlock)
+        {
+            this.pageTypeField = new BinaryByteField(metaDataBlock, offset);
+            this.positionField = new BinaryInt64Field(metaDataBlock, this.pageTypeField.FieldEnd);
+
+            MetaDataEnd = this.positionField.FieldEnd;
+        }
+    }
+
+    internal class Page : IPage
+    {
+        private PageMetadata metaData;
+        
+        public PageType PageType
+        {
+            get => this.metaData.PageType;
+            set => this.metaData.PageType = value;
+        }
+
+        public long Position
+        {
+            get => this.metaData.Position;
+            set => this.metaData.Position = value;
+        }
 
         public DataBlock DataBlock { get; }
 
@@ -35,7 +53,8 @@ namespace SoltysDb.Core
 
         public Page()
         {
-            DataBlock = new DataBlock(RawData, Page.ReservedBytes, Page.PageSize - Page.ReservedBytes);
+            this.metaData = new PageMetadata(RawData, 0);
+            DataBlock = new DataBlock(RawData, this.metaData.MetaDataEnd, Page.PageSize - this.metaData.MetaDataEnd);
             Position = -1;
         }
     }

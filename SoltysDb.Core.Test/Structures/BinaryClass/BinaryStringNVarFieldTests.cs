@@ -5,7 +5,7 @@ namespace SoltysDb.Core.Test.Structures
 {
     public class BinaryStringNVarFieldTests
     {
-        private BinaryStringNVarField sut;
+        private readonly BinaryStringNVarField sut;
 
         public BinaryStringNVarFieldTests()
         {

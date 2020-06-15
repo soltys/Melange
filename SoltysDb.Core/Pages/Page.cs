@@ -32,7 +32,7 @@ namespace SoltysDb.Core
 
     internal class Page : IPage
     {
-        private PageMetadata metaData;
+        private readonly PageMetadata metaData;
         
         public PageType PageType
         {

@@ -6,7 +6,7 @@ namespace SoltysDb.Core
     internal class BinaryClass
     {
         protected readonly byte[] RawData;
-        private int size;
+        private readonly int size;
 
         public BinaryClass(int size)
         {

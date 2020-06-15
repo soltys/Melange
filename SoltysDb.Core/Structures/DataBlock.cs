@@ -32,7 +32,7 @@ namespace SoltysDb.Core
     internal class DataBlock
     {
         private readonly Memory<byte> usableData;
-        private DataBlockMetadata metaData;
+        private readonly DataBlockMetadata metaData;
 
         public long NextBlockLocation
         {

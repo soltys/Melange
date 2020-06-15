@@ -1,3 +1,4 @@
+using SoltysDb.Core.Test.TestUtils;
 using Xunit;
 
 namespace SoltysDb.Core.Test
@@ -22,8 +23,8 @@ namespace SoltysDb.Core.Test
         [Fact]
         public void Insert_Get_AllowsToInsertStringUnderKey_ReturnsEqualsValueToInserted()
         {
-            var sut = new SoltysDb();
-            sut.KV.Insert("key3", "value3"); 
+            using var sut = new SoltysDb();
+            sut.KV.Insert("key3", "value3");
             sut.KV.Insert("key2", "value2");
             sut.KV.Insert("key1", "value1");
 
@@ -37,6 +38,17 @@ namespace SoltysDb.Core.Test
         {
             var sut = new SoltysDb();
             Assert.Throws<DbKeyNotFoundException>(() => sut.KV.Get("key"));
+        }
+
+        [Fact]
+        public void Insert_BiggerThanPageSizeKeyValueData_DataSplitIntoMultiplePages()
+        {
+            using var sut = new SoltysDb();
+            const int numberOfItems = Page.PageSize / (2 * 16);
+            foreach (var pair in Generator.GenerateKeyValuesPairs(numberOfItems))
+            {
+                sut.KV.Insert(pair.Key, pair.Value);
+            }
         }
     }
 }

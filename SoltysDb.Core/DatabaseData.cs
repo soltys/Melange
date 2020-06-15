@@ -19,17 +19,21 @@ namespace SoltysDb.Core
             return this.dataStream.Length == 0;
         }
 
-        public void Write(IPage page)
+        /// <summary>
+        /// Write writes page and returns page position
+        /// </summary>
+        public long Write(IPage page)
         {
             if (page.Position == -1)
             {
-                page.Position = (int)this.dataStream.Length;
+                page.Position = this.dataStream.Length;
             }
 
             this.dataStream.Position = page.Position;
             this.dataStream.Write(page.RawData, 0, page.RawData.Length);
+            return page.Position;
         }
-
+        
         public IPage Read(int pageOffset)
         {
             var offset = Page.PageSize * pageOffset;
@@ -89,6 +93,24 @@ namespace SoltysDb.Core
         public void Dispose()
         {
             dataStream?.Dispose();
+        }
+
+        public byte[] ReadDataBlock(DataPage dataPage)
+        {
+            
+            using var ms =new MemoryStream();
+            var currentDataPage = dataPage;
+
+            while (true)
+            {
+                var data = currentDataPage.DataBlock.Data;
+                ms.Write(data);
+
+
+                
+            }
+            
+            return new byte[0];
         }
     }
 }

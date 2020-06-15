@@ -4,6 +4,6 @@
     {
         byte[] RawData { get; }
 
-        int Position { get; set; }
+        long Position { get; set; }
     }
 }

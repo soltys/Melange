@@ -6,13 +6,9 @@ namespace SoltysDb.Core
     {
         private readonly Page page;
 
-        public Span<byte> Data
-        {
-            get => this.page.Data;
-            set => this.page.Data = value;
-        }
+        public DataBlock DataBlock => this.page.DataBlock;
 
-        public int Position
+        public long Position
         {
             get => this.page.Position;
             set => this.page.Position = value;

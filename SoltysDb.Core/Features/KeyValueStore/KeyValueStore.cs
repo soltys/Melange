@@ -10,13 +10,14 @@
         {
             var kvPage = DatabaseData.FindFirst<KeyValuePage>() ?? new KeyValuePage(new Page());
 
-            var w = new DatabaseWriter(DatabaseData);
-            var store = kvPage.GetStore();
-            
-            store.Add(key, value);
+            DatabaseData.ReadDataBlock(kvPage);
 
-            kvPage.SaveStore(store);
-            w.Write(kvPage);
+            kvPage.GetWriteStore((store) =>
+            {
+               store.Add(key, value);
+            });
+
+            DatabaseData.Write(kvPage);
         }
 
         public string Get(string key)
@@ -24,7 +25,7 @@
             var kvPage = DatabaseData.FindFirst<KeyValuePage>();
             if (kvPage != null)
             {
-                var store = kvPage.GetStore();
+                var store = kvPage.GetReadStore();
                 if (store.ContainsKey(key))
                 {
                     return store[key];

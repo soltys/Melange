@@ -31,14 +31,14 @@ namespace SoltysDb.Core.Test
         {
 
             var dataPage = new DataPage(new Page());
-            dataPage.Data = new byte[] {1, 2, 3};
+            dataPage.DataBlock.Data = new byte[] {1, 2, 3};
             sut.Write(dataPage);
 
             var page = (DataPage)sut.Read(0);
 
-            Assert.Equal(1, page.Data[0]);
-            Assert.Equal(2, page.Data[1]);
-            Assert.Equal(3, page.Data[2]);
+            Assert.Equal(1, page.DataBlock.Data[0]);
+            Assert.Equal(2, page.DataBlock.Data[1]);
+            Assert.Equal(3, page.DataBlock.Data[2]);
         }
 
         [Fact]
@@ -49,7 +49,23 @@ namespace SoltysDb.Core.Test
 
             sut.Write(page);
             Assert.Throws<DbInvalidOperationException>(()=>sut.Read(0));
-
         }
+
+        [Fact]
+        public void Write_ReturnsPagePostion()
+        {
+            var dataPage1 = new DataPage(new Page());
+            var dataPage2 = new DataPage(new Page());
+
+            var position1 = sut.Write(dataPage1);
+            Assert.Equal(0,dataPage1.Position);
+            Assert.Equal(position1, dataPage1.Position);
+
+            var position2 = sut.Write(dataPage2);
+            Assert.Equal(Page.PageSize,dataPage2.Position);
+            Assert.Equal(position2,dataPage2.Position);
+        }
+
+     
     }
 }

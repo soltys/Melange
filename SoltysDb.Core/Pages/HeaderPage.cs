@@ -8,7 +8,7 @@ namespace SoltysDb.Core
         public HeaderPage(Page page) : base(page)
         {
             var byteHeader = Encoding.ASCII.GetBytes("SOLTYSDB");
-            byteHeader.AsSpan().CopyTo(Data);
+            byteHeader.AsSpan().CopyTo(DataBlock.Data);
         }
     }
 }

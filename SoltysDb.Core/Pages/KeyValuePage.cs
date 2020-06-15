@@ -5,20 +5,20 @@ namespace SoltysDb.Core
 {
     class KeyValuePage : DataPage
     {
+        public Dictionary<string, string> GetReadStore()
+            => KeyValueStoreSerializer.GetDictionaryFromBytes(this.DataBlock.Data);
 
-        public Dictionary<string, string> GetStore()
-            => KeyValueStoreSerializer.GetDictionaryFromBytes(this.Data);
+        public void GetWriteStore(Action<Dictionary<string, string>> modify)
+        {
+            var dict = KeyValueStoreSerializer.GetDictionaryFromBytes(this.DataBlock.Data);
 
-        public void SaveStore(Dictionary<string, string> store)
-            => KeyValueStoreSerializer.CovertDictionaryToBytes(store).AsSpan().CopyTo(Data);
+            modify(dict);
+
+            KeyValueStoreSerializer.CovertDictionaryToBytes(dict).AsSpan().CopyTo(this.DataBlock.Data);
+        }
 
         public KeyValuePage(Page page) : base(page)
         {
-            if (page == null)
-            {
-                throw new ArgumentNullException(nameof(page));
-            }
-
             page.PageType = PageType.KeyValue;
         }
     }

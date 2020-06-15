@@ -15,16 +15,14 @@ namespace SoltysDb.Core.Test
         [Fact]
         public void RawData_ContainsDataFromConstructor()
         {
-            var sut = new DataPage(new Page())
-            {
-                Data = new Span<byte>(new byte[] {1, 2, 3})
-            };
+            var sut = new DataPage(new Page());
+            sut.DataBlock.Data = new Span<byte>(new byte[] {1, 2, 3});
             Assert.Equal(Page.PageSize, sut.RawData.Length);
 
-            Assert.Equal(1, sut.Data[0]);
-            Assert.Equal(2, sut.Data[1]);
-            Assert.Equal(3, sut.Data[2]);
-            Assert.Equal(0, sut.Data[3]);
+            Assert.Equal(1, sut.DataBlock.Data[0]);
+            Assert.Equal(2, sut.DataBlock.Data[1]);
+            Assert.Equal(3, sut.DataBlock.Data[2]);
+            Assert.Equal(0, sut.DataBlock.Data[3]);
         }
     }
 }

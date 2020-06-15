@@ -122,9 +122,9 @@ namespace SoltysDb.Core
                 var data = currentDataPage.DataBlock.Data;
                 ms.Write(data);
 
-                if (currentDataPage.DataBlock.NextBlockLocation > 0)
+                if (currentDataPage.DataBlock.NextPageLocation > 0)
                 {
-                    currentDataPage = (DataPage)Read(currentDataPage.DataBlock.NextBlockLocation);
+                    currentDataPage = (DataPage)Read(currentDataPage.DataBlock.NextPageLocation);
                 }
                 else
                 {

@@ -5,7 +5,7 @@ namespace SoltysDb.Core
     internal class DataBlockMetadata : BinaryClass
     {
         private readonly BinaryInt64Field nextBlockLocationField;
-        public long NextBlockLocation
+        public long NextPageLocation
         {
             get => this.nextBlockLocationField.GetValue();
             set => this.nextBlockLocationField.SetValue(value);
@@ -26,10 +26,10 @@ namespace SoltysDb.Core
         private readonly Memory<byte> usableData;
         private readonly DataBlockMetadata metaData;
 
-        public long NextBlockLocation
+        public long NextPageLocation
         {
-            get => this.metaData.NextBlockLocation;
-            set => this.metaData.NextBlockLocation = value;
+            get => this.metaData.NextPageLocation;
+            set => this.metaData.NextPageLocation = value;
         }
 
         public Span<byte> Data

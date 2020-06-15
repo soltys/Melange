@@ -31,16 +31,16 @@ namespace SoltysDb.Core
 
                 if (bytesToBeWritten > 0)
                 {
-                    if (currentPage.DataBlock.NextBlockLocation > 0)
+                    if (currentPage.DataBlock.NextPageLocation > 0)
                     {
-                        currentPage = (DataPage) data.Read(currentPage.DataBlock.NextBlockLocation);
+                        currentPage = (DataPage) data.Read(currentPage.DataBlock.NextPageLocation);
                     }
                     else
                     {
                         var newKvPage = new KeyValuePage(new Page());
                         data.Write(newKvPage);
 
-                        currentPage.DataBlock.NextBlockLocation = newKvPage.Position;
+                        currentPage.DataBlock.NextPageLocation = newKvPage.Position;
                         data.Write(currentPage);
 
                         currentPage = newKvPage;

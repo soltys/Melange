@@ -3,7 +3,7 @@ using System.Text;
 
 namespace SoltysDb.Core
 {
-    class BinaryStringNVarField : BinaryField
+    class BinaryStringNVarField : BinaryField<string>
     {
         private readonly int maxStringLength;
         private readonly BinaryInt32Field currentStringLength;
@@ -16,13 +16,13 @@ namespace SoltysDb.Core
             
         }
 
-        public string ToValue()
+        public override string GetValue()
         {
             var encodedString = Encoding.Default.GetString(this.fieldSpan.Span.ToArray());
-            return encodedString.Substring(0, this.currentStringLength.ToValue());
+            return encodedString.Substring(0, this.currentStringLength.GetValue());
         }
 
-        public void SetValue(string value)
+        public override void SetValue(string value)
         {
             if (value == null)
             {

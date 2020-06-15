@@ -49,7 +49,7 @@ namespace SoltysDb.Core.Test.Structures
 
         public int Id
         {
-            get => this.idField.ToValue();
+            get => this.idField.GetValue();
             set => this.idField.SetValue(value);
         }
 
@@ -57,7 +57,7 @@ namespace SoltysDb.Core.Test.Structures
 
         public long LongValue
         {
-            get => this.longValueField.ToValue();
+            get => this.longValueField.GetValue();
             set => this.longValueField.SetValue(value);
         }
 
@@ -65,7 +65,7 @@ namespace SoltysDb.Core.Test.Structures
 
         public double DoubleValue
         {
-            get => this.doubleValueField.ToValue();
+            get => this.doubleValueField.GetValue();
             set => this.doubleValueField.SetValue(value);
         }
 
@@ -73,7 +73,7 @@ namespace SoltysDb.Core.Test.Structures
 
         public bool BoolValue
         {
-            get => this.binaryBooleanField.ToValue();
+            get => this.binaryBooleanField.GetValue();
             set => this.binaryBooleanField.SetValue(value);
         }
 
@@ -81,7 +81,7 @@ namespace SoltysDb.Core.Test.Structures
 
         public string StringValue
         {
-            get => this.stringField.ToValue();
+            get => this.stringField.GetValue();
             set => this.stringField.SetValue(value);
         }
 
@@ -89,7 +89,7 @@ namespace SoltysDb.Core.Test.Structures
 
         public byte ByteValue
         {
-            get => this.byteField.ToValue();
+            get => this.byteField.GetValue();
             set => this.byteField.SetValue(value);
         }
     }

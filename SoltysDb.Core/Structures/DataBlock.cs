@@ -2,24 +2,43 @@
 
 namespace SoltysDb.Core
 {
-    internal class DataBlock
+    internal class DataBlockMetadata : BinaryClass
     {
-        private const int NextBlockLocationOffset = 0 ;
-        private const int NextBlockLocationFieldSize = sizeof(long);
+        private readonly BinaryInt64Field nextBlockLocationField;
         public long NextBlockLocation
         {
-            get => BitConverter.ToInt64(this.metaData[DataBlock.NextBlockLocationOffset..(DataBlock.NextBlockLocationOffset + DataBlock.NextBlockLocationFieldSize)].Span);
-            set => BitConverter.GetBytes(value).AsMemory().CopyTo(this.metaData.Slice(DataBlock.NextBlockLocationOffset, DataBlock.NextBlockLocationFieldSize));
+            get => this.nextBlockLocationField.GetValue();
+            set => this.nextBlockLocationField.SetValue(value);
         }
 
-        private const int LengthOffset = DataBlock.NextBlockLocationFieldSize;
-        private const int LengthFieldSize = sizeof(int);
-        public int Length => BitConverter.ToInt32(this.metaData[DataBlock.LengthOffset..(DataBlock.LengthOffset + DataBlock.LengthFieldSize)].Span);
+        private readonly BinaryInt32Field dataBlockLengthField;
+        public int DataBlockLength
+        {
+            get => this.dataBlockLengthField.GetValue();
+            set => this.dataBlockLengthField.SetValue(value);
+        }
 
-        private const int ReservedBytes = DataBlock.NextBlockLocationFieldSize + DataBlock.LengthFieldSize;
-        
+        public DataBlockMetadata(byte[] metaDataBlock, int offset) : base(metaDataBlock)
+        {
+            this.nextBlockLocationField = new BinaryInt64Field(metaDataBlock, offset);
+            this.dataBlockLengthField = new BinaryInt32Field(metaDataBlock, this.nextBlockLocationField.FieldEnd);
+
+            MetaDataEnd = this.dataBlockLengthField.FieldEnd;
+        }
+
+        public int MetaDataEnd { get; private set; }
+    }
+
+    internal class DataBlock
+    {
         private readonly Memory<byte> usableData;
-        private Memory<byte> metaData;
+        private DataBlockMetadata metaData;
+
+        public long NextBlockLocation
+        {
+            get => this.metaData.NextBlockLocation;
+            set => this.metaData.NextBlockLocation = value;
+        }
 
         public Span<byte> Data
         {
@@ -34,16 +53,9 @@ namespace SoltysDb.Core
                 throw new ArgumentNullException(nameof(dataBlock));
             }
 
-            this.metaData = dataBlock.AsMemory(offset, DataBlock.ReservedBytes);
-            this.usableData = new Memory<byte>(dataBlock, offset + DataBlock.ReservedBytes, length - DataBlock.ReservedBytes);
-
-
-            //Save Length into meta data block
-            BitConverter.GetBytes(length - DataBlock.ReservedBytes)
-                .AsMemory()
-                .CopyTo(this.metaData.Slice(DataBlock.LengthOffset, DataBlock.LengthFieldSize));
-            
-            NextBlockLocation = -1;
+            this.metaData = new DataBlockMetadata(dataBlock, offset) { NextBlockLocation = -1, };
+            this.metaData.DataBlockLength = length;
+            this.usableData = new Memory<byte>(dataBlock, this.metaData.MetaDataEnd, length - this.metaData.MetaDataEnd);
         }
     }
 }

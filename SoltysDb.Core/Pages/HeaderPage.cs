@@ -3,6 +3,7 @@ using System.Text;
 
 namespace SoltysDb.Core
 {
+
     internal class HeaderPage : DataPage
     {
         public HeaderPage(Page page) : base(page)

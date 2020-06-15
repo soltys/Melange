@@ -2,18 +2,18 @@
 
 namespace SoltysDb.Core
 {
-    internal class BinaryDoubleField : BinaryField
+    internal class BinaryDoubleField : BinaryField<double>
     {
         public BinaryDoubleField(byte[] memory, int offset) : base(memory, offset, sizeof(double))
         {
         }
 
-        public double ToValue()
+        public override double GetValue()
         {
             return BitConverter.ToDouble(this.fieldSpan.Span);
         }
 
-        public void SetValue(double value)
+        public override void SetValue(double value)
         {
             BitConverter.GetBytes(value).CopyTo(this.fieldSpan);
         }

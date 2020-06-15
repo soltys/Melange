@@ -33,11 +33,28 @@ namespace SoltysDb.Core
             this.dataStream.Write(page.RawData, 0, page.RawData.Length);
             return page.Position;
         }
-        
+
         public IPage Read(int pageOffset)
         {
             var offset = Page.PageSize * pageOffset;
             this.dataStream.Position = offset;
+
+            var dataPage = new Page();
+            int bytesRead = this.dataStream.Read(dataPage.RawData, 0, Page.PageSize);
+
+            //Do not attempt to project a page since no data has been read
+            //TODO - throw exception here
+            if (bytesRead == 0)
+            {
+                return null;
+            }
+
+            return ProjectPage(dataPage);
+        }
+
+        public IPage Read(long location)
+        {
+            this.dataStream.Position = location;
 
             var dataPage = new Page();
             int bytesRead = this.dataStream.Read(dataPage.RawData, 0, Page.PageSize);
@@ -97,8 +114,7 @@ namespace SoltysDb.Core
 
         public byte[] ReadDataBlock(DataPage dataPage)
         {
-            
-            using var ms =new MemoryStream();
+            using var ms = new MemoryStream();
             var currentDataPage = dataPage;
 
             while (true)
@@ -106,11 +122,17 @@ namespace SoltysDb.Core
                 var data = currentDataPage.DataBlock.Data;
                 ms.Write(data);
 
-
-                
+                if (currentDataPage.DataBlock.NextBlockLocation > 0)
+                {
+                    currentDataPage = (DataPage)Read(currentDataPage.DataBlock.NextBlockLocation);
+                }
+                else
+                {
+                    break;
+                }
             }
-            
-            return new byte[0];
+
+            return ms.ToArray();
         }
     }
 }

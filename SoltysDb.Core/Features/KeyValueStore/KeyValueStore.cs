@@ -10,11 +10,9 @@
         {
             var kvPage = this.DatabaseData.FindFirst<KeyValuePage>() ?? new KeyValuePage(new Page());
 
-            this.DatabaseData.ReadDataBlock(kvPage);
-
-            kvPage.GetWriteStore((store) =>
+            kvPage.GetWriteStore(this.DatabaseData, (store) =>
             {
-               store.Add(key, value);
+                store.Add(key, value);
             });
 
             this.DatabaseData.Write(kvPage);

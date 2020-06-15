@@ -2,7 +2,7 @@
 
 namespace SoltysDb.Core
 {
-    internal abstract class BinaryField
+    internal abstract class BinaryField<T>
     {
         protected Memory<byte> fieldSpan;
 
@@ -15,5 +15,8 @@ namespace SoltysDb.Core
         public int FieldLength { get; }
         public int Offset { get; }
         public int FieldEnd => Offset + FieldLength;
+
+        public abstract T GetValue();
+        public abstract void SetValue(T value);
     }
 }

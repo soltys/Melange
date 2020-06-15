@@ -30,9 +30,9 @@ namespace SoltysDb.Core
 
         public DataBlock DataBlock { get; }
 
-        public const int PageSize = 4096;
+        public const int PageSize = 4 * 1024; // 4 kb
         public byte[] RawData { get; } = new byte[Page.PageSize];
-        
+
         public Page()
         {
             DataBlock = new DataBlock(RawData, Page.ReservedBytes, Page.PageSize - Page.ReservedBytes);

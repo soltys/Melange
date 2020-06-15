@@ -11,7 +11,7 @@ namespace SoltysDb.Core
         public BinaryClass(int size)
         {
             this.size = size;
-            RawData = new byte[this.size];
+            this.RawData = new byte[this.size];
         }
 
         public BinaryClass(byte[] rawData) : this(rawData.Length)
@@ -21,12 +21,12 @@ namespace SoltysDb.Core
 
         public byte[] ToBytes()
         {
-            return RawData.ToArray();
+            return this.RawData.ToArray();
         }
 
         public void SetBytes(byte[] rawData)
         {
-            rawData.CopyTo(RawData.AsSpan());
+            rawData.CopyTo(this.RawData.AsSpan());
         }
     }
 }

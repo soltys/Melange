@@ -10,7 +10,7 @@ namespace SoltysDb.Core
 
         public Boolean ToValue()
         {
-            return BitConverter.ToBoolean(fieldSpan.Span);
+            return BitConverter.ToBoolean(this.fieldSpan.Span);
         }
 
         public void SetValue(bool value)

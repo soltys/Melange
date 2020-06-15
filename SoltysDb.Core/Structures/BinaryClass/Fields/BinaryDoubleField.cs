@@ -10,7 +10,7 @@ namespace SoltysDb.Core
 
         public double ToValue()
         {
-            return BitConverter.ToDouble(fieldSpan.Span);
+            return BitConverter.ToDouble(this.fieldSpan.Span);
         }
 
         public void SetValue(double value)

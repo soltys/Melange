@@ -6,15 +6,15 @@ namespace SoltysDb.Core
     class KeyValuePage : DataPage
     {
         public Dictionary<string, string> GetReadStore()
-            => KeyValueStoreSerializer.GetDictionaryFromBytes(this.DataBlock.Data);
+            => KeyValueStoreSerializer.GetDictionaryFromBytes(DataBlock.Data);
 
         public void GetWriteStore(Action<Dictionary<string, string>> modify)
         {
-            var dict = KeyValueStoreSerializer.GetDictionaryFromBytes(this.DataBlock.Data);
+            var dict = KeyValueStoreSerializer.GetDictionaryFromBytes(DataBlock.Data);
 
             modify(dict);
 
-            KeyValueStoreSerializer.CovertDictionaryToBytes(dict).AsSpan().CopyTo(this.DataBlock.Data);
+            KeyValueStoreSerializer.CovertDictionaryToBytes(dict).AsSpan().CopyTo(DataBlock.Data);
         }
 
         public KeyValuePage(Page page) : base(page)

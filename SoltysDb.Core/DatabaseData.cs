@@ -92,7 +92,7 @@ namespace SoltysDb.Core
 
         public void Dispose()
         {
-            dataStream?.Dispose();
+            this.dataStream?.Dispose();
         }
 
         public byte[] ReadDataBlock(DataPage dataPage)

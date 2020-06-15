@@ -10,12 +10,12 @@ namespace SoltysDb.Core
 
         public byte ToValue()
         {
-            return fieldSpan.ToArray()[0];
+            return this.fieldSpan.ToArray()[0];
         }
 
         public void SetValue(byte value)
         {
-            (new[] { value }).CopyTo(fieldSpan);
+            (new[] { value }).CopyTo(this.fieldSpan);
         }
     }
 }

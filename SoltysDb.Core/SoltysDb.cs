@@ -10,13 +10,13 @@ namespace SoltysDb.Core
         public string FileName { get; }
 
         private const string InMemoryDatabaseId = ":memory:";
-        public bool IsInMemoryDatabase => FileName == InMemoryDatabaseId;
+        public bool IsInMemoryDatabase => FileName == SoltysDb.InMemoryDatabaseId;
 
         public IKeyValueStore KV { get; set; }
 
         public SoltysDb()
         {
-            FileName = InMemoryDatabaseId;
+            FileName = SoltysDb.InMemoryDatabaseId;
             Initialize();
         }
 
@@ -30,27 +30,27 @@ namespace SoltysDb.Core
         {
             if (IsInMemoryDatabase)
             {
-                data = new DatabaseData(new MemoryStream());
+                this.data = new DatabaseData(new MemoryStream());
             }
             else
             {
-                data = new DatabaseData(new FileStream(FileName, FileMode.OpenOrCreate));
+                this.data = new DatabaseData(new FileStream(FileName, FileMode.OpenOrCreate));
             }
 
-            if (data.IsNew())
+            if (this.data.IsNew())
             {
-                var writer = new DatabaseWriter(data);
+                var writer = new DatabaseWriter(this.data);
                 writer.Write(new HeaderPage(new Page()));
             }
 
-            KV = new KeyValueStore(data);
+            KV = new KeyValueStore(this.data);
         }
 
 
      
         public void Dispose()
         {
-            data?.Dispose();
+            this.data?.Dispose();
         }
     }
 }

@@ -8,21 +8,21 @@
 
         public void Insert(string key, string value)
         {
-            var kvPage = DatabaseData.FindFirst<KeyValuePage>() ?? new KeyValuePage(new Page());
+            var kvPage = this.DatabaseData.FindFirst<KeyValuePage>() ?? new KeyValuePage(new Page());
 
-            DatabaseData.ReadDataBlock(kvPage);
+            this.DatabaseData.ReadDataBlock(kvPage);
 
             kvPage.GetWriteStore((store) =>
             {
                store.Add(key, value);
             });
 
-            DatabaseData.Write(kvPage);
+            this.DatabaseData.Write(kvPage);
         }
 
         public string Get(string key)
         {
-            var kvPage = DatabaseData.FindFirst<KeyValuePage>();
+            var kvPage = this.DatabaseData.FindFirst<KeyValuePage>();
             if (kvPage != null)
             {
                 var store = kvPage.GetReadStore();

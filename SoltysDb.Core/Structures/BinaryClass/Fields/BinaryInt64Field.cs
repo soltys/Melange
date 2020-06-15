@@ -10,7 +10,7 @@ namespace SoltysDb.Core
 
         public Int64 ToValue()
         {
-            return BitConverter.ToInt64(fieldSpan.Span);
+            return BitConverter.ToInt64(this.fieldSpan.Span);
         }
 
         public void SetValue(Int64 value)

@@ -37,12 +37,12 @@ namespace SoltysDb.Core.Test.Structures
     {
         public MyClass() : base(1024)
         {
-            idField = new BinaryInt32Field(RawData, 0);
-            longValueField = new BinaryInt64Field(RawData, idField.FieldEnd);
-            doubleValueField = new BinaryDoubleField(RawData, longValueField.FieldEnd);
-            binaryBooleanField = new BinaryBooleanField(RawData, doubleValueField.FieldEnd);
-            stringField = new BinaryStringNVarField(RawData, binaryBooleanField.FieldEnd, 16);
-            byteField = new BinaryByteField(RawData, stringField.FieldEnd);
+            this.idField = new BinaryInt32Field(this.RawData, 0);
+            this.longValueField = new BinaryInt64Field(this.RawData, this.idField.FieldEnd);
+            this.doubleValueField = new BinaryDoubleField(this.RawData, this.longValueField.FieldEnd);
+            this.binaryBooleanField = new BinaryBooleanField(this.RawData, this.doubleValueField.FieldEnd);
+            this.stringField = new BinaryStringNVarField(this.RawData, this.binaryBooleanField.FieldEnd, 16);
+            this.byteField = new BinaryByteField(this.RawData, this.stringField.FieldEnd);
         }
 
         private readonly BinaryInt32Field idField;
@@ -92,7 +92,5 @@ namespace SoltysDb.Core.Test.Structures
             get => this.byteField.ToValue();
             set => this.byteField.SetValue(value);
         }
-
-
     }
 }

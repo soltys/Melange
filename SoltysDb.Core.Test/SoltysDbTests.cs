@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using SoltysDb.Core.Test.TestUtils;
 using Xunit;
 
@@ -41,6 +42,7 @@ namespace SoltysDb.Core.Test
         }
 
         [Fact]
+        [Description("Maybe long running due to big data set needed to fill pages")]
         public void Insert_BiggerThanPageSizeKeyValueData_DataSplitIntoMultiplePages()
         {
             using var sut = new SoltysDb();

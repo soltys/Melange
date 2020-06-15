@@ -11,19 +11,11 @@ namespace SoltysDb.Core
             set => this.nextBlockLocationField.SetValue(value);
         }
 
-        private readonly BinaryInt32Field dataBlockLengthField;
-        public int DataBlockLength
-        {
-            get => this.dataBlockLengthField.GetValue();
-            set => this.dataBlockLengthField.SetValue(value);
-        }
-
         public DataBlockMetadata(byte[] metaDataBlock, int offset) : base(metaDataBlock)
         {
             this.nextBlockLocationField = new BinaryInt64Field(metaDataBlock, offset);
-            this.dataBlockLengthField = new BinaryInt32Field(metaDataBlock, this.nextBlockLocationField.FieldEnd);
 
-            MetaDataEnd = this.dataBlockLengthField.FieldEnd;
+            MetaDataEnd = this.nextBlockLocationField.FieldEnd;
         }
 
         public int MetaDataEnd { get; private set; }
@@ -53,8 +45,7 @@ namespace SoltysDb.Core
                 throw new ArgumentNullException(nameof(dataBlock));
             }
 
-            this.metaData = new DataBlockMetadata(dataBlock, offset) { NextBlockLocation = -1, };
-            this.metaData.DataBlockLength = length;
+            this.metaData = new DataBlockMetadata(dataBlock, offset) {  };
             this.usableData = new Memory<byte>(dataBlock, this.metaData.MetaDataEnd, length - this.metaData.MetaDataEnd);
         }
     }

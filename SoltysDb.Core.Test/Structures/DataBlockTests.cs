@@ -7,22 +7,16 @@ namespace SoltysDb.Core.Test.Structures
 {
     public class DataBlockTests
     {
-        //[Fact]
-        //public void Length_AfterCreationIsSmallerThanOriginalValue_By12Bytes()
-        //{
-        //    var memoryBlock = new byte[128];
-        //    var sut = new DataBlock(memoryBlock, 0, memoryBlock.Length);
+        [Fact]
+        public void NextBlockLocation_IsSavedInAttachedMemoryBlock()
+        {
+            var memoryBlock = new byte[128];
+            var sut = new DataBlock(memoryBlock, 0, memoryBlock.Length) {NextBlockLocation = 123};
 
-        //    //length is smaller than initial block of memory to hold information about it's length where data is located
-        //    Assert.Equal(116, sut.Length);
-        //}
 
-        //[Fact]
-        //public void NextBlockLocation_AfterCreation_LessThanZero()
-        //{
-        //    var sut = new DataBlock(new byte[16], 0, 12);
-        //    Assert.Equal(-1, sut.NextBlockLocation);
-        //}
+            var newInstance = new DataBlock(memoryBlock,0, memoryBlock.Length);
+            Assert.Equal(123, newInstance.NextBlockLocation);
+        }
 
         [Fact]
         public void Constructor_OnPassedNull_ThrowsArgumentNullException()

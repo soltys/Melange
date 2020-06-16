@@ -38,8 +38,7 @@ namespace SoltysDb.Core
 
             if (this.data.IsNew())
             {
-                var writer = new DatabaseWriter(this.data);
-                writer.Write(new HeaderPage());
+                this.data.Write(new HeaderPage());
             }
 
             KV = new KeyValueStore(this.data);

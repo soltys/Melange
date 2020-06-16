@@ -8,7 +8,7 @@ namespace SoltysDb.Core
         private readonly BinaryByteField pageTypeField;
         public PageType PageType
         {
-            get => (PageType) this.pageTypeField.GetValue();
+            get => (PageType)this.pageTypeField.GetValue();
             set => this.pageTypeField.SetValue((byte)value);
         }
 
@@ -19,42 +19,42 @@ namespace SoltysDb.Core
             set => this.positionField.SetValue(value);
         }
 
-        public int MetaDataEnd { get; }
+        public int End { get; }
 
-        public PageMetadata(byte[] metaDataBlock, int offset):base(metaDataBlock)
+        public PageMetadata(byte[] metaDataBlock, int offset) : base(metaDataBlock)
         {
             this.pageTypeField = new BinaryByteField(metaDataBlock, offset);
             this.positionField = new BinaryInt64Field(metaDataBlock, this.pageTypeField.FieldEnd);
 
-            MetaDataEnd = this.positionField.FieldEnd;
+            End = this.positionField.FieldEnd;
         }
     }
 
     internal class Page : IPage
     {
-        private readonly PageMetadata metaData;
-        
+        protected readonly PageMetadata PageMetadata;
+
         public PageType PageType
         {
-            get => this.metaData.PageType;
-            set => this.metaData.PageType = value;
+            get => this.PageMetadata.PageType;
+            set => this.PageMetadata.PageType = value;
         }
 
         public long Position
         {
-            get => this.metaData.Position;
-            set => this.metaData.Position = value;
+            get => this.PageMetadata.Position;
+            set => this.PageMetadata.Position = value;
         }
 
-        public DataBlock DataBlock { get; }
+        public DataBlock DataBlock { get; protected set; }
 
         public const int PageSize = 4 * 1024; // 4 kb
         public byte[] RawData { get; } = new byte[Page.PageSize];
 
-        public Page()
+        public Page(PageType pageType = PageType.Undefined)
         {
-            this.metaData = new PageMetadata(RawData, 0);
-            DataBlock = new DataBlock(RawData, this.metaData.MetaDataEnd, Page.PageSize - this.metaData.MetaDataEnd);
+            this.PageMetadata = new PageMetadata(RawData, 0) { PageType = pageType };
+            DataBlock = new DataBlock(RawData, this.PageMetadata.End, Page.PageSize - this.PageMetadata.End);
             Position = -1;
         }
     }

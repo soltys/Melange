@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel;
 using SoltysDb.Core.Test.TestUtils;
 using Xunit;
@@ -47,10 +48,16 @@ namespace SoltysDb.Core.Test
         {
             using var sut = new SoltysDb();
             const int numberOfItems = Page.PageSize / (2 * 16);
+            KeyValuePair<string, string> lastPair = new KeyValuePair<string, string>();
             foreach (var pair in Generator.GenerateKeyValuesPairs(numberOfItems))
             {
                 sut.KV.Insert(pair.Key, pair.Value);
+                lastPair = pair;
             }
+
+            //just checking if KV store is not only write-only :)
+            var dbValue =  sut.KV.Get(lastPair.Key);
+            Assert.Equal(lastPair.Value, dbValue);
         }
     }
 }

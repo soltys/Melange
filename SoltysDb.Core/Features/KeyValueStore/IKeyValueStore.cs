@@ -1,4 +1,4 @@
-﻿namespace SoltysDb.Core.Features.KeyValueStore
+﻿namespace SoltysDb.Core
 {
     public interface IKeyValueStore
     {

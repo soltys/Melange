@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using SoltysDb.Core.Features.KeyValueStore;
 
 namespace SoltysDb.Core
 {
@@ -40,7 +39,7 @@ namespace SoltysDb.Core
             if (this.data.IsNew())
             {
                 var writer = new DatabaseWriter(this.data);
-                writer.Write(new HeaderPage(new Page()));
+                writer.Write(new HeaderPage());
             }
 
             KV = new KeyValueStore(this.data);

@@ -9,7 +9,7 @@ namespace SoltysDb.Core.Test.Structures
         {
             var sut = new MyClass
             {
-                Id = 42,
+                IntValue = 42,
                 LongValue = 666L,
                 DoubleValue = 3.1415,
                 BoolValue = true,
@@ -23,7 +23,7 @@ namespace SoltysDb.Core.Test.Structures
             var newInstance = new MyClass();
             newInstance.SetBytes(bytes);
 
-            Assert.Equal(42, newInstance.Id);
+            Assert.Equal(42, newInstance.IntValue);
             Assert.Equal(666L, newInstance.LongValue);
             Assert.Equal(3.1415, newInstance.DoubleValue, 4);
             Assert.True(newInstance.BoolValue);
@@ -46,15 +46,13 @@ namespace SoltysDb.Core.Test.Structures
         }
 
         private readonly BinaryInt32Field idField;
-
-        public int Id
+        public int IntValue
         {
             get => this.idField.GetValue();
             set => this.idField.SetValue(value);
         }
 
         private readonly BinaryInt64Field longValueField;
-
         public long LongValue
         {
             get => this.longValueField.GetValue();
@@ -62,7 +60,6 @@ namespace SoltysDb.Core.Test.Structures
         }
 
         private readonly BinaryDoubleField doubleValueField;
-
         public double DoubleValue
         {
             get => this.doubleValueField.GetValue();
@@ -70,7 +67,6 @@ namespace SoltysDb.Core.Test.Structures
         }
 
         private readonly BinaryBooleanField binaryBooleanField;
-
         public bool BoolValue
         {
             get => this.binaryBooleanField.GetValue();
@@ -78,7 +74,6 @@ namespace SoltysDb.Core.Test.Structures
         }
 
         private readonly BinaryStringNVarField stringField;
-
         public string StringValue
         {
             get => this.stringField.GetValue();
@@ -86,7 +81,6 @@ namespace SoltysDb.Core.Test.Structures
         }
 
         private readonly BinaryByteField byteField;
-
         public byte ByteValue
         {
             get => this.byteField.GetValue();

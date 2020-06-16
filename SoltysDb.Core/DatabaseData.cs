@@ -49,15 +49,15 @@ namespace SoltysDb.Core
                 return null;
             }
 
-            return ProjectPage(dataPage);
+            return dataPage;
         }
 
         public IPage Read(long location)
         {
             this.dataStream.Position = location;
 
-            var dataPage = new Page();
-            int bytesRead = this.dataStream.Read(dataPage.RawData, 0, Page.PageSize);
+            var page = new Page();
+            int bytesRead = this.dataStream.Read(page.RawData, 0, Page.PageSize);
 
             //Do not attempt to project a page since no data has been read
             //TODO - throw exception here
@@ -66,22 +66,7 @@ namespace SoltysDb.Core
                 return null;
             }
 
-            return ProjectPage(dataPage);
-        }
-
-        private IPage ProjectPage(Page page)
-        {
-            switch (page.PageType)
-            {
-                case PageType.DataPage:
-                    return new DataPage(page);
-                case PageType.KeyValue:
-                    return new KeyValuePage(page);
-                case PageType.Header:
-                    return new HeaderPage(page);
-                default:
-                    throw new DbInvalidOperationException("Cannot identified page type");
-            }
+            return page;
         }
 
         public IEnumerable<IPage> ReadAll()
@@ -93,14 +78,14 @@ namespace SoltysDb.Core
             }
         }
 
-        public T FindFirst<T>() where T : class
+        public IPage FindFirst(PageType pageType) 
         {
             var allPages = ReadAll().ToArray();
             foreach (var page in allPages)
             {
-                if (page is T pageFound)
+                if (page?.PageType == pageType)
                 {
-                    return pageFound;
+                    return page;
                 }
             }
 
@@ -112,7 +97,7 @@ namespace SoltysDb.Core
             this.dataStream?.Dispose();
         }
 
-        public byte[] ReadDataBlock(DataPage dataPage)
+        public byte[] ReadDataBlock(IPage dataPage)
         {
             using var ms = new MemoryStream();
             var currentDataPage = dataPage;
@@ -124,7 +109,7 @@ namespace SoltysDb.Core
 
                 if (currentDataPage.DataBlock.NextPageLocation > 0)
                 {
-                    currentDataPage = (DataPage)Read(currentDataPage.DataBlock.NextPageLocation);
+                    currentDataPage = Read(currentDataPage.DataBlock.NextPageLocation);
                 }
                 else
                 {

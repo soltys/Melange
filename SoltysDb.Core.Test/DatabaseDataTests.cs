@@ -22,7 +22,7 @@ namespace SoltysDb.Core.Test
         [Fact]
         public void Write_WritingHeaderFile_IsNewReturnsFalse()
         {
-            this.sut.Write(new HeaderPage(new Page()));
+            this.sut.Write(new Page(PageType.Header));
             Assert.False(this.sut.IsNew());
         }
 
@@ -30,11 +30,11 @@ namespace SoltysDb.Core.Test
         public void Read_AfterWrite_ReturnsEqualData()
         {
 
-            var dataPage = new DataPage(new Page());
+            var dataPage = new Page(PageType.DataPage);
             dataPage.DataBlock.Data = new byte[] {1, 2, 3};
             this.sut.Write(dataPage);
 
-            var page = (DataPage) this.sut.Read(0);
+            var page = this.sut.Read(0);
 
             Assert.Equal(1, page.DataBlock.Data[0]);
             Assert.Equal(2, page.DataBlock.Data[1]);
@@ -42,20 +42,10 @@ namespace SoltysDb.Core.Test
         }
 
         [Fact]
-        public void Read_InvalidPageType_ThrowsException()
-        {
-            var page = new Page();
-            page.RawData[0] = 200;
-
-            this.sut.Write(page);
-            Assert.Throws<DbInvalidOperationException>(()=> this.sut.Read(0));
-        }
-
-        [Fact]
         public void Write_ReturnsPagePosition()
         {
-            var dataPage1 = new DataPage(new Page());
-            var dataPage2 = new DataPage(new Page());
+            var dataPage1 = new Page(PageType.DataPage);
+            var dataPage2 = new Page(PageType.DataPage);
 
             var position1 = this.sut.Write(dataPage1);
             Assert.Equal(0,dataPage1.Position);

@@ -36,7 +36,6 @@ namespace SoltysDb.Core
             var value = Encoding.Default.GetString(data.Slice(stringsLengthMetadata + keyLength, valueLength));
 
             return new KeyValuePair<string, string>(key, value);
-
         }
 
 

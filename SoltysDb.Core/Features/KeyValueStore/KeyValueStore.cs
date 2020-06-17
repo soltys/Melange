@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace SoltysDb.Core
 {
@@ -9,7 +10,7 @@ namespace SoltysDb.Core
         {
         }
 
-        public void Insert(string key, string value)
+        public void Add(string key, string value)
         {
             IPage kvPage = this.DatabaseData.FindFirst(PageType.KeyValue) ?? new Page(PageType.KeyValue);
 
@@ -36,6 +37,31 @@ namespace SoltysDb.Core
             throw new DbKeyNotFoundException(key);
         }
 
+        public bool Remove(string key)
+        {
+            var kvPage = this.DatabaseData.FindFirst(PageType.KeyValue);
+            var wasRemoved = false;
+            if (kvPage != null)
+            {
+                GetWriteStore(kvPage, this.DatabaseData, (store) =>
+                {
+                    wasRemoved = store.Remove(key);
+                });
+            }
+
+            return wasRemoved;
+        }
+
+        public Dictionary<string, string> AsDictionary()
+        {
+            var kvPage = this.DatabaseData.FindFirst(PageType.KeyValue);
+            if (kvPage != null)
+            {
+                return GetReadStore(kvPage, this.DatabaseData);
+            }
+            //Not KeyValueStore - for e.g. noting was inserted yet, returns empty dictionary
+            return new Dictionary<string, string>();
+        }
 
         public Dictionary<string, string> GetReadStore(IPage firstDataPage, DatabaseData data)
             => KeyValueStoreSerializer.GetDictionaryFromBytes(data.ReadDataBlock(firstDataPage));
@@ -47,39 +73,9 @@ namespace SoltysDb.Core
 
             modify(dict);
 
-            var newBytes = KeyValueStoreSerializer.CovertDictionaryToBytes(dict);
+            var newDictBytes = KeyValueStoreSerializer.CovertDictionaryToBytes(dict);
 
-            int bytesToBeWritten = newBytes.Length;
-            IPage currentPage = firstDataPage;
-            while (bytesToBeWritten > 0)
-            {
-                int startIndex = newBytes.Length - bytesToBeWritten;
-                int copyLength = Math.Min(bytesToBeWritten, currentPage.DataBlock.Data.Length);
-                newBytes.AsSpan().Slice(startIndex, copyLength).CopyTo(currentPage.DataBlock.Data);
-
-                data.Write(currentPage);
-
-                bytesToBeWritten -= currentPage.DataBlock.Data.Length;
-
-                if (bytesToBeWritten > 0)
-                {
-                    if (currentPage.DataBlock.NextPageLocation > 0)
-                    {
-                        currentPage = data.Read(currentPage.DataBlock.NextPageLocation);
-                    }
-                    else
-                    {
-                        var newKvPage = new Page(PageType.KeyValue);
-                        data.Write(newKvPage);
-
-                        currentPage.DataBlock.NextPageLocation = newKvPage.Position;
-                        data.Write(currentPage);
-
-                        currentPage = newKvPage;
-                    }
-                }
-            }
+            data.SaveDataInPages(firstDataPage, newDictBytes);
         }
-
     }
 }

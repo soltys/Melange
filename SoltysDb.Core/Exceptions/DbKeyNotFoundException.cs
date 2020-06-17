@@ -9,12 +9,4 @@ namespace SoltysDb.Core
             
         }
     }
-
-    public class DbInvalidOperationException: InvalidOperationException
-    {
-        public DbInvalidOperationException(string message): base(message)
-        {
-            
-        }
-    }
 }

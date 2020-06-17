@@ -55,7 +55,5 @@ namespace SoltysDb.Core.Test
             Assert.Equal(Page.PageSize,dataPage2.Position);
             Assert.Equal(position2,dataPage2.Position);
         }
-
-     
     }
 }

@@ -12,7 +12,7 @@ namespace SoltysDb
             
             for (int i = 0; i < 69; i++)
             {
-                db.KV.Insert(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
+                db.KV.Add(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
             }
         }
     }

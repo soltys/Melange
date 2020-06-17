@@ -119,5 +119,40 @@ namespace SoltysDb.Core
 
             return ms.ToArray();
         }
+
+        public void SaveDataInPages(IPage firstDataPage, byte[] newBytes)
+        {
+            PageType pageType = firstDataPage.PageType;
+            int bytesToBeWritten = newBytes.Length;
+            IPage currentPage = firstDataPage;
+            while (bytesToBeWritten > 0)
+            {
+                int startIndex = newBytes.Length - bytesToBeWritten;
+                int copyLength = Math.Min(bytesToBeWritten, currentPage.DataBlock.Data.Length);
+                newBytes.AsSpan().Slice(startIndex, copyLength).CopyTo(currentPage.DataBlock.Data);
+
+                Write(currentPage);
+
+                bytesToBeWritten -= currentPage.DataBlock.Data.Length;
+
+                if (bytesToBeWritten > 0)
+                {
+                    if (currentPage.DataBlock.NextPageLocation > 0)
+                    {
+                        currentPage = Read(currentPage.DataBlock.NextPageLocation);
+                    }
+                    else
+                    {
+                        var newKvPage = new Page(pageType);
+                        Write(newKvPage);
+
+                        currentPage.DataBlock.NextPageLocation = newKvPage.Position;
+                        Write(currentPage);
+
+                        currentPage = newKvPage;
+                    }
+                }
+            }
+        }
     }
 }

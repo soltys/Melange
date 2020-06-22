@@ -2,21 +2,29 @@
 
 namespace SoltysDb.Core
 {
-    internal abstract class BinaryField<T>
+    internal abstract class BinaryField
     {
-        protected Memory<byte> fieldSpan;
+        protected Memory<byte> FieldSpan;
+        private byte[] memoryHandler;
 
         protected BinaryField(byte[] memory, int offset, int fieldLength)
         {
             Offset = offset;
             FieldLength = fieldLength;
-            this.fieldSpan = new Memory<byte>(memory, Offset, fieldLength);
+            memoryHandler = memory;
+            this.FieldSpan = new Memory<byte>(this.memoryHandler, Offset, fieldLength);
         }
         public int FieldLength { get; }
         public int Offset { get; }
         public int FieldEnd => Offset + FieldLength;
 
-        public abstract T GetValue();
-        public abstract void SetValue(T value);
+        public void Move(int newOffset)
+        {
+            var newSpan  =  new Memory<byte>(this.memoryHandler, newOffset, this.FieldLength);
+
+            this.FieldSpan.CopyTo(newSpan);
+            this.FieldSpan = newSpan;
+        }
+
     }
 }

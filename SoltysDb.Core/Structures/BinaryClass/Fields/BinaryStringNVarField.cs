@@ -3,7 +3,7 @@ using System.Text;
 
 namespace SoltysDb.Core
 {
-    class BinaryStringNVarField : BinaryField<string>
+    class BinaryStringNVarField : BinaryField
     {
         private readonly int maxStringLength;
         private readonly BinaryInt32Field currentStringLength;
@@ -12,17 +12,17 @@ namespace SoltysDb.Core
         {
             this.maxStringLength = maxStringLength;
             this.currentStringLength = new BinaryInt32Field(memory, offset);
-            this.fieldSpan = new Memory<byte>(memory, this.currentStringLength.FieldEnd, maxStringLength * sizeof(char));
+            this.FieldSpan = new Memory<byte>(memory, this.currentStringLength.FieldEnd, maxStringLength * sizeof(char));
             
         }
 
-        public override string GetValue()
+        public string GetValue()
         {
-            var encodedString = Encoding.Default.GetString(this.fieldSpan.Span.ToArray());
+            var encodedString = Encoding.Default.GetString(this.FieldSpan.Span.ToArray());
             return encodedString.Substring(0, this.currentStringLength.GetValue());
         }
 
-        public override void SetValue(string value)
+        public void SetValue(string value)
         {
             if (value == null)
             {
@@ -36,7 +36,7 @@ namespace SoltysDb.Core
 
             this.currentStringLength.SetValue(value.Length);
             var bytes = Encoding.Default.GetBytes(value);
-            bytes.CopyTo(this.fieldSpan);
+            bytes.CopyTo(this.FieldSpan);
         }
     }
 }

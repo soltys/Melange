@@ -2,21 +2,20 @@
 
 namespace SoltysDb.Core
 {
-    internal class BinaryInt32Field : BinaryField<Int32>
-    {
+    internal class BinaryInt32Field : BinaryField
+    { 
         public BinaryInt32Field(byte[] memory, int offset) : base(memory, offset, sizeof(int))
         {
         }
 
-        public override Int32 GetValue()
+        public Int32 GetValue()
         {
-            return BitConverter.ToInt32(this.fieldSpan.Span);
+            return BitConverter.ToInt32(this.FieldSpan.Span);
         }
 
-        public override void SetValue(Int32 value)
+        public void SetValue(Int32 value)
         {
-            BitConverter.GetBytes(value).CopyTo(this.fieldSpan);
+            BitConverter.GetBytes(value).CopyTo(this.FieldSpan);
         }
-
     }
 }

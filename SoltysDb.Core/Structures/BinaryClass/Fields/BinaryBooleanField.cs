@@ -2,20 +2,20 @@
 
 namespace SoltysDb.Core
 {
-    internal class BinaryBooleanField : BinaryField<Boolean>
-    {
+    internal class BinaryBooleanField : BinaryField
+    { 
         public BinaryBooleanField(byte[] memory, int offset) : base(memory, offset, sizeof(bool))
         {
         }
 
-        public override Boolean GetValue()
+        public Boolean GetValue()
         {
-            return BitConverter.ToBoolean(this.fieldSpan.Span);
+            return BitConverter.ToBoolean(this.FieldSpan.Span);
         }
 
-        public override void SetValue(bool value)
+        public void SetValue(bool value)
         {
-            BitConverter.GetBytes(value).CopyTo(this.fieldSpan);
+            BitConverter.GetBytes(value).CopyTo(this.FieldSpan);
         }
     }
 }

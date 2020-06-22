@@ -2,20 +2,20 @@
 
 namespace SoltysDb.Core
 {
-    class BinaryByteField : BinaryField<byte>
+    class BinaryByteField : BinaryField
     {
         public BinaryByteField(byte[] memory, int offset) : base(memory, offset, sizeof(byte))
         {
         }
 
-        public override byte GetValue()
+        public byte GetValue()
         {
-            return this.fieldSpan.ToArray()[0];
+            return this.FieldSpan.ToArray()[0];
         }
 
-        public override void SetValue(byte value)
+        public void SetValue(byte value)
         {
-            (new[] { value }).CopyTo(this.fieldSpan);
+            (new[] { value }).CopyTo(this.FieldSpan);
         }
     }
 }

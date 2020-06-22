@@ -5,14 +5,22 @@ using Xunit;
 
 namespace SoltysDb.Core.Test.Structures
 {
-public    class BinaryFieldTests
+    public class BinaryFieldTests
     {
+        [Fact]
+        public void Constructor_SetOffsetProperty()
+        {
+            var memory = new byte[8];
+            var byteField = new BinaryByteField(memory, 1);
+
+            Assert.Equal(1, byteField.Offset);
+        }
+
         [Fact]
         public void Move_MovesBytesToNewLocationInByteArray()
         {
             var memory = new byte[8];
-
-            var byteField = new BinaryByteField(memory, 1 );
+            var byteField = new BinaryByteField(memory, 1);
             byteField.SetValue(100);
 
             Assert.Equal(100, memory[1]);
@@ -34,6 +42,17 @@ public    class BinaryFieldTests
 
             //old place have old value
             Assert.Equal(100, memory[1]);
+        }
+
+        [Fact]
+        public void Move_UpdatesOffsetProperty()
+        {
+            var memory = new byte[8];
+            var byteField = new BinaryByteField(memory, 1);
+
+            byteField.Move(7);
+
+            Assert.Equal(7, byteField.Offset);
         }
     }
 }

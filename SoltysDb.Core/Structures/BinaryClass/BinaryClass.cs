@@ -10,11 +10,11 @@ namespace SoltysDb.Core
 
         protected readonly byte[] RawData;
         private readonly int maxSize;
-        private int reservedBytes;
+        private int totalReservedBytes;
 
         public BinaryClass(int maxSize)
         {
-            this.reservedBytes = 0;
+            this.totalReservedBytes = 0;
             this.maxSize = maxSize;
             this.RawData = new byte[this.maxSize];
         }
@@ -37,26 +37,26 @@ namespace SoltysDb.Core
         private BinaryField InitializeField(BinaryField field)
         {
             binaryFields.Add(field);
-            reservedBytes = field.FieldEnd;
+            totalReservedBytes = field.FieldEnd;
             return field;
         }
 
         protected BinaryInt32Field AddInt32Field()
-            => (BinaryInt32Field)InitializeField(new BinaryInt32Field(this.RawData, reservedBytes));
+            => (BinaryInt32Field)InitializeField(new BinaryInt32Field(this.RawData, totalReservedBytes));
 
         protected BinaryInt64Field AddInt64Field()
-            => (BinaryInt64Field)InitializeField(new BinaryInt64Field(this.RawData, reservedBytes));
+            => (BinaryInt64Field)InitializeField(new BinaryInt64Field(this.RawData, totalReservedBytes));
 
         protected BinaryByteField AddByteField()
-            => (BinaryByteField)InitializeField(new BinaryByteField(this.RawData, reservedBytes));
+            => (BinaryByteField)InitializeField(new BinaryByteField(this.RawData, totalReservedBytes));
 
         protected BinaryBooleanField AddBooleanField()
-            => (BinaryBooleanField)InitializeField(new BinaryBooleanField(this.RawData, reservedBytes));
+            => (BinaryBooleanField)InitializeField(new BinaryBooleanField(this.RawData, totalReservedBytes));
 
         protected BinaryDoubleField AddDoubleField()
-            => (BinaryDoubleField)InitializeField(new BinaryDoubleField(this.RawData, reservedBytes));
+            => (BinaryDoubleField)InitializeField(new BinaryDoubleField(this.RawData, totalReservedBytes));
 
         protected BinaryStringNVarField AddStringNVarField(int maxStringLength)
-            => (BinaryStringNVarField)InitializeField(new BinaryStringNVarField(this.RawData, reservedBytes, maxStringLength));
+            => (BinaryStringNVarField)InitializeField(new BinaryStringNVarField(this.RawData, totalReservedBytes, maxStringLength));
     }
 }

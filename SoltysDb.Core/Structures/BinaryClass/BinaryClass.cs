@@ -12,15 +12,11 @@ namespace SoltysDb.Core
         private readonly int maxSize;
         private int totalReservedBytes;
 
-        public BinaryClass(int maxSize)
+        public BinaryClass(byte[] rawData)
         {
             this.totalReservedBytes = 0;
-            this.maxSize = maxSize;
+            this.maxSize = rawData.Length;
             this.RawData = new byte[this.maxSize];
-        }
-
-        public BinaryClass(byte[] rawData) : this(rawData.Length)
-        {
             rawData.CopyTo(this.RawData.AsSpan());
         }
 

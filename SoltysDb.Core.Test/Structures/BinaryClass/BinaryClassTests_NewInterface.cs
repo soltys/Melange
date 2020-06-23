@@ -33,7 +33,7 @@ namespace SoltysDb.Core.Test.Structures
 
         internal class MyClass : BinaryClass
         {
-            public MyClass() : base(1024)
+            public MyClass() : base(new byte[1024])
             {
                 this.idField = this.AddInt32Field();
                 this.longValueField = AddInt64Field();

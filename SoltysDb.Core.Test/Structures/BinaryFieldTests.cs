@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace SoltysDb.Core.Test.Structures
@@ -14,6 +12,13 @@ namespace SoltysDb.Core.Test.Structures
             var byteField = new BinaryByteField(memory, 1);
 
             Assert.Equal(1, byteField.Offset);
+        }
+
+        [Fact]
+        public void Constructor_OffsetOutOfRangeMemory_ArgumentOutOfRangeExceptionIsThrown()
+        {
+            var memory = new byte[8];
+            Assert.Throws<ArgumentOutOfRangeException>("offset", () => new BinaryByteField(memory, 8));
         }
 
         [Fact]
@@ -53,6 +58,34 @@ namespace SoltysDb.Core.Test.Structures
             byteField.Move(7);
 
             Assert.Equal(7, byteField.Offset);
+        }
+
+        [Fact]
+        public void Move_MovesAlsoFieldSetAsNext()
+        {
+            var memory = new byte[8];
+            var byteField1 = new BinaryByteField(memory, 1);
+            var byteField2 = new BinaryByteField(memory, 2);
+
+            byteField1.Next = byteField2;
+
+
+            byteField1.SetValue(100);
+            byteField2.SetValue(200);
+
+            byteField1.Move(5);
+
+            Assert.Equal(100, memory[5]);
+            Assert.Equal(200, memory[6]);
+        }
+
+        [Fact]
+        public void Move_OutOfMemory_OutOfRangeExceptionIsThrown()
+        {
+            var memory = new byte[8];
+            var byteField1 = new BinaryByteField(memory, 1);
+
+            Assert.Throws<ArgumentOutOfRangeException>("newOffset", () => byteField1.Move(8));
         }
     }
 }

@@ -9,6 +9,11 @@ namespace SoltysDb.Core
 
         protected BinaryField(byte[] memory, int offset, int fieldLength)
         {
+            if (offset >= memory.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            }
+
             this.Offset = offset;
             FieldLength = fieldLength;
             memoryHandler = memory;
@@ -20,8 +25,21 @@ namespace SoltysDb.Core
 
         public int FieldEnd => Offset + FieldLength;
 
+        public BinaryField Next { get; set; }
+
         public void Move(int newOffset)
         {
+            if (newOffset >= memoryHandler.Length )
+            {
+                throw new ArgumentOutOfRangeException(nameof(newOffset));
+            }
+
+            if (Next != null)
+            {
+                var newFieldEnd = newOffset + FieldLength;
+                Next.Move(newFieldEnd);
+            }
+
             var newSpan = new Memory<byte>(this.memoryHandler, newOffset, this.FieldLength);
             
             this.FieldSpan.CopyTo(newSpan);

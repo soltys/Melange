@@ -8,9 +8,10 @@ namespace SoltysDb.Core.Test.Pages
         [InlineData(1, PageType.Header)]
         [InlineData(2, PageType.DataPage)]
         [InlineData(3, PageType.KeyValue)]
-        public void ConvertByte_IntoPageType(byte expectedPageTypeByte, PageType PageType)
+        public void ConvertByte_IntoPageType(byte expectedPageTypeByte, PageType pageType)
         {
-            var page = new Page { PageType = PageType };
+            var page = new Page();
+            page.PageType = pageType;
             Assert.Equal(expectedPageTypeByte, page.RawData[0]);
         }
 

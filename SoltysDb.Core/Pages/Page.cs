@@ -21,10 +21,10 @@ namespace SoltysDb.Core
 
         public int End { get; }
 
-        public PageMetadata(byte[] metaDataBlock, int offset) : base(metaDataBlock)
+        public PageMetadata(byte[] metaDataBlock, int freeMemoryOffset) : base(metaDataBlock, freeMemoryOffset)
         {
-            this.pageTypeField = new BinaryByteField(metaDataBlock, offset);
-            this.positionField = new BinaryInt64Field(metaDataBlock, this.pageTypeField.FieldEnd);
+            this.pageTypeField = AddByteField();
+            this.positionField = AddInt64Field();
 
             End = this.positionField.FieldEnd;
         }

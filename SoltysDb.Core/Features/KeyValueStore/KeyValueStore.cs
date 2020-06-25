@@ -64,11 +64,11 @@ namespace SoltysDb.Core
         }
 
         public Dictionary<string, string> GetReadStore(IPage firstDataPage, DatabaseData data)
-            => KeyValueStoreSerializer.GetDictionaryFromBytes(data.ReadDataBlock(firstDataPage));
+            => KeyValueStoreSerializer.GetDictionaryFromBytes(data.ReadDataBlockBytes(firstDataPage));
 
         public void GetWriteStore(IPage firstDataPage, DatabaseData data, Action<Dictionary<string, string>> modify)
         {
-            var oldBytes = data.ReadDataBlock(firstDataPage);
+            var oldBytes = data.ReadDataBlockBytes(firstDataPage);
             var dict = KeyValueStoreSerializer.GetDictionaryFromBytes(oldBytes);
 
             modify(dict);

@@ -8,14 +8,12 @@ namespace SoltysDb.Core
     {
         private readonly BinaryStringNVarField databaseNameField;
         public string DatabaseName => this.databaseNameField.GetValue();
-
         public int End { get; }
-        public HeaderMetadata(byte[] memory, int offset) : base(memory)
+        public HeaderMetadata(byte[] memory, int offset) : base(memory, offset)
         {
             const string dbId = "SOLTYSDB";
             this.databaseNameField = AddStringNVarField(dbId.Length);
             this.databaseNameField.SetValue(dbId);
-
 
             End = this.databaseNameField.FieldEnd;
         }

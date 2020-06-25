@@ -8,51 +8,52 @@ namespace SoltysDb.Core
     {
         List<BinaryField> binaryFields = new List<BinaryField>();
 
-        protected readonly byte[] RawData;
-        private readonly int maxSize;
-        private int totalReservedBytes;
+        protected readonly byte[] memoryHandler;
+        private int freeMemoryOffset;
 
-        public BinaryClass(byte[] rawData)
+        public BinaryClass(byte[] dataSource) : this(dataSource, 0)
         {
-            this.totalReservedBytes = 0;
-            this.maxSize = rawData.Length;
-            this.RawData = new byte[this.maxSize];
-            rawData.CopyTo(this.RawData.AsSpan());
+        }
+
+        public BinaryClass(byte[] dataSource, int freeMemoryOffset)
+        {
+            this.freeMemoryOffset = freeMemoryOffset;
+            this.memoryHandler = dataSource;
         }
 
         public byte[] ToBytes()
         {
-            return this.RawData.ToArray();
+            return this.memoryHandler.ToArray();
         }
 
         public void SetBytes(byte[] rawData)
         {
-            rawData.CopyTo(this.RawData.AsSpan());
+            rawData.CopyTo(this.memoryHandler.AsSpan());
         }
 
         private BinaryField InitializeField(BinaryField field)
         {
             binaryFields.Add(field);
-            totalReservedBytes = field.FieldEnd;
+            freeMemoryOffset = field.FieldEnd;
             return field;
         }
 
         protected BinaryInt32Field AddInt32Field()
-            => (BinaryInt32Field)InitializeField(new BinaryInt32Field(this.RawData, totalReservedBytes));
+            => (BinaryInt32Field)InitializeField(new BinaryInt32Field(this.memoryHandler, freeMemoryOffset));
 
         protected BinaryInt64Field AddInt64Field()
-            => (BinaryInt64Field)InitializeField(new BinaryInt64Field(this.RawData, totalReservedBytes));
+            => (BinaryInt64Field)InitializeField(new BinaryInt64Field(this.memoryHandler, freeMemoryOffset));
 
         protected BinaryByteField AddByteField()
-            => (BinaryByteField)InitializeField(new BinaryByteField(this.RawData, totalReservedBytes));
+            => (BinaryByteField)InitializeField(new BinaryByteField(this.memoryHandler, freeMemoryOffset));
 
         protected BinaryBooleanField AddBooleanField()
-            => (BinaryBooleanField)InitializeField(new BinaryBooleanField(this.RawData, totalReservedBytes));
+            => (BinaryBooleanField)InitializeField(new BinaryBooleanField(this.memoryHandler, freeMemoryOffset));
 
         protected BinaryDoubleField AddDoubleField()
-            => (BinaryDoubleField)InitializeField(new BinaryDoubleField(this.RawData, totalReservedBytes));
+            => (BinaryDoubleField)InitializeField(new BinaryDoubleField(this.memoryHandler, freeMemoryOffset));
 
         protected BinaryStringNVarField AddStringNVarField(int maxStringLength)
-            => (BinaryStringNVarField)InitializeField(new BinaryStringNVarField(this.RawData, totalReservedBytes, maxStringLength));
+            => (BinaryStringNVarField)InitializeField(new BinaryStringNVarField(this.memoryHandler, freeMemoryOffset, maxStringLength));
     }
 }

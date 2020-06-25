@@ -97,7 +97,7 @@ namespace SoltysDb.Core
             this.dataStream?.Dispose();
         }
 
-        public byte[] ReadDataBlock(IPage dataPage)
+        public byte[] ReadDataBlockBytes(IPage dataPage)
         {
             using var ms = new MemoryStream();
             var currentDataPage = dataPage;

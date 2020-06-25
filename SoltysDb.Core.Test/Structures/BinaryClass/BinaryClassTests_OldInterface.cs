@@ -36,12 +36,12 @@ namespace SoltysDb.Core.Test.Structures
         {
             public MyClass() : base(new byte[1024])
             {
-                this.idField = new BinaryInt32Field(this.RawData, 0);
-                this.longValueField = new BinaryInt64Field(this.RawData, this.idField.FieldEnd);
-                this.doubleValueField = new BinaryDoubleField(this.RawData, this.longValueField.FieldEnd);
-                this.binaryBooleanField = new BinaryBooleanField(this.RawData, this.doubleValueField.FieldEnd);
-                this.stringField = new BinaryStringNVarField(this.RawData, this.binaryBooleanField.FieldEnd, 16);
-                this.byteField = new BinaryByteField(this.RawData, this.stringField.FieldEnd);
+                this.idField = new BinaryInt32Field(this.memoryHandler, 0);
+                this.longValueField = new BinaryInt64Field(this.memoryHandler, this.idField.FieldEnd);
+                this.doubleValueField = new BinaryDoubleField(this.memoryHandler, this.longValueField.FieldEnd);
+                this.binaryBooleanField = new BinaryBooleanField(this.memoryHandler, this.doubleValueField.FieldEnd);
+                this.stringField = new BinaryStringNVarField(this.memoryHandler, this.binaryBooleanField.FieldEnd, 16);
+                this.byteField = new BinaryByteField(this.memoryHandler, this.stringField.FieldEnd);
             }
 
             private readonly BinaryInt32Field idField;

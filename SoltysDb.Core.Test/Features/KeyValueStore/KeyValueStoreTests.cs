@@ -65,7 +65,7 @@ namespace SoltysDb.Core.Test.Features
         {
             using var sut = new SoltysDb();
 
-            var dict=  sut.KV.AsDictionary();
+            var dict = sut.KV.AsDictionary();
 
             Assert.NotNull(dict);
             Assert.Empty(dict);
@@ -90,6 +90,21 @@ namespace SoltysDb.Core.Test.Features
             using var sut = new SoltysDb();
             var wasRemoved = sut.KV.Remove("foo");
             Assert.False(wasRemoved);
+        }
+
+        [Fact]
+        public void ChangeCollection_AllowsToHaveDiffrentDicts()
+        {
+            using var sut = new SoltysDb();
+
+            sut.KV.Add("foo", "bar");
+            sut.KV.ChangeCollection("myOwn");
+            sut.KV.Add("foo", "baz");
+
+            Assert.Equal("baz", sut.KV.Get("foo"));
+
+            sut.KV.ChangeCollection(sut.KV.DefaultCollection);
+            Assert.Equal("bar", sut.KV.Get("foo"));
         }
     }
 }

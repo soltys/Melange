@@ -6,13 +6,23 @@ namespace SoltysDb.Core
 {
     internal class KeyValueStore : Feature, IKeyValueStore
     {
+        private string collection;
+        private const string DefaultCollectionName = "$global";
+        public string DefaultCollection => DefaultCollectionName;
+
         internal KeyValueStore(DatabaseData data) : base(data)
         {
+            this.collection = DefaultCollectionName;
+        }
+
+        public void ChangeCollection(string name)
+        {
+            this.collection = name;
         }
 
         public void Add(string key, string value)
         {
-            IPage kvPage = this.DatabaseData.FindFirst(PageType.KeyValue) ?? new Page(PageType.KeyValue);
+            IPage kvPage = FindKeyValuePage(this.collection);
 
             GetWriteStore(kvPage, this.DatabaseData, (store) =>
             {
@@ -24,7 +34,7 @@ namespace SoltysDb.Core
 
         public string Get(string key)
         {
-            var kvPage = this.DatabaseData.FindFirst(PageType.KeyValue);
+            var kvPage = FindKeyValuePage(this.collection);
             if (kvPage != null)
             {
                 var store = GetReadStore(kvPage, this.DatabaseData);
@@ -39,7 +49,7 @@ namespace SoltysDb.Core
 
         public bool Remove(string key)
         {
-            var kvPage = this.DatabaseData.FindFirst(PageType.KeyValue);
+            var kvPage = FindKeyValuePage(this.collection);
             var wasRemoved = false;
             if (kvPage != null)
             {
@@ -54,7 +64,7 @@ namespace SoltysDb.Core
 
         public Dictionary<string, string> AsDictionary()
         {
-            var kvPage = this.DatabaseData.FindFirst(PageType.KeyValue);
+            var kvPage = FindKeyValuePage(this.collection);
             if (kvPage != null)
             {
                 return GetReadStore(kvPage, this.DatabaseData);
@@ -76,6 +86,34 @@ namespace SoltysDb.Core
             var newDictBytes = KeyValueStoreSerializer.CovertDictionaryToBytes(dict);
 
             data.SaveDataInPages(firstDataPage, newDictBytes);
+        }
+
+        private IPage FindKeyValuePage(string name)
+        {
+            var headerPage = this.DatabaseData.Read(0);
+            if (headerPage == null)
+            {
+                throw new InvalidOperationException("No header found");
+            }
+            var location = 0L;
+            GetWriteStore(headerPage, this.DatabaseData, (store) =>
+            {
+                var locationKey = name + "_location";
+                if (!store.ContainsKey(locationKey))
+                {
+                    var newPage = new Page(PageType.KeyValue);
+                    this.DatabaseData.Write(newPage);
+
+                    store[locationKey] = newPage.Position.ToString();
+                    location = newPage.Position;
+                }
+                else
+                {
+                    location = long.Parse(store[locationKey]);
+                }
+            });
+
+            return this.DatabaseData.Read(location);
         }
     }
 }

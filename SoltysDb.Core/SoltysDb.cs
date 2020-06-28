@@ -43,8 +43,6 @@ namespace SoltysDb.Core
 
             KV = new KeyValueStore(this.data);
         }
-
-
      
         public void Dispose()
         {

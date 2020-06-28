@@ -57,5 +57,12 @@ namespace SoltysDb.Core
             DataBlock = new DataBlock(RawData, this.PageMetadata.End, Page.PageSize - this.PageMetadata.End);
             Position = -1;
         }
+
+        public Page(byte[] rawData)
+        {
+            RawData = rawData;
+            this.PageMetadata = new PageMetadata(RawData, 0);;
+            DataBlock = new DataBlock(RawData, this.PageMetadata.End, Page.PageSize - this.PageMetadata.End);
+        }
     }
 }

@@ -28,5 +28,11 @@ namespace SoltysDb.Core
             DataBlock = new DataBlock(RawData, this.headerMetadata.End, Page.PageSize - this.headerMetadata.End);
             PageType = PageType.Header;
         }
+
+        public HeaderPage(byte[] rawData) : base(rawData)
+        {
+            this.headerMetadata = new HeaderMetadata(RawData, this.PageMetadata.End);
+            DataBlock = new DataBlock(RawData, this.headerMetadata.End, Page.PageSize - this.headerMetadata.End);
+        }
     }
 }

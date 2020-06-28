@@ -33,7 +33,7 @@ namespace SoltysDb.Core
             this.dataStream.Write(page.RawData, 0, page.RawData.Length);
             return page.Position;
         }
-
+        
         public IPage Read(int pageOffset)
         {
             var offset = Page.PageSize * pageOffset;
@@ -41,6 +41,11 @@ namespace SoltysDb.Core
 
             var dataPage = new Page();
             int bytesRead = this.dataStream.Read(dataPage.RawData, 0, Page.PageSize);
+
+            if (dataPage.PageType == PageType.Header)
+            {
+                dataPage = new HeaderPage(dataPage.RawData);
+            }
 
             //Do not attempt to project a page since no data has been read
             //TODO - throw exception here
@@ -78,7 +83,7 @@ namespace SoltysDb.Core
             }
         }
 
-        public IPage FindFirst(PageType pageType) 
+        public IPage FindFirst(PageType pageType)
         {
             var allPages = ReadAll().ToArray();
             foreach (var page in allPages)

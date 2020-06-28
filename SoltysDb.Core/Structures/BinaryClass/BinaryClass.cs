@@ -55,5 +55,8 @@ namespace SoltysDb.Core
 
         protected BinaryStringNVarField AddStringNVarField(int maxStringLength)
             => (BinaryStringNVarField)InitializeField(new BinaryStringNVarField(this.memoryHandler, freeMemoryOffset, maxStringLength));
+        
+        protected  BinaryStringNVarField AddStringNVarField()
+            => (BinaryStringNVarField)InitializeField(new BinaryStringNVarField(this.memoryHandler, freeMemoryOffset, BitConverter.ToInt32(this.memoryHandler, freeMemoryOffset)));
     }
 }

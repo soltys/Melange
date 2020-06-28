@@ -74,21 +74,21 @@ namespace SoltysDb.Core
         }
 
         public Dictionary<string, string> GetReadStore(IPage firstDataPage, DatabaseData data)
-            => KeyValueStoreSerializer.GetDictionaryFromBytes(data.ReadDataBlockBytes(firstDataPage));
+            => KeyValueStoreSerializer.ToDictionary(data.ReadDataBlockBytes(firstDataPage));
 
         public void GetWriteStore(IPage firstDataPage, DatabaseData data, Action<Dictionary<string, string>> modify)
         {
             var oldBytes = data.ReadDataBlockBytes(firstDataPage);
-            var dict = KeyValueStoreSerializer.GetDictionaryFromBytes(oldBytes);
+            var dict = KeyValueStoreSerializer.ToDictionary(oldBytes);
 
             modify(dict);
 
-            var newDictBytes = KeyValueStoreSerializer.CovertDictionaryToBytes(dict);
+            var newDictBytes = KeyValueStoreSerializer.ToBytes(dict);
 
             data.SaveDataInPages(firstDataPage, newDictBytes);
         }
 
-        private IPage FindKeyValuePage(string name)
+        private IPage FindKeyValuePage(string collectionName)
         {
             var headerPage = this.DatabaseData.Read(0);
             if (headerPage == null)
@@ -98,7 +98,7 @@ namespace SoltysDb.Core
             var location = 0L;
             GetWriteStore(headerPage, this.DatabaseData, (store) =>
             {
-                var locationKey = name + "_location";
+                var locationKey = collectionName + "_location";
                 if (!store.ContainsKey(locationKey))
                 {
                     var newPage = new Page(PageType.KeyValue);

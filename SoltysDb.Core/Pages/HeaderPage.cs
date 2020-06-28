@@ -3,7 +3,6 @@ using System.Text;
 
 namespace SoltysDb.Core
 {
-
     internal class HeaderMetadata : BinaryClass
     {
         private readonly BinaryStringNVarField databaseNameField;

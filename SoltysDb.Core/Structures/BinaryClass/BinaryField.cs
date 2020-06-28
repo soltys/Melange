@@ -29,7 +29,7 @@ namespace SoltysDb.Core
 
         public void Move(int newOffset)
         {
-            if (newOffset >= memoryHandler.Length )
+            if (newOffset >= memoryHandler.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(newOffset));
             }
@@ -41,7 +41,7 @@ namespace SoltysDb.Core
             }
 
             var newSpan = new Memory<byte>(this.memoryHandler, newOffset, this.FieldLength);
-            
+
             this.FieldSpan.CopyTo(newSpan);
 
             this.Offset = newOffset;

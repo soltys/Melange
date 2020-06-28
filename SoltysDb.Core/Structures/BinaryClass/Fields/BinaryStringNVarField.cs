@@ -13,7 +13,6 @@ namespace SoltysDb.Core
             this.maxStringLength = maxStringLength;
             this.currentStringLength = new BinaryInt32Field(memory, offset);
             this.FieldSpan = new Memory<byte>(memory, this.currentStringLength.FieldEnd, maxStringLength * sizeof(char));
-            
         }
 
         public string GetValue()

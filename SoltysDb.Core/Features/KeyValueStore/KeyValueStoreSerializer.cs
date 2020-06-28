@@ -33,7 +33,8 @@ namespace SoltysDb.Core
                 this.Size = valueField.FieldEnd;
             }
         }
-        public static byte[] ConvertKeyValueStringPairToBytes(string key, string value)
+        
+        public static byte[] ToBytes(string key, string value)
         {
             int outputLength = key.Length * sizeof(char) + value.Length * sizeof(char) + sizeof(int) + sizeof(int);
             byte[] output = new byte[outputLength];
@@ -41,15 +42,14 @@ namespace SoltysDb.Core
             return output;
         }
 
-        public static KeyValuePair<string, string> GetKeyValuePairFromBytes(Span<byte> data, out int entrySize)
+        public static KeyValuePair<string, string> ToKeyValuePair(Span<byte> data, out int entrySize)
         {
             var entry = new KeyValueEntry(data.ToArray());
             entrySize = entry.Size;
             return new KeyValuePair<string, string>(entry.Key, entry.Value);
         }
 
-
-        public static byte[] CovertDictionaryToBytes(Dictionary<string, string> dict)
+        public static byte[] ToBytes(Dictionary<string, string> dict)
         {
             byte[] dictCount = BitConverter.GetBytes(dict.Count);
 
@@ -58,14 +58,13 @@ namespace SoltysDb.Core
 
             foreach (var keyValuePair in dict)
             {
-                bytes.AddRange(ConvertKeyValueStringPairToBytes(keyValuePair.Key, keyValuePair.Value));
+                bytes.AddRange(ToBytes(keyValuePair.Key, keyValuePair.Value));
             }
 
             return bytes.ToArray();
         }
 
-
-        public static Dictionary<string, string> GetDictionaryFromBytes(Span<byte> bytes)
+        public static Dictionary<string, string> ToDictionary(Span<byte> bytes)
         {
             var dictionaryLength = BitConverter.ToInt32(bytes);
             Dictionary<string, string> output = new Dictionary<string, string>();
@@ -74,7 +73,7 @@ namespace SoltysDb.Core
             {
                 var pairSlice = bytes.Slice(byteOffset);
                 int entryByteSize;
-                var pair = GetKeyValuePairFromBytes(pairSlice, out entryByteSize);
+                var pair = ToKeyValuePair(pairSlice, out entryByteSize);
                 byteOffset += entryByteSize;
 
                 output.Add(pair.Key, pair.Value);

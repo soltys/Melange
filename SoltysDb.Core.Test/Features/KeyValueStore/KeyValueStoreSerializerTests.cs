@@ -8,9 +8,9 @@ namespace SoltysDb.Core.Test.Features
         [Fact]
         public void SerializeToBytesAndDeserialize()
         {
-            var bytes = KeyValueStoreSerializer.ConvertKeyValueStringPairToBytes("myKey", "myValue");
+            var bytes = KeyValueStoreSerializer.ToBytes("myKey", "myValue");
             int entrySize;
-            var pair = KeyValueStoreSerializer.GetKeyValuePairFromBytes(bytes, out entrySize);
+            var pair = KeyValueStoreSerializer.ToKeyValuePair(bytes, out entrySize);
 
             Assert.Equal("myKey", pair.Key);
             Assert.Equal("myValue", pair.Value);
@@ -28,9 +28,9 @@ namespace SoltysDb.Core.Test.Features
                 {"foo", "bar"},
                 {"me", "you"}
             };
-            var bytes = KeyValueStoreSerializer.CovertDictionaryToBytes(dict);
+            var bytes = KeyValueStoreSerializer.ToBytes(dict);
 
-            var dictFromBytes = KeyValueStoreSerializer.GetDictionaryFromBytes(bytes);
+            var dictFromBytes = KeyValueStoreSerializer.ToDictionary(bytes);
 
             Assert.Equal("bar", dictFromBytes["foo"]);
             Assert.Equal("you", dictFromBytes["me"]);

@@ -2,7 +2,6 @@
 
 namespace SoltysDb.Core
 {
-
     internal class PageMetadata : BinaryClass
     {
         private readonly BinaryByteField pageTypeField;
@@ -49,19 +48,18 @@ namespace SoltysDb.Core
         public DataBlock DataBlock { get; protected set; }
 
         public const int PageSize = 4 * 1024; // 4 kb
-        public byte[] RawData { get; } = new byte[Page.PageSize];
+        public byte[] RawData { get; } 
 
-        public Page(PageType pageType = PageType.Undefined)
+        public Page(PageType pageType = PageType.Undefined) : this(new byte[Page.PageSize])
         {
-            this.PageMetadata = new PageMetadata(RawData, 0) { PageType = pageType };
-            DataBlock = new DataBlock(RawData, this.PageMetadata.End, Page.PageSize - this.PageMetadata.End);
             Position = -1;
+            PageMetadata.PageType = pageType;
         }
 
         public Page(byte[] rawData)
         {
             RawData = rawData;
-            this.PageMetadata = new PageMetadata(RawData, 0);;
+            this.PageMetadata = new PageMetadata(RawData, 0);
             DataBlock = new DataBlock(RawData, this.PageMetadata.End, Page.PageSize - this.PageMetadata.End);
         }
     }

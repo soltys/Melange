@@ -35,7 +35,7 @@ namespace SoltysDb.Core.Test.Structures
         {
             public MyClass() : base(new byte[1024])
             {
-                this.idField = this.AddInt32Field();
+                this.idField = AddInt32Field();
                 this.longValueField = AddInt64Field();
                 this.doubleValueField = AddDoubleField();
                 this.binaryBooleanField = AddBooleanField();

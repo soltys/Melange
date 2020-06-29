@@ -33,30 +33,30 @@ namespace SoltysDb.Core
 
         private BinaryField InitializeField(BinaryField field)
         {
-            binaryFields.Add(field);
-            freeMemoryOffset = field.FieldEnd;
+            this.binaryFields.Add(field);
+            this.freeMemoryOffset = field.FieldEnd;
             return field;
         }
 
         protected BinaryInt32Field AddInt32Field()
-            => (BinaryInt32Field)InitializeField(new BinaryInt32Field(this.memoryHandler, freeMemoryOffset));
+            => (BinaryInt32Field)InitializeField(new BinaryInt32Field(this.memoryHandler, this.freeMemoryOffset));
 
         protected BinaryInt64Field AddInt64Field()
-            => (BinaryInt64Field)InitializeField(new BinaryInt64Field(this.memoryHandler, freeMemoryOffset));
+            => (BinaryInt64Field)InitializeField(new BinaryInt64Field(this.memoryHandler, this.freeMemoryOffset));
 
         protected BinaryByteField AddByteField()
-            => (BinaryByteField)InitializeField(new BinaryByteField(this.memoryHandler, freeMemoryOffset));
+            => (BinaryByteField)InitializeField(new BinaryByteField(this.memoryHandler, this.freeMemoryOffset));
 
         protected BinaryBooleanField AddBooleanField()
-            => (BinaryBooleanField)InitializeField(new BinaryBooleanField(this.memoryHandler, freeMemoryOffset));
+            => (BinaryBooleanField)InitializeField(new BinaryBooleanField(this.memoryHandler, this.freeMemoryOffset));
 
         protected BinaryDoubleField AddDoubleField()
-            => (BinaryDoubleField)InitializeField(new BinaryDoubleField(this.memoryHandler, freeMemoryOffset));
+            => (BinaryDoubleField)InitializeField(new BinaryDoubleField(this.memoryHandler, this.freeMemoryOffset));
 
         protected BinaryStringNVarField AddStringNVarField(int maxStringLength)
-            => (BinaryStringNVarField)InitializeField(new BinaryStringNVarField(this.memoryHandler, freeMemoryOffset, maxStringLength));
+            => (BinaryStringNVarField)InitializeField(new BinaryStringNVarField(this.memoryHandler, this.freeMemoryOffset, maxStringLength));
         
         protected  BinaryStringNVarField AddStringNVarField()
-            => (BinaryStringNVarField)InitializeField(new BinaryStringNVarField(this.memoryHandler, freeMemoryOffset, BitConverter.ToInt32(this.memoryHandler, freeMemoryOffset)));
+            => (BinaryStringNVarField)InitializeField(new BinaryStringNVarField(this.memoryHandler, this.freeMemoryOffset, BitConverter.ToInt32(this.memoryHandler, this.freeMemoryOffset)));
     }
 }

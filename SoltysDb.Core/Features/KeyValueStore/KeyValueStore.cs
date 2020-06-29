@@ -8,11 +8,11 @@ namespace SoltysDb.Core
     {
         private string collection;
         private const string DefaultCollectionName = "$global";
-        public string DefaultCollection => DefaultCollectionName;
+        public string DefaultCollection => KeyValueStore.DefaultCollectionName;
 
         internal KeyValueStore(DatabaseData data) : base(data)
         {
-            this.collection = DefaultCollectionName;
+            this.collection = KeyValueStore.DefaultCollectionName;
         }
 
         public void ChangeCollection(string name)

@@ -14,9 +14,9 @@ namespace SoltysDb.Core
                 throw new ArgumentOutOfRangeException(nameof(offset));
             }
 
-            this.Offset = offset;
+            Offset = offset;
             FieldLength = fieldLength;
-            memoryHandler = memory;
+            this.memoryHandler = memory;
             this.FieldSpan = new Memory<byte>(this.memoryHandler, Offset, fieldLength);
         }
         public int FieldLength { get; }
@@ -29,7 +29,7 @@ namespace SoltysDb.Core
 
         public void Move(int newOffset)
         {
-            if (newOffset >= memoryHandler.Length)
+            if (newOffset >= this.memoryHandler.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(newOffset));
             }
@@ -40,11 +40,11 @@ namespace SoltysDb.Core
                 Next.Move(newFieldEnd);
             }
 
-            var newSpan = new Memory<byte>(this.memoryHandler, newOffset, this.FieldLength);
+            var newSpan = new Memory<byte>(this.memoryHandler, newOffset, FieldLength);
 
             this.FieldSpan.CopyTo(newSpan);
 
-            this.Offset = newOffset;
+            Offset = newOffset;
             this.FieldSpan = newSpan;
         }
     }

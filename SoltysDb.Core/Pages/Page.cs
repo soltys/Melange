@@ -53,7 +53,7 @@ namespace SoltysDb.Core
         public Page(PageType pageType = PageType.Undefined) : this(new byte[Page.PageSize])
         {
             Position = -1;
-            PageMetadata.PageType = pageType;
+            this.PageMetadata.PageType = pageType;
         }
 
         public Page(byte[] rawData)

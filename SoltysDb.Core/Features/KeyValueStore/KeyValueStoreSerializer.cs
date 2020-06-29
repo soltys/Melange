@@ -11,8 +11,8 @@ namespace SoltysDb.Core
             private BinaryStringNVarField keyField;
             private BinaryStringNVarField valueField;
 
-            public string Key => keyField.GetValue();
-            public string Value => valueField.GetValue();
+            public string Key => this.keyField.GetValue();
+            public string Value => this.valueField.GetValue();
             public int Size { get; private set; }
 
             public KeyValueEntry(byte[] dataSource, string key, string value) : base(dataSource)
@@ -20,17 +20,17 @@ namespace SoltysDb.Core
                 this.keyField = AddStringNVarField(key.Length);
                 this.valueField = AddStringNVarField(value.Length);
 
-                keyField.SetValue(key);
-                valueField.SetValue(value);
+                this.keyField.SetValue(key);
+                this.valueField.SetValue(value);
 
-                this.Size = valueField.FieldEnd;
+                Size = this.valueField.FieldEnd;
             }
 
             public KeyValueEntry(byte[] dataSource) : base(dataSource)
             {
                 this.keyField = AddStringNVarField();
                 this.valueField = AddStringNVarField();
-                this.Size = valueField.FieldEnd;
+                Size = this.valueField.FieldEnd;
             }
         }
         

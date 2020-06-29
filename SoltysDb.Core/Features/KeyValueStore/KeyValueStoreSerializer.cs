@@ -8,8 +8,8 @@ namespace SoltysDb.Core
     {
         private class KeyValueEntry : BinaryClass
         {
-            private BinaryStringNVarField keyField;
-            private BinaryStringNVarField valueField;
+            private readonly BinaryStringNVarField keyField;
+            private readonly BinaryStringNVarField valueField;
 
             public string Key => this.keyField.GetValue();
             public string Value => this.valueField.GetValue();
@@ -28,8 +28,8 @@ namespace SoltysDb.Core
 
             public KeyValueEntry(byte[] dataSource) : base(dataSource)
             {
-                this.keyField = AddStringNVarField();
-                this.valueField = AddStringNVarField();
+                this.keyField = AddExistingStringNVarField();
+                this.valueField = AddExistingStringNVarField();
                 Size = this.valueField.FieldEnd;
             }
         }
@@ -72,11 +72,10 @@ namespace SoltysDb.Core
             for (int i = 0; i < dictionaryLength; i++)
             {
                 var pairSlice = bytes.Slice(byteOffset);
-                int entryByteSize;
-                var pair = ToKeyValuePair(pairSlice, out entryByteSize);
+                var (key, value) = ToKeyValuePair(pairSlice, out var entryByteSize);
                 byteOffset += entryByteSize;
 
-                output.Add(pair.Key, pair.Value);
+                output.Add(key, value);
             }
 
             return output;

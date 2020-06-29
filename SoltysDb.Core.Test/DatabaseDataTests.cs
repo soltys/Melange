@@ -31,7 +31,7 @@ namespace SoltysDb.Core.Test
         {
 
             var dataPage = new Page(PageType.DataPage);
-            dataPage.DataBlock.Data = new byte[] {1, 2, 3};
+            dataPage.DataBlock.Data = new byte[] { 1, 2, 3 };
             this.sut.Write(dataPage);
 
             var page = this.sut.Read(0);
@@ -48,12 +48,26 @@ namespace SoltysDb.Core.Test
             var dataPage2 = new Page(PageType.DataPage);
 
             var position1 = this.sut.Write(dataPage1);
-            Assert.Equal(0,dataPage1.Position);
+            Assert.Equal(0, dataPage1.Position);
             Assert.Equal(position1, dataPage1.Position);
 
             var position2 = this.sut.Write(dataPage2);
-            Assert.Equal(Page.PageSize,dataPage2.Position);
-            Assert.Equal(position2,dataPage2.Position);
+            Assert.Equal(Page.PageSize, dataPage2.Position);
+            Assert.Equal(position2, dataPage2.Position);
+        }
+
+        [Fact]
+        public void FindFirst_ReturnsCorrectTypeForHeaderPageType()
+        {
+            this.sut.Write(new HeaderPage());
+            var page = this.sut.FindFirst(PageType.Header);
+            Assert.IsType<HeaderPage>(page);
+        }
+
+        [Fact]
+        public void FindFirst_IfNoPagesReturnsNull()
+        {
+            Assert.Null(this.sut.FindFirst(PageType.Header));
         }
     }
 }

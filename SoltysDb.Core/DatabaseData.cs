@@ -79,7 +79,7 @@ namespace SoltysDb.Core
             var pageAmount = this.dataStream.Length / Page.PageSize;
             for (int i = 0; i < pageAmount; i++)
             {
-                yield return Read(i + 1);
+                yield return Read(i);
             }
         }
 

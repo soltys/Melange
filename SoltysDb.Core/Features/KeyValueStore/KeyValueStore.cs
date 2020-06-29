@@ -22,7 +22,7 @@ namespace SoltysDb.Core
 
         public void Add(string key, string value)
         {
-            IPage kvPage = FindKeyValuePage(this.collection);
+            IPage kvPage = FindOrCreateKeyValuePage(this.collection);
 
             GetWriteStore(kvPage, this.DatabaseData, (store) =>
             {
@@ -34,7 +34,7 @@ namespace SoltysDb.Core
 
         public string Get(string key)
         {
-            var kvPage = FindKeyValuePage(this.collection);
+            var kvPage = FindOrCreateKeyValuePage(this.collection);
             if (kvPage != null)
             {
                 var store = GetReadStore(kvPage, this.DatabaseData);
@@ -49,7 +49,7 @@ namespace SoltysDb.Core
 
         public bool Remove(string key)
         {
-            var kvPage = FindKeyValuePage(this.collection);
+            var kvPage = FindOrCreateKeyValuePage(this.collection);
             var wasRemoved = false;
             if (kvPage != null)
             {
@@ -64,13 +64,9 @@ namespace SoltysDb.Core
 
         public Dictionary<string, string> AsDictionary()
         {
-            var kvPage = FindKeyValuePage(this.collection);
-            if (kvPage != null)
-            {
-                return GetReadStore(kvPage, this.DatabaseData);
-            }
-            //Not KeyValueStore - for e.g. noting was inserted yet, returns empty dictionary
-            return new Dictionary<string, string>();
+            var kvPage = FindOrCreateKeyValuePage(this.collection);
+
+            return GetReadStore(kvPage, this.DatabaseData);
         }
 
         public Dictionary<string, string> GetReadStore(IPage firstDataPage, DatabaseData data)
@@ -88,13 +84,9 @@ namespace SoltysDb.Core
             data.SaveDataInPages(firstDataPage, newDictBytes);
         }
 
-        private IPage FindKeyValuePage(string collectionName)
+        private IPage FindOrCreateKeyValuePage(string collectionName)
         {
             var headerPage = this.DatabaseData.Read(0);
-            if (headerPage == null)
-            {
-                throw new InvalidOperationException("No header found");
-            }
             var location = 0L;
             GetWriteStore(headerPage, this.DatabaseData, (store) =>
             {

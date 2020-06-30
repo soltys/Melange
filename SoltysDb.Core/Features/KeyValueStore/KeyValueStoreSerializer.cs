@@ -68,7 +68,7 @@ namespace SoltysDb.Core
         {
             var dictionaryLength = BitConverter.ToInt32(bytes);
             Dictionary<string, string> output = new Dictionary<string, string>();
-            int byteOffset = 4; //dictionaryLength
+            int byteOffset = sizeof(int); //dictionaryLength
             for (int i = 0; i < dictionaryLength; i++)
             {
                 var pairSlice = bytes.Slice(byteOffset);

@@ -93,7 +93,7 @@ namespace SoltysDb.Core.Test.Features
         }
 
         [Fact]
-        public void ChangeCollection_AllowsToHaveDiffrentDicts()
+        public void ChangeCollection_AllowsToHaveDifferentDictionaries()
         {
             using var sut = new SoltysDb();
 

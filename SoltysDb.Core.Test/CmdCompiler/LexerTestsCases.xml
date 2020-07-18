@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LexerTestPlan>
+  <TestCase name="make basic insert to default dictionary">
+    <Input>insert foo=bar</Input>
+    <ExpectedTokens>
+      <Token type="Insert" value="insert"/>
+      <Token type="Id" value="foo"/>
+      <Token type="EqualSign" value="="/>
+      <Token type="Id" value="bar"/>
+    </ExpectedTokens>
+  </TestCase>
+
+  <TestCase name="make insert to given dictionary">
+    <Input>insert foo=bar into dict</Input>
+    <ExpectedTokens>
+      <Token type="Insert" value="insert"/>
+      <Token type="Id" value="foo"/>
+      <Token type="EqualSign" value="="/>
+      <Token type="Id" value="bar"/>
+      <Token type="Into" value="into"/>
+      <Token type="Id" value="dict"/>
+    </ExpectedTokens>
+  </TestCase>
+</LexerTestPlan>

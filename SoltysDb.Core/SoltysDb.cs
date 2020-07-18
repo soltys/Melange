@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
+using SoltysDb.Core;
 
-namespace SoltysDb.Core
+// ReSharper disable once CheckNamespace
+namespace Soltys
 {
     public class SoltysDb : IDisposable
     {

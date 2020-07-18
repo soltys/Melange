@@ -88,7 +88,7 @@ namespace SoltysDb.Core
             var allPages = ReadAll().ToArray();
             foreach (var page in allPages)
             {
-                if (page?.PageType == pageType)
+                if (page.PageType == pageType)
                 {
                     return page;
                 }

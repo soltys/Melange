@@ -10,14 +10,14 @@ namespace SoltysDb.Core.Test
         [Fact]
         public void ParameterlessConstructor_CreatesInMemoryDatabase_ReturnsTrue()
         {
-            var sut = new SoltysDb();
+            var sut = new Soltys.SoltysDb();
             Assert.True(sut.IsInMemoryDatabase);
         }
 
         [Fact]
         public void FilenameConstructor_SetsFilenameProperty_EqualToFileNameInParameter()
         {
-            var sut = new SoltysDb("file.db");
+            var sut = new Soltys.SoltysDb("file.db");
             Assert.False(sut.IsInMemoryDatabase);
             Assert.Equal("file.db", sut.FileName);
         }

@@ -2,13 +2,13 @@
 using System.Diagnostics.Contracts;
 using System.IO;
 
-namespace SoltysDb
+namespace App
 {
     class Program
     {
         static void Main(string[] args)
         {
-            var db = new Core.SoltysDb("file.db");
+            var db = new Soltys.SoltysDb("file.db");
             
             for (int i = 0; i < 69; i++)
             {

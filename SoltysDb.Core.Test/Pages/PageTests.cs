@@ -1,17 +1,17 @@
 ﻿using Xunit;
 
-namespace SoltysDb.Core.Test.Pages
+namespace SoltysDb.Core.Test
 {
     public class PageTests
     {
         [Theory]
+        [InlineData(0, PageType.Undefined)]
         [InlineData(1, PageType.Header)]
         [InlineData(2, PageType.DataPage)]
         [InlineData(3, PageType.KeyValue)]
         public void ConvertByte_IntoPageType(byte expectedPageTypeByte, PageType pageType)
         {
-            var page = new Page();
-            page.PageType = pageType;
+            var page = new Page {PageType = pageType};
             Assert.Equal(expectedPageTypeByte, page.RawData[0]);
         }
 

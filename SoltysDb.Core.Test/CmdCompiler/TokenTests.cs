@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
+﻿using Xunit;
 
 namespace SoltysDb.Core.Test.CmdCompiler
 {
@@ -22,6 +19,13 @@ namespace SoltysDb.Core.Test.CmdCompiler
             var token = new Token();
             Assert.Equal(TokenType.Undefined, token.TokenType);
             Assert.Null(token.Value);
+        }
+
+        [Fact]
+        public void ToString_HasProperFormat()
+        {
+            var token = new Token(TokenType.Id, "Value");
+            Assert.Equal("<Id,Value>", token.ToString());
         }
     }
 }

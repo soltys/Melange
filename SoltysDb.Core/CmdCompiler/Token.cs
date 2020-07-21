@@ -10,5 +10,7 @@
 
         public TokenType TokenType { get; }
         public string Value { get; }
+
+        public override string ToString() => $"<{TokenType},{Value}>";
     }
 }

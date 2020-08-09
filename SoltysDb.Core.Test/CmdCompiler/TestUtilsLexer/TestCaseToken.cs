@@ -17,10 +17,8 @@ namespace SoltysDb.Core.Test.CmdCompiler
             {
                 return new Token((TokenType)type, Value);
             }
-            else
-            {
-                throw new ArgumentOutOfRangeException($"Type is not valid token type: {Type}");
-            }
+
+            throw new ArgumentOutOfRangeException($"Type is not valid token type: {Type}");
         }
     }
 }

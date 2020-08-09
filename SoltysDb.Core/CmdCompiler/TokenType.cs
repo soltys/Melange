@@ -12,7 +12,7 @@
         //Operators
         EqualSign,
 
-        //Special Words
+        //Keywords
         Insert,
         Into,
     }

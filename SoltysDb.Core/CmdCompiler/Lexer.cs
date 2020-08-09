@@ -89,7 +89,9 @@ namespace SoltysDb.Core
 
         private Token MakeToken(string input)
         {
-            switch (input)
+            //we are testing lower case to make it case insensitive but we are preserving casing in Token Value
+            var testString = input.ToLowerInvariant();
+            switch (testString)
             {
                 case "insert":
                     return new Token(TokenType.Insert, input);

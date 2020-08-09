@@ -12,7 +12,7 @@ namespace SoltysDb.Core.Test.CmdCompiler
         public void CommandInput_StringPassedInConstructor_ReadToEnd()
         {
             var sut = new CommandInput("abcdef");
-            Assert.Equal("abcdef",sut.GetToEnd());
+            Assert.Equal("abcdef", sut.GetToEnd());
         }
     }
 }

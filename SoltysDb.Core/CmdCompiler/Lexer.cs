@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SoltysDb.Core
 {
@@ -19,26 +20,53 @@ namespace SoltysDb.Core
 
             for (int i = 0; i < input.Length; i++)
             {
-                if (input[i] == '=')
+                var currentChar = input[i];
+                if (currentChar == '=')
                 {
                     yield return new Token(TokenType.EqualSign, "=");
                 }
                 else
                 {
-                    if (char.IsLetter(input[i]))
+                    if (char.IsLetter(currentChar))
                     {
-                        var (ident, offset) = GetIdent(input.AsSpan().Slice(i));
-                        //We are checking if Ident is not special keyword
+                        var (ident, offset) = GetAnyName(input.AsSpan().Slice(i));
                         yield return MakeToken(ident);
-                        
+
                         i += offset;
+                    }
+                    else if (char.IsDigit(currentChar))
+                    {
+                        var (token, offset) = GetNumber(input.AsSpan().Slice(i));
+                        yield return token;
+                        i += offset;
+                    }
+                    else if (currentChar == '\'')
+                    {
+                        var match = Regex.Match(input.AsSpan().Slice(i).ToString(), "\'([^\']*)\'", RegexOptions.Compiled);
+                        yield return new Token(TokenType.String, match.Groups[1].Value);
+                        i += match.Length;
                     }
                 }
             }
 
         }
 
-        private (string, int) GetIdent(ReadOnlySpan<char> slice)
+        private (Token, int) GetNumber(ReadOnlySpan<char> slice)
+        {
+            var builder = new StringBuilder();
+            int i = 0;
+
+            while (i < slice.Length && (char.IsDigit(slice[i]) || slice[i] == '.'))
+            {
+                builder.Append(slice[i]);
+                i++;
+            }
+
+            return (new Token(TokenType.Number, builder.ToString()), i - 1);
+        }
+
+
+        private (string, int) GetAnyName(ReadOnlySpan<char> slice)
         {
             var builder = new StringBuilder();
             int i = 0;
@@ -49,7 +77,14 @@ namespace SoltysDb.Core
                 i++;
             }
 
-            return (builder.ToString(), i-1);
+            int offset = i - 1;
+
+            if (offset < 0)
+            {
+                throw new InvalidOperationException("Something went wrong on here!");
+            }
+
+            return (builder.ToString(), i - 1);
         }
 
         private Token MakeToken(string input)

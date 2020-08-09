@@ -3,9 +3,17 @@
     internal enum TokenType
     {
         Undefined,
-        Insert,
+        
+        //Common
         Id,
+        Number,
+        String,
+
+        //Operators
         EqualSign,
+
+        //Special Words
+        Insert,
         Into,
     }
 }

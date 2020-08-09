@@ -1,12 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <LexerTestPlan>
-  <TestCase name="make basic insert to default dictionary">
-    <Input>insert foo=bar</Input>
+  <TestCase name="lexer doing integer">
+    <Input>42</Input>
     <ExpectedTokens>
-      <Token type="Insert" value="insert"/>
-      <Token type="Id" value="foo"/>
-      <Token type="EqualSign" value="="/>
-      <Token type="Id" value="bar"/>
+      <Token type="Number" value="42"/>
+    </ExpectedTokens>
+  </TestCase>
+
+  <TestCase name="lexer doing float">
+    <Input>42.69</Input>
+    <ExpectedTokens>
+      <Token type="Number" value="42.69"/>
+    </ExpectedTokens>
+  </TestCase>
+
+  <TestCase name="lexer doing strings">
+    <Input>'foobar'</Input>
+    <ExpectedTokens>
+      <Token type="String" value="foobar"/>
     </ExpectedTokens>
   </TestCase>
 

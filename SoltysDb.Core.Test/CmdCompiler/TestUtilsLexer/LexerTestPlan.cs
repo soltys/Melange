@@ -2,7 +2,7 @@
 
 namespace SoltysDb.Core.Test.CmdCompiler
 {
-    [XmlRoot("LexerTestPlan")]
+    [XmlRoot("LexerTestPlan", Namespace = "http://github.com/soltys/SoltysDB/LexerTestCases.xsd")]
     public class LexerTestPlan
     {
         [XmlElement("TestCase")]

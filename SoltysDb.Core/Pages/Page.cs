@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SoltysDb.Core
+﻿namespace SoltysDb.Core
 {
     internal class PageMetadata : BinaryClass
     {

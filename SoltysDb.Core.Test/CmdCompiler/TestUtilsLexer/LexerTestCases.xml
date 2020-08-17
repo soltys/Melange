@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<LexerTestPlan>
+<LexerTestPlan xmlns="http://github.com/soltys/SoltysDB/LexerTestCases.xsd">
   <TestCase name="lexer doing integer">
     <Input>42</Input>
     <ExpectedTokens>

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-
-namespace SoltysDb.Core
+﻿namespace SoltysDb.Core
 {
     internal class HeaderMetadata : BinaryClass
     {

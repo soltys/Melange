@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using Xunit;
 
@@ -7,13 +6,9 @@ namespace SoltysDb.Core.Test.CmdCompiler
 {
     public class LexerTests
     {
-        private readonly Func<string, Lexer> lexerFactory;
+        private Lexer LexerFactory(string input) =>
+            new Lexer(new CommandInput(input));
 
-        public LexerTests()
-        {
-            this.lexerFactory = (input)
-                => new Lexer(new CommandInput(input));
-        }
 
         [Theory]
         [ClassData(typeof(LexerTestsCasesProvider))]
@@ -24,7 +19,7 @@ namespace SoltysDb.Core.Test.CmdCompiler
                 Debugger.Break();
             }
 
-            var lexer = this.lexerFactory(testCase.Input);
+            var lexer = LexerFactory(testCase.Input);
             var tokens = lexer.GetTokens().ToArray();
 
             var expectedTokens = testCase.ExpectedTokens.Select(x => x.ToToken()).ToArray();
@@ -42,7 +37,7 @@ namespace SoltysDb.Core.Test.CmdCompiler
         [ClassData(typeof(InsensitiveKeywordGenerator))]
         internal void GetTokens_Keyword_AreCaseInsensitiveRecognized(InputTokenTypePair testCase)
         {
-            var lexer = this.lexerFactory(testCase.Input);
+            var lexer = LexerFactory(testCase.Input);
             var tokens = lexer.GetTokens().ToArray();
 
             Assert.Single(tokens);

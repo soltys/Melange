@@ -12,7 +12,7 @@ namespace SoltysDb.Core.Test.CmdCompiler
         {
             var assembly = typeof(LexerTestsCasesProvider).GetTypeInfo().Assembly;
             XmlSerializer serializer = new XmlSerializer(typeof(LexerTestPlan));
-            var plan = (LexerTestPlan)serializer.Deserialize(assembly.FindFileStream("LexerTestsCases.xml"));
+            var plan = (LexerTestPlan)serializer.Deserialize(assembly.FindFileStream("LexerTestCases.xml"));
 
             foreach (var testCase in plan.TestCases)
             {

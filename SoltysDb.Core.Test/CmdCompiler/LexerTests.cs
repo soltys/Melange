@@ -9,10 +9,9 @@ namespace SoltysDb.Core.Test.CmdCompiler
         private Lexer LexerFactory(string input) =>
             new Lexer(new CommandInput(input));
 
-
         [Theory]
         [ClassData(typeof(LexerTestsCasesProvider))]
-        public void GetTokens_RunAllTestCases(LexerTestCase testCase)
+        internal void GetTokens_RunAllTestCases(ILexerTestCase testCase)
         {
             if (testCase.IsBreakpointOn && Debugger.IsAttached)
             {
@@ -22,14 +21,12 @@ namespace SoltysDb.Core.Test.CmdCompiler
             var lexer = LexerFactory(testCase.Input);
             var tokens = lexer.GetTokens().ToArray();
 
-            var expectedTokens = testCase.ExpectedTokens.Select(x => x.ToToken()).ToArray();
-
             Assert.Equal(
-                expectedTokens.Select(x => x.TokenType),
+                testCase.ExpectedTokens.Select(x => x.TokenType),
                 tokens.Select(x => x.TokenType));
 
             Assert.Equal(
-                expectedTokens.Select(x => x.Value),
+                testCase.ExpectedTokens.Select(x => x.Value),
                 tokens.Select(x => x.Value));
         }
 

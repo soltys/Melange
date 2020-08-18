@@ -1,6 +1,6 @@
 ﻿namespace SoltysDb.Core
 {
-    internal enum TokenType
+    public enum TokenType
     {
         Undefined,
         

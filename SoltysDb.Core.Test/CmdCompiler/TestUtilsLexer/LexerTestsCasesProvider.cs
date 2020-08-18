@@ -1,14 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Xml.Serialization;
 using SoltysDb.Core.Test.TestUtils;
+using Xunit;
 
 namespace SoltysDb.Core.Test.CmdCompiler
 {
-    class LexerTestsCasesProvider : IEnumerable<object[]>
+    class LexerTestsCasesProvider : TheoryData<LexerTestCase>
     {
-        public IEnumerator<object[]> GetEnumerator()
+        public LexerTestsCasesProvider()
         {
             var assembly = typeof(LexerTestsCasesProvider).GetTypeInfo().Assembly;
             XmlSerializer serializer = new XmlSerializer(typeof(LexerTestPlan));
@@ -16,11 +15,9 @@ namespace SoltysDb.Core.Test.CmdCompiler
             
             foreach (var testCase in plan.TestCases)
             {
-                yield return new object[] { testCase };
+                Add(testCase);
             }
-
         }
 
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

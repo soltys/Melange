@@ -1,15 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using SoltysDb.Core.Test.TestUtils;
+using Xunit;
 
 namespace SoltysDb.Core.Test.CmdCompiler
 {
-    class InsensitiveKeywordGenerator : IEnumerable<object[]>
+    class InsensitiveKeywordGenerator : TheoryData<InputTokenTypePair>
     {
-        public IEnumerator<object[]> GetEnumerator()
+        public InsensitiveKeywordGenerator()
         {
-
             var dataList = EnumHelper.GetKeywords<TokenType>()
                 .Select(x => new InputTokenTypePair
                 {
@@ -19,16 +17,14 @@ namespace SoltysDb.Core.Test.CmdCompiler
 
             foreach (var pair in dataList)
             {
-                yield return new object[] { new InputTokenTypePair() { ExpectedTokenType = pair.ExpectedTokenType, Input = pair.Input } };
+                Add(new InputTokenTypePair() { ExpectedTokenType = pair.ExpectedTokenType, Input = pair.Input });
                 var newInput = char.ToUpperInvariant(pair.Input[0]) + pair.Input.Substring(1);
-                yield return new object[] { new InputTokenTypePair() { ExpectedTokenType = pair.ExpectedTokenType, Input = newInput } };
+                Add(new InputTokenTypePair() { ExpectedTokenType = pair.ExpectedTokenType, Input = newInput });
                 newInput = pair.Input.ToUpperInvariant();
-                yield return new object[] { new InputTokenTypePair() { ExpectedTokenType = pair.ExpectedTokenType, Input = newInput } };
+                Add(new InputTokenTypePair() { ExpectedTokenType = pair.ExpectedTokenType, Input = newInput });
             }
 
         }
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
     internal class InputTokenTypePair

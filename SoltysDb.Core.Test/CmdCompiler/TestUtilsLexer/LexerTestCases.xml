@@ -32,4 +32,22 @@
       <Token type="Id" value="dict"/>
     </ExpectedTokens>
   </TestCase>
+
+  <TestCase name="Select with where">
+    <Input>select * from pool where x>2+2*2</Input>
+    <ExpectedTokens>
+      <Token type="Select" value="select"/>
+      <Token type="Star" value="*"/>
+      <Token type="From" value="from"/>
+      <Token type="Id" value="pool"/>
+      <Token type="Where" value="where"/>
+      <Token type="Id" value="x"/>
+      <Token type="GreaterThan" value=">"/>
+      <Token type="Number" value="2"/>
+      <Token type="Plus" value="+"/>
+      <Token type="Number" value="2"/>
+      <Token type="Star" value="*"/>
+      <Token type="Number" value="2"/>
+    </ExpectedTokens>
+  </TestCase>
 </LexerTestPlan>

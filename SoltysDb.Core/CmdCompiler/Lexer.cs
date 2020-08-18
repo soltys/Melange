@@ -25,6 +25,18 @@ namespace SoltysDb.Core
                 {
                     yield return new Token(TokenType.EqualSign, "=");
                 }
+                else if (currentChar == '*')
+                {
+                    yield return new Token(TokenType.Star, "*");
+                }
+                else if (currentChar == '>')
+                {
+                    yield return new Token(TokenType.GreaterThan, ">");
+                }
+                else if (currentChar == '+')
+                {
+                    yield return new Token(TokenType.Plus, "+");
+                }
                 else
                 {
                     if (char.IsLetter(currentChar))
@@ -97,6 +109,12 @@ namespace SoltysDb.Core
                     return new Token(TokenType.Insert, input);
                 case "into":
                     return new Token(TokenType.Into, input);
+                case "select":
+                    return new Token(TokenType.Select, input);
+                case "where":
+                    return new Token(TokenType.Where, input);
+                case "from":
+                    return new Token(TokenType.From, input);
                 default:
                     return new Token(TokenType.Id, input);
             }

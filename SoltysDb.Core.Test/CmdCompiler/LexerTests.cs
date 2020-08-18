@@ -21,13 +21,13 @@ namespace SoltysDb.Core.Test.CmdCompiler
             var lexer = LexerFactory(testCase.Input);
             var tokens = lexer.GetTokens().ToArray();
 
-            Assert.Equal(
-                testCase.ExpectedTokens.Select(x => x.TokenType),
-                tokens.Select(x => x.TokenType));
+            Assert.Equal(testCase.ExpectedTokens.Length, tokens.Length);
 
-            Assert.Equal(
-                testCase.ExpectedTokens.Select(x => x.Value),
-                tokens.Select(x => x.Value));
+            for (int i = 0; i < testCase.ExpectedTokens.Length; i++)
+            {
+                Assert.Equal(testCase.ExpectedTokens[i].TokenType, tokens[i].TokenType);
+                Assert.Equal(testCase.ExpectedTokens[i].Value, tokens[i].Value);
+            }
         }
 
         [Theory]

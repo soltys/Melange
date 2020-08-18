@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using SoltysDb.Core.Test.TestUtils;
 
 namespace SoltysDb.Core.Test.CmdCompiler
 {
@@ -7,11 +9,13 @@ namespace SoltysDb.Core.Test.CmdCompiler
     {
         public IEnumerator<object[]> GetEnumerator()
         {
-            var dataList = new List<InputTokenTypePair>
-            {
-                new InputTokenTypePair {ExpectedTokenType = TokenType.Insert, Input = "insert"},
-                new InputTokenTypePair {ExpectedTokenType = TokenType.Into, Input = "into"}
-            };
+
+            var dataList = EnumHelper.GetKeywords<TokenType>()
+                .Select(x => new InputTokenTypePair
+                {
+                    ExpectedTokenType = x,
+                    Input = x.ToString().ToLowerInvariant()
+                });
 
             foreach (var pair in dataList)
             {

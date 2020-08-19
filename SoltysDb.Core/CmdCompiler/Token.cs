@@ -2,6 +2,7 @@
 {
     internal readonly struct Token
     {
+        public static Token Empty = new Token(Core.TokenType.Undefined, "");
         public Token(TokenType tokenType, string value)
         {
             TokenType = tokenType;

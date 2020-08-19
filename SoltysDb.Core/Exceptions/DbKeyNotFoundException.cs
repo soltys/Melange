@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SoltysDb.Core
+namespace SoltysDb.Core.Exceptions
 {
     class DbKeyNotFoundException :Exception
     {

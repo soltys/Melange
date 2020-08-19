@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SoltysDb.Core.Exceptions;
 
 namespace SoltysDb.Core
 {

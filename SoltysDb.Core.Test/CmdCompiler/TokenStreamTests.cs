@@ -6,8 +6,8 @@ namespace SoltysDb.Core.Test.CmdCompiler
 {
     public class TokenStreamTests
     {
-        TokenStream TokenStreamFactory(Token[] tokens) =>
-            new TokenStream(new TestTokenProvider(tokens));
+        TokenSource TokenStreamFactory(Token[] tokens) =>
+            new TokenSource(new TestTokenProvider(tokens));
 
         [Fact]
         internal void Current_WithGivenListAfterConstruction_ReturnsFirstToken()
@@ -74,12 +74,10 @@ namespace SoltysDb.Core.Test.CmdCompiler
         class TestTokenProvider : ILexer
         {
             private readonly Token[] tokens;
-
             public TestTokenProvider(Token[] tokens)
             {
                 this.tokens = tokens;
             }
-
             public IEnumerable<Token> GetTokens() => this.tokens;
         }
     }

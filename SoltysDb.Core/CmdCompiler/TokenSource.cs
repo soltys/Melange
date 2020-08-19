@@ -2,13 +2,13 @@
 
 namespace SoltysDb.Core
 {
-    internal class TokenStream : ITokenStream
+    internal class TokenSource : ITokenSource
     {
         private readonly ILexer lexer;
         private readonly Token[] allTokens;
         private int tokenIndex;
 
-        public TokenStream(ILexer lexer)
+        public TokenSource(ILexer lexer)
         {
             this.lexer = lexer;
             this.allTokens = this.lexer.GetTokens().ToArray();

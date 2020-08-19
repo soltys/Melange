@@ -6,6 +6,9 @@ namespace SoltysDb.Core
     {
         Undefined,
         
+        LParen,
+        RParen,
+
         //Common
         Id,
         Number,

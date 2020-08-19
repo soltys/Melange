@@ -1,6 +1,6 @@
 ﻿namespace SoltysDb.Core
 {
-    internal interface ITokenStream
+    internal interface ITokenSource
     {
         Token Current { get; }
         Token PeekNextToken { get; }

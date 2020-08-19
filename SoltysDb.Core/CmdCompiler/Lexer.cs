@@ -37,6 +37,14 @@ namespace SoltysDb.Core
                 {
                     yield return new Token(TokenType.Plus, "+");
                 }
+                else if (currentChar == '(')
+                {
+                    yield return new Token(TokenType.LParen, "(");
+                }
+                else if (currentChar == ')')
+                {
+                    yield return new Token(TokenType.RParen, ")");
+                }
                 else
                 {
                     if (char.IsLetter(currentChar))

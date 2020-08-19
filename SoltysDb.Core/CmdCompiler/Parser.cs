@@ -27,7 +27,7 @@
             {
                 var leftExpression = (AstExpression)term;
                 this.ts.NextToken();
-                var rightExpression = (AstExpression)ParseTerm();
+                var rightExpression = (AstExpression)ParseExpression();
 
                 var binaryExpression = new AstBinaryExpression()
                 {
@@ -49,7 +49,7 @@
             {
                 var leftExpression = (AstExpression)factor;
                 this.ts.NextToken();
-                var rightExpression = (AstExpression)ParseFactor();
+                var rightExpression = (AstExpression)ParseTerm();
 
                 var binaryExpression = new AstBinaryExpression()
                 {

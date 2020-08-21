@@ -1,29 +1,66 @@
-﻿using System.Linq.Expressions;
-using Xunit;
+﻿using Xunit;
 
 namespace SoltysDb.Core.Test.CmdCompiler
 {
     public class ParserTests
     {
-        //https://en.wikipedia.org/wiki/Recursive_descent_parser
         [Fact]
-        internal void ParseExpression_OperatorPrecedence_RecursiveDescentParser()
+        internal void ParseExpression_OperatorPrecedence_MultiplicationLowerInTreeAdditionHigher()
         {
-            var parser = ParserFactory("2+2*2");
+            var parser = ParserFactory("1+2*3");
             var ast = parser.ParseExpression();
-            Assert.IsType<AstBinaryExpression>(ast);
-            var astBinaryExpression = (AstBinaryExpression)ast;
-            Assert.Equal(TokenType.Plus, astBinaryExpression.Operator);
+            var expectedAst = new AstBinaryExpression()
+            {
+                Operator = TokenType.Plus,
+                LeftExpression = new AstNumberExpression()
+                {
+                    Value = "1"
+                },
+                RightExpression = new AstBinaryExpression()
+                {
+                    LeftExpression = new AstNumberExpression()
+                    {
+                        Value = "2"
+                    },
+                    RightExpression = new AstNumberExpression()
+                    {
+                        Value = "3"
+                    },
+                    Operator = TokenType.Star
+                }
+            };
+            var assertVisitor = new TestParserVisitor();
+            assertVisitor.AssertVisit(expectedAst, (IAstNode)ast);
         }
 
         [Fact]
-        internal void ParseExpression_Parenthesis_PrioritySupport()
+        internal void ParseExpression_ParenthesisPrecedence_AdditionInParenthesisLowerInAstTreeThanMultiplication()
         {
-            var parser = ParserFactory("(2+2)*2");
+            var parser = ParserFactory("(1+2)*3");
+
             var ast = parser.ParseExpression();
-            Assert.IsType<AstBinaryExpression>(ast);
-            var astBinaryExpression = (AstBinaryExpression)ast;
-            Assert.Equal(TokenType.Star, astBinaryExpression.Operator);
+            var expectedAst = new AstBinaryExpression()
+            {
+                Operator = TokenType.Star,
+                LeftExpression = new AstBinaryExpression()
+                {
+                    LeftExpression = new AstNumberExpression()
+                    {
+                        Value = "1"
+                    },
+                    RightExpression = new AstNumberExpression()
+                    {
+                        Value = "2"
+                    },
+                    Operator = TokenType.Plus
+                },
+                RightExpression = new AstNumberExpression()
+                {
+                    Value = "3"
+                },
+            };
+            var assertVisitor = new TestParserVisitor();
+            assertVisitor.AssertVisit(expectedAst, (IAstNode)ast);
         }
 
         [Fact]
@@ -31,11 +68,28 @@ namespace SoltysDb.Core.Test.CmdCompiler
         {
             var parser = ParserFactory("1+2+3");
             var ast = parser.ParseExpression();
-            Assert.IsType<AstBinaryExpression>(ast);
-            var astBinaryExpression = (AstBinaryExpression)ast;
-            Assert.Equal(TokenType.Plus, astBinaryExpression.Operator);
-            Assert.IsType<AstNumberExpression>(astBinaryExpression.LeftExpression);
-            Assert.IsType<AstBinaryExpression>(astBinaryExpression.RightExpression);
+            var expectedAst = new AstBinaryExpression()
+            {
+                Operator = TokenType.Plus,
+                LeftExpression = new AstNumberExpression()
+                {
+                    Value = "1"
+                },
+                RightExpression = new AstBinaryExpression()
+                {
+                    LeftExpression = new AstNumberExpression()
+                    {
+                        Value = "2"
+                    },
+                    RightExpression = new AstNumberExpression()
+                    {
+                        Value = "3"
+                    },
+                    Operator = TokenType.Plus
+                }
+            };
+            var assertVisitor = new TestParserVisitor();
+            assertVisitor.AssertVisit(expectedAst, (IAstNode)ast);
         }
 
         [Fact]
@@ -43,27 +97,28 @@ namespace SoltysDb.Core.Test.CmdCompiler
         {
             var parser = ParserFactory("1*2*3");
             var ast = parser.ParseExpression();
-            Assert.IsType<AstBinaryExpression>(ast);
-            var astBinaryExpression = (AstBinaryExpression)ast;
-            Assert.Equal(TokenType.Star, astBinaryExpression.Operator);
-            Assert.IsType<AstNumberExpression>(astBinaryExpression.LeftExpression);
-            Assert.IsType<AstBinaryExpression>(astBinaryExpression.RightExpression);
-        }
-
-        [Fact]
-        internal void ParseExpression_MoreComplexArithmicExpression()
-        {
-            var parser = ParserFactory("1+2*3+4");
-            var ast = parser.ParseExpression();
-            var astBinaryExpression = (AstBinaryExpression)ast;
-            Assert.Equal(TokenType.Plus, astBinaryExpression.Operator);
-            Assert.IsType<AstNumberExpression>(astBinaryExpression.LeftExpression);
-            Assert.IsType<AstBinaryExpression>(astBinaryExpression.RightExpression);
-            var rightExpression = (AstBinaryExpression)astBinaryExpression.RightExpression;
-            Assert.Equal(TokenType.Plus, rightExpression.Operator);
-            Assert.IsType<AstBinaryExpression>(rightExpression.LeftExpression);
-            Assert.Equal("4", rightExpression.RightExpression.Value);
-
+            var expectedAst = new AstBinaryExpression()
+            {
+                Operator = TokenType.Star,
+                LeftExpression = new AstNumberExpression()
+                {
+                    Value = "1"
+                },
+                RightExpression = new AstBinaryExpression()
+                {
+                    LeftExpression = new AstNumberExpression()
+                    {
+                        Value = "2"
+                    },
+                    RightExpression = new AstNumberExpression()
+                    {
+                        Value = "3"
+                    },
+                    Operator = TokenType.Star
+                }
+            };
+            var assertVisitor = new TestParserVisitor();
+            assertVisitor.AssertVisit(expectedAst, (IAstNode)ast);
         }
 
         [Fact]
@@ -71,12 +126,24 @@ namespace SoltysDb.Core.Test.CmdCompiler
         {
             var parser = ParserFactory("-6*2");
             var ast = parser.ParseExpression();
-            var multiplicationExpression = (AstBinaryExpression) ast;
-            Assert.Equal(TokenType.Star, multiplicationExpression.Operator);
-            Assert.IsType<AstUnaryExpression>(multiplicationExpression.LeftExpression);
-            var unaryExpression = (AstUnaryExpression) multiplicationExpression.LeftExpression;
-            Assert.Equal(TokenType.Minus, unaryExpression.Operator);
-            Assert.Equal("6", unaryExpression.Expression.Value);
+            var expectedAst = new AstBinaryExpression()
+            {
+                Operator = TokenType.Star,
+                LeftExpression = new AstUnaryExpression()
+                {
+                    Operator = TokenType.Minus,
+                    Expression = new AstNumberExpression()
+                    {
+                        Value = "6"
+                    }
+                },
+                RightExpression = new AstNumberExpression()
+                {
+                    Value = "2"
+                },
+            };
+            var assertVisitor = new TestParserVisitor();
+            assertVisitor.AssertVisit(expectedAst, (IAstNode)ast);
         }
 
         Parser ParserFactory(string input) =>
@@ -84,7 +151,5 @@ namespace SoltysDb.Core.Test.CmdCompiler
                 new TokenSource(
                     new Lexer(
                         new CommandInput(input))));
-
-
     }
 }

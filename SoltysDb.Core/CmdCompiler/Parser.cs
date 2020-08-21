@@ -12,7 +12,7 @@ namespace SoltysDb.Core
         }
 
         private TokenType CurrentToken => this.ts.Current.TokenType;
-        private TokenType NextToken => this.ts.Current.TokenType;
+        private TokenType NextToken => this.ts.PeekNextToken.TokenType;
         private void GoToNextToken() => this.ts.NextToken();
         private bool IsToken(params TokenType[] tokens) => tokens.Any(x => x == CurrentToken);
 

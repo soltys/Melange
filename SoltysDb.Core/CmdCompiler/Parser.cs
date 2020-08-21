@@ -1,4 +1,6 @@
-﻿namespace SoltysDb.Core
+﻿using System.Linq;
+
+namespace SoltysDb.Core
 {
     internal class Parser
     {
@@ -12,14 +14,16 @@
         private TokenType CurrentToken => this.ts.Current.TokenType;
         private TokenType NextToken => this.ts.Current.TokenType;
         private void GoToNextToken() => this.ts.NextToken();
+        private bool IsToken(params TokenType[] tokens) => tokens.Any(x => x == CurrentToken);
 
         public AstNode ParseExpression()
         {
             var term = ParseTerm();
 
-            if (CurrentToken == TokenType.Plus)
+            if (IsToken(TokenType.Plus))
             {
                 var leftExpression = (AstExpression)term;
+                var op = CurrentToken;
                 GoToNextToken();
                 var rightExpression = (AstExpression)ParseExpression();
 
@@ -27,7 +31,7 @@
                 {
                     LeftExpression = leftExpression,
                     RightExpression = rightExpression,
-                    Operator = TokenType.Plus
+                    Operator = op
                 };
                 return binaryExpression;
             }
@@ -39,9 +43,10 @@
         public AstNode ParseTerm()
         {
             var factor = ParseFactor();
-            if (CurrentToken == TokenType.Star)
+            if (IsToken(TokenType.Star))
             {
                 var leftExpression = (AstExpression)factor;
+                var op = CurrentToken;
                 GoToNextToken();
                 var rightExpression = (AstExpression)ParseTerm();
 
@@ -49,7 +54,7 @@
                 {
                     LeftExpression = leftExpression,
                     RightExpression = rightExpression,
-                    Operator = TokenType.Star
+                    Operator = op
                 };
                 return binaryExpression;
             }
@@ -59,7 +64,7 @@
         public AstNode ParseFactor()
         {
             // '(' expression ')'
-            if (CurrentToken == TokenType.LParen)
+            if (IsToken(TokenType.LParen))
             {
                 GoToNextToken();
                 var expression = ParseExpression();
@@ -67,7 +72,7 @@
                 return expression;
             }
 
-            if (CurrentToken == TokenType.Minus)
+            if (IsToken(TokenType.Minus))
             {
                 var op = CurrentToken;
                 GoToNextToken();

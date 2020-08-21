@@ -37,6 +37,10 @@ namespace SoltysDb.Core
                 {
                     yield return new Token(TokenType.Plus, "+");
                 }
+                else if (currentChar == '-')
+                {
+                    yield return new Token(TokenType.Minus, "-");
+                }
                 else if (currentChar == '(')
                 {
                     yield return new Token(TokenType.LParen, "(");

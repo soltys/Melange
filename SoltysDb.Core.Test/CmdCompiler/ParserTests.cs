@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.Linq.Expressions;
+using Xunit;
 
 namespace SoltysDb.Core.Test.CmdCompiler
 {
@@ -63,6 +64,19 @@ namespace SoltysDb.Core.Test.CmdCompiler
             Assert.IsType<AstBinaryExpression>(rightExpression.LeftExpression);
             Assert.Equal("4", rightExpression.RightExpression.Value);
 
+        }
+
+        [Fact]
+        internal void ParseExpression_UnaryExpression()
+        {
+            var parser = ParserFactory("-6*2");
+            var ast = parser.ParseExpression();
+            var multiplicationExpression = (AstBinaryExpression) ast;
+            Assert.Equal(TokenType.Star, multiplicationExpression.Operator);
+            Assert.IsType<AstUnaryExpression>(multiplicationExpression.LeftExpression);
+            var unaryExpression = (AstUnaryExpression) multiplicationExpression.LeftExpression;
+            Assert.Equal(TokenType.Minus, unaryExpression.Operator);
+            Assert.Equal("6", unaryExpression.Expression.Value);
         }
 
         Parser ParserFactory(string input) =>

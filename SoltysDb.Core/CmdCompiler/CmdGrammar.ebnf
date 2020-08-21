@@ -1,0 +1,14 @@
+expression
+	= term [('+'|'-') expression]    
+	;
+
+
+term 
+	= factor [("*"|"/") term]
+	;
+
+factor  
+	= ident
+	| ["-"] number
+	| "(" expression ")"
+	;

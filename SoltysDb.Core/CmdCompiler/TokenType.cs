@@ -19,6 +19,7 @@ namespace SoltysDb.Core
         Star,
         GreaterThan,
         Plus,
+        Minus,
 
         //Keywords
         [Keyword]

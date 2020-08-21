@@ -9,24 +9,18 @@
             this.ts = ts;
         }
 
-
-        //expression = term {("+"|"-") term} 
-
-        //term = factor {("*"|"/") factor}
-
-        //factor =
-        //ident
-        //| number
-        //| "(" expression ")"
+        private TokenType CurrentToken => this.ts.Current.TokenType;
+        private TokenType NextToken => this.ts.Current.TokenType;
+        private void GoToNextToken() => this.ts.NextToken();
 
         public AstNode ParseExpression()
         {
             var term = ParseTerm();
 
-            if (this.ts.Current.TokenType == TokenType.Plus)
+            if (CurrentToken == TokenType.Plus)
             {
                 var leftExpression = (AstExpression)term;
-                this.ts.NextToken();
+                GoToNextToken();
                 var rightExpression = (AstExpression)ParseExpression();
 
                 var binaryExpression = new AstBinaryExpression()
@@ -45,10 +39,10 @@
         public AstNode ParseTerm()
         {
             var factor = ParseFactor();
-            if (this.ts.Current.TokenType == TokenType.Star)
+            if (CurrentToken == TokenType.Star)
             {
                 var leftExpression = (AstExpression)factor;
-                this.ts.NextToken();
+                GoToNextToken();
                 var rightExpression = (AstExpression)ParseTerm();
 
                 var binaryExpression = new AstBinaryExpression()
@@ -58,25 +52,34 @@
                     Operator = TokenType.Star
                 };
                 return binaryExpression;
-
             }
-
             return factor;
-
         }
 
         public AstNode ParseFactor()
         {
-            if (this.ts.Current.TokenType == TokenType.LParen)
+            // '(' expression ')'
+            if (CurrentToken == TokenType.LParen)
             {
-                this.ts.NextToken();
+                GoToNextToken();
                 var expression = ParseExpression();
-                this.ts.NextToken();
+                GoToNextToken();
                 return expression;
             }
 
+            if (CurrentToken == TokenType.Minus)
+            {
+                var op = CurrentToken;
+                GoToNextToken();
+                var unaryExpression = new AstUnaryExpression()
+                {
+                    Operator = op,
+                    Expression = (AstExpression)ParseFactor()
+                };
+                return unaryExpression;
+            }
             var numberExpression = new AstNumberExpression() { Value = this.ts.Current.Value };
-            this.ts.NextToken();
+            GoToNextToken();
             return numberExpression;
         }
     }

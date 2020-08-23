@@ -13,8 +13,7 @@ namespace SoltysDb.Core.Test.CmdCompiler
             Visit(actualVisit);
         }
 
-        public void Visit(IAstNode node) => node.Accept(this);
-
+        private void Visit(IAstNode node) => node.Accept(this);
 
         public void VisitExpression(AstExpression expression)
         {
@@ -37,9 +36,8 @@ namespace SoltysDb.Core.Test.CmdCompiler
             var expectedAst = (AstBinaryExpression)this.expected;
             Assert.Equal(expectedAst.Operator, binaryExpression.Operator);
 
-            AssertVisit(expectedAst.RightExpression, binaryExpression.RightExpression);
-            AssertVisit(expectedAst.LeftExpression, binaryExpression.LeftExpression);
-
+            AssertVisit(expectedAst.Rhs, binaryExpression.Rhs);
+            AssertVisit(expectedAst.Lhs, binaryExpression.Lhs);
         }
 
         public void VisitUnaryExpression(AstUnaryExpression unaryExpression)

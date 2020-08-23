@@ -7,129 +7,153 @@ namespace SoltysDb.Core.Test.CmdCompiler
         [Fact]
         internal void ParseExpression_OperatorPrecedence_MultiplicationLowerInTreeAdditionHigher()
         {
-            var parser = ParserFactory("1+2*3");
-            var ast = parser.ParseExpression();
             var expectedAst = new AstBinaryExpression()
             {
                 Operator = TokenType.Plus,
-                LeftExpression = new AstNumberExpression()
+                Lhs = new AstNumberExpression()
                 {
                     Value = "1"
                 },
-                RightExpression = new AstBinaryExpression()
+                Rhs = new AstBinaryExpression()
                 {
-                    LeftExpression = new AstNumberExpression()
+                    Lhs = new AstNumberExpression()
                     {
                         Value = "2"
                     },
-                    RightExpression = new AstNumberExpression()
+                    Rhs = new AstNumberExpression()
                     {
                         Value = "3"
                     },
                     Operator = TokenType.Star
                 }
             };
-            var assertVisitor = new TestParserVisitor();
-            assertVisitor.AssertVisit(expectedAst, (IAstNode)ast);
+
+            AssertExpressionAstFromInput(expectedAst, "1+2*3");
         }
 
         [Fact]
         internal void ParseExpression_ParenthesisPrecedence_AdditionInParenthesisLowerInAstTreeThanMultiplication()
         {
-            var parser = ParserFactory("(1+2)*3");
-
-            var ast = parser.ParseExpression();
             var expectedAst = new AstBinaryExpression()
             {
                 Operator = TokenType.Star,
-                LeftExpression = new AstBinaryExpression()
+                Lhs = new AstBinaryExpression()
                 {
-                    LeftExpression = new AstNumberExpression()
+                    Lhs = new AstNumberExpression()
                     {
                         Value = "1"
                     },
-                    RightExpression = new AstNumberExpression()
+                    Rhs = new AstNumberExpression()
                     {
                         Value = "2"
                     },
                     Operator = TokenType.Plus
                 },
-                RightExpression = new AstNumberExpression()
+                Rhs = new AstNumberExpression()
                 {
                     Value = "3"
                 },
             };
-            var assertVisitor = new TestParserVisitor();
-            assertVisitor.AssertVisit(expectedAst, (IAstNode)ast);
+
+            AssertExpressionAstFromInput(expectedAst, "(1+2)*3");
         }
 
         [Fact]
         internal void ParseExpression_OddNumberOfAddition()
         {
-            var parser = ParserFactory("1+2+3");
-            var ast = parser.ParseExpression();
             var expectedAst = new AstBinaryExpression()
             {
                 Operator = TokenType.Plus,
-                LeftExpression = new AstNumberExpression()
+                Lhs = new AstNumberExpression()
                 {
                     Value = "1"
                 },
-                RightExpression = new AstBinaryExpression()
+                Rhs = new AstBinaryExpression()
                 {
-                    LeftExpression = new AstNumberExpression()
+                    Lhs = new AstNumberExpression()
                     {
                         Value = "2"
                     },
-                    RightExpression = new AstNumberExpression()
+                    Rhs = new AstNumberExpression()
                     {
                         Value = "3"
                     },
                     Operator = TokenType.Plus
                 }
             };
-            var assertVisitor = new TestParserVisitor();
-            assertVisitor.AssertVisit(expectedAst, (IAstNode)ast);
+            AssertExpressionAstFromInput(expectedAst, "1+2+3");
         }
 
         [Fact]
         internal void ParseExpression_OddNumberOfMultiplication()
         {
-            var parser = ParserFactory("1*2*3");
-            var ast = parser.ParseExpression();
             var expectedAst = new AstBinaryExpression()
             {
                 Operator = TokenType.Star,
-                LeftExpression = new AstNumberExpression()
+                Lhs = new AstNumberExpression()
                 {
                     Value = "1"
                 },
-                RightExpression = new AstBinaryExpression()
+                Rhs = new AstBinaryExpression()
                 {
-                    LeftExpression = new AstNumberExpression()
+                    Lhs = new AstNumberExpression()
                     {
                         Value = "2"
                     },
-                    RightExpression = new AstNumberExpression()
+                    Rhs = new AstNumberExpression()
                     {
                         Value = "3"
                     },
                     Operator = TokenType.Star
                 }
             };
-            var assertVisitor = new TestParserVisitor();
-            assertVisitor.AssertVisit(expectedAst, (IAstNode)ast);
+
+            AssertExpressionAstFromInput(expectedAst, "1*2*3");
         }
 
         [Fact]
-        internal void ParseExpression_UnaryExpression()
+        internal void ParseExpression_SubtractionSupport()
         {
-            var parser = ParserFactory("-6*2");
-            var ast = parser.ParseExpression();
+            var expectedAst = new AstBinaryExpression()
+            {
+                Operator = TokenType.Minus,
+                Lhs = new AstNumberExpression()
+                {
+                    Value = "1"
+                },
+                Rhs = new AstNumberExpression()
+                {
+                    Value = "2"
+                }
+            };
+            AssertExpressionAstFromInput(expectedAst, "1-2");
+        }
+
+        [Fact]
+        internal void ParseExpression_DivisionSupport()
+        {
+            var expectedAst = new AstBinaryExpression()
+            {
+                Operator = TokenType.Slash,
+                Lhs = new AstNumberExpression()
+                {
+                    Value = "1"
+                },
+                Rhs = new AstNumberExpression()
+                {
+                    Value = "2"
+                }
+            };
+            AssertExpressionAstFromInput(expectedAst, "1/2");
+        }
+
+        [Fact]
+        internal void ParseExpression_UnaryExpression_Precedence()
+        {
             var expectedAst = new AstBinaryExpression()
             {
                 Operator = TokenType.Star,
-                LeftExpression = new AstUnaryExpression()
+                Lhs = new AstUnaryExpression()
                 {
                     Operator = TokenType.Minus,
                     Expression = new AstNumberExpression()
@@ -137,14 +161,33 @@ namespace SoltysDb.Core.Test.CmdCompiler
                         Value = "6"
                     }
                 },
-                RightExpression = new AstNumberExpression()
+                Rhs = new AstNumberExpression()
                 {
                     Value = "2"
                 },
             };
-            var assertVisitor = new TestParserVisitor();
-            assertVisitor.AssertVisit(expectedAst, (IAstNode)ast);
+
+            AssertExpressionAstFromInput(expectedAst, "-6*2");
         }
+
+        [Fact]
+        internal void ParseExpression_UnaryExpression_SupportForPlusOperator()
+        {
+            var expectedAst = new AstUnaryExpression()
+            {
+                Operator = TokenType.Plus,
+                Expression = new AstNumberExpression()
+                {
+                    Value = "6"
+                }
+            };
+
+            AssertExpressionAstFromInput(expectedAst, "+6");
+        }
+
+        private void AssertExpressionAstFromInput(IAstNode expectedAst, string input) =>
+            new TestParserVisitor()
+                .AssertVisit(expectedAst, (IAstNode)ParserFactory(input).ParseExpression());
 
         Parser ParserFactory(string input) =>
             new Parser(

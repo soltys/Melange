@@ -49,6 +49,10 @@ namespace SoltysDb.Core
                 {
                     yield return new Token(TokenType.RParen, ")");
                 }
+                else if (currentChar == '/')
+                {
+                    yield return new Token(TokenType.Slash, "/");
+                }
                 else
                 {
                     if (char.IsLetter(currentChar))

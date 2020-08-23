@@ -9,6 +9,6 @@ term
 
 factor  
 	= ident
-	| ["-"] number
+	| ['-' | '+' ] number
 	| "(" expression ")"
 	;

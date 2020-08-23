@@ -16,10 +16,13 @@ namespace SoltysDb.Core
 
         //Operators
         EqualSign,
-        Star,
         GreaterThan,
+
         Plus,
         Minus,
+
+        Star,
+        Slash,
 
         //Keywords
         [Keyword]
@@ -35,7 +38,8 @@ namespace SoltysDb.Core
         Into,
 
         [Keyword]
-        From
+        From,
+        
     }
 
     [AttributeUsage(AttributeTargets.Field)]

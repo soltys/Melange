@@ -20,7 +20,7 @@ namespace SoltysDb.Core
         {
             var term = ParseTerm();
 
-            if (IsToken(TokenType.Plus))
+            if (IsToken(TokenType.Plus, TokenType.Minus))
             {
                 var leftExpression = (AstExpression)term;
                 var op = CurrentToken;
@@ -29,8 +29,8 @@ namespace SoltysDb.Core
 
                 var binaryExpression = new AstBinaryExpression()
                 {
-                    LeftExpression = leftExpression,
-                    RightExpression = rightExpression,
+                    Lhs = leftExpression,
+                    Rhs = rightExpression,
                     Operator = op
                 };
                 return binaryExpression;
@@ -43,7 +43,7 @@ namespace SoltysDb.Core
         public AstNode ParseTerm()
         {
             var factor = ParseFactor();
-            if (IsToken(TokenType.Star))
+            if (IsToken(TokenType.Star, TokenType.Slash))
             {
                 var leftExpression = (AstExpression)factor;
                 var op = CurrentToken;
@@ -52,8 +52,8 @@ namespace SoltysDb.Core
 
                 var binaryExpression = new AstBinaryExpression()
                 {
-                    LeftExpression = leftExpression,
-                    RightExpression = rightExpression,
+                    Lhs = leftExpression,
+                    Rhs = rightExpression,
                     Operator = op
                 };
                 return binaryExpression;
@@ -72,7 +72,7 @@ namespace SoltysDb.Core
                 return expression;
             }
 
-            if (IsToken(TokenType.Minus))
+            if (IsToken(TokenType.Minus, TokenType.Plus))
             {
                 var op = CurrentToken;
                 GoToNextToken();

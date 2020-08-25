@@ -1,3 +1,5 @@
+# Current
+
 expression
 	= term [('+'|'-') expression]    
 	;
@@ -9,6 +11,44 @@ term
 
 factor  
 	= ident
-	| ['-' | '+' ] number
+	| ['-' | '+' ] factor
+	| "(" expression ")"
+	;
+
+---
+
+# New one
+
+location
+	= ID[.ident]*
+	| STRING
+	;
+
+value
+	= STRING
+	| NUMBER
+	; 
+
+stmt
+	= SELECT location FROM location [WHERE expr]
+	| INSERT INTO location '(' location [',' location] ')'  VALUES '(' value [, value]* ')'
+	;
+
+expr
+	= binary_op
+	;
+
+binary_op 
+	= factor ('+' | '-' | '*' | '/' ) factor
+	;
+
+unary_op 
+	= ['-' | '+' ] number
+	;
+
+factor  
+	= ID 
+	| NUMBER
+	| unary_op
 	| "(" expression ")"
 	;

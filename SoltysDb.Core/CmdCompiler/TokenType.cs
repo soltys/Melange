@@ -18,6 +18,7 @@ namespace SoltysDb.Core
         EqualSign,
         GreaterThan,
 
+        [Operator(Precedence = 1)]
         Plus,
         Minus,
 
@@ -46,5 +47,19 @@ namespace SoltysDb.Core
     public class KeywordAttribute : Attribute
     {
 
+    }
+
+    [AttributeUsage(AttributeTargets.Field)]
+    public class OperatorAttribute : Attribute
+    {
+        public Associativity Associativity { get; set; } = Associativity.Left;
+        public int Precedence { get; set; }
+
+    }
+
+    public enum Associativity
+    {
+        Left,
+        Right
     }
 }

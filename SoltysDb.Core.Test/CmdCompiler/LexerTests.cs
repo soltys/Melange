@@ -6,7 +6,7 @@ namespace SoltysDb.Core.Test.CmdCompiler
 {
     public class LexerTests
     {
-        private Lexer LexerFactory(string input) =>
+        private static Lexer LexerFactory(string input) =>
             new Lexer(new CommandInput(input));
 
         [Fact]
@@ -75,7 +75,7 @@ namespace SoltysDb.Core.Test.CmdCompiler
                 });
         }
 
-        private void AssertLexer(string input, IReadOnlyList<Token> expectedTokens)
+        private static void AssertLexer(string input, IReadOnlyList<Token> expectedTokens)
         {
             var lexer = LexerFactory(input);
             var tokens = lexer.GetTokens().ToArray();

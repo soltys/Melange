@@ -1,0 +1,52 @@
+using Xunit;
+
+namespace SoltysDb.Test.CmdCompiler
+{
+    internal class TestParserVisitor : IAstVisitor
+    {
+        private IAstNode expected;
+
+
+        public void AssertVisit(IAstNode expectedVisit, IAstNode actualVisit)
+        {
+            this.expected = expectedVisit;
+            Visit(actualVisit);
+        }
+
+        private void Visit(IAstNode node) => node.Accept(this);
+
+        public void VisitExpression(AstExpression expression)
+        {
+            Assert.IsType<AstExpression>(this.expected);
+            var expectedAst = (AstExpression) this.expected;
+
+            Assert.Equal(expectedAst.Value, expression.Value);
+        }
+
+        public void VisitNumberExpression(AstNumberExpression number)
+        {
+            Assert.IsType<AstNumberExpression>(this.expected);
+            var expectedAst = (AstNumberExpression)this.expected;
+            Assert.Equal(expectedAst.Value, number.Value);
+        }
+
+        public void VisitBinaryExpression(AstBinaryExpression binaryExpression)
+        {
+            Assert.IsType<AstBinaryExpression>(this.expected);
+            var expectedAst = (AstBinaryExpression)this.expected;
+            Assert.Equal(expectedAst.Operator, binaryExpression.Operator);
+
+            AssertVisit(expectedAst.Rhs, binaryExpression.Rhs);
+            AssertVisit(expectedAst.Lhs, binaryExpression.Lhs);
+        }
+
+        public void VisitUnaryExpression(AstUnaryExpression unaryExpression)
+        {
+            Assert.IsType<AstUnaryExpression>(this.expected);
+            var expectedAst = (AstUnaryExpression) this.expected;
+            Assert.Equal(expectedAst.Operator, unaryExpression.Operator);
+
+            AssertVisit(expectedAst.Expression, unaryExpression.Expression);
+        }
+    }
+}

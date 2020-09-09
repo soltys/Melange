@@ -1,26 +1,5 @@
-# Current
-
-expression
-	= term [('+'|'-') expression]    
-	;
-
-
-term 
-	= factor [("*"|"/") term]
-	;
-
-factor  
-	= ident
-	| ['-' | '+' ] factor
-	| "(" expression ")"
-	;
-
----
-
-# New one
-
 location
-	= ID[.ident]*
+	= ID[.ID]*
 	| STRING
 	;
 
@@ -35,15 +14,12 @@ stmt
 	;
 
 expr
-	= binary_op
+	= factor [('+' | '-' | '*' | '/' ) expr]*
 	;
 
-binary_op 
-	= factor ('+' | '-' | '*' | '/' ) factor
-	;
 
 unary_op 
-	= ['-' | '+' ] number
+	= ['-' | '+' ] NUMBER
 	;
 
 factor  
@@ -51,4 +27,5 @@ factor
 	| NUMBER
 	| unary_op
 	| "(" expression ")"
+    | ID '(' [expr [',' expr]*] ')'
 	;

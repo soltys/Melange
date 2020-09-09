@@ -6,7 +6,7 @@ namespace SoltysDb
     internal class KeyValueStore : Feature, IKeyValueStore
     {
         private string collection;
-        private const string DefaultCollectionName = "$global";
+        private const string DefaultCollectionName = "soltysdb_kv";
         public string DefaultCollection => KeyValueStore.DefaultCollectionName;
 
         internal KeyValueStore(DatabaseData data) : base(data)

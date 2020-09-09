@@ -8,6 +8,8 @@ namespace SoltysDb
         
         LParen,
         RParen,
+        Comma,
+        Dot,
 
         //Common
         Id,
@@ -16,14 +18,30 @@ namespace SoltysDb
 
         //Operators
         EqualSign,
-        GreaterThan,
-
         [Operator(Precedence = 1)]
+        CompareEqual,
+        [Operator(Precedence = 1)]
+        CompareNotEqual,
+        [Operator(Precedence = 1)]
+        GreaterThan,
+        [Operator(Precedence = 1)]
+        GreaterThanEqual,
+        [Operator(Precedence = 1)]
+        LessThan,
+        [Operator(Precedence = 1)]
+        LessThanEqual,
+
+        [Operator(Precedence = 2)]
         Plus,
+        [Operator(Precedence = 2)]
         Minus,
 
+        [Operator(Precedence = 3)]
         Star,
+        [Operator(Precedence = 3)]
         Slash,
+        [Operator(Precedence = 4, Associativity = Associativity.Right)]
+        Power,
 
         //Keywords
         [Keyword]
@@ -40,7 +58,18 @@ namespace SoltysDb
 
         [Keyword]
         From,
-        
+
+        [Operator(Precedence = 1)]
+        [Keyword]
+        And,
+
+        [Operator(Precedence = 1)]
+        [Keyword]
+        Or,
+
+        [Keyword]
+        Values,
+     
     }
 
     [AttributeUsage(AttributeTargets.Field)]

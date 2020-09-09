@@ -8,7 +8,7 @@ namespace SoltysDb
     internal class Lexer : ILexer
     {
         private readonly ICommandInput commandInput;
-
+        
         public Lexer(ICommandInput commandInput)
         {
             this.commandInput = commandInput;
@@ -23,16 +23,45 @@ namespace SoltysDb
                 var currentChar = input[i];
                 if (currentChar == '=')
                 {
-                    yield return new Token(TokenType.EqualSign, "=");
+                    var nextChar = GetNextChar(i, input);
+                    if (nextChar == '=')
+                    {
+                        yield return new Token(TokenType.CompareEqual, "==");
+                        i += 1;
+                    }
+                    else
+                    {
+                        yield return new Token(TokenType.EqualSign, "=");
+                    }
                 }
-                else if (currentChar == '*')
+               
+                else if (currentChar == '<')
                 {
-                    yield return new Token(TokenType.Star, "*");
+                    var nextChar = GetNextChar(i, input);
+                    if (nextChar == '=')
+                    {
+                        yield return new Token(TokenType.LessThanEqual, "<=");
+                        i += 1;
+                    }
+                    else
+                    {
+                        yield return new Token(TokenType.LessThan, "<");
+                    }
                 }
                 else if (currentChar == '>')
                 {
-                    yield return new Token(TokenType.GreaterThan, ">");
+                    var nextChar = GetNextChar(i, input);
+                    if (nextChar == '=')
+                    {
+                        yield return new Token(TokenType.GreaterThanEqual, ">=");
+                        i += 1;
+                    }
+                    else
+                    {
+                        yield return new Token(TokenType.GreaterThan, ">");
+                    }
                 }
+                
                 else if (currentChar == '+')
                 {
                     yield return new Token(TokenType.Plus, "+");
@@ -40,6 +69,14 @@ namespace SoltysDb
                 else if (currentChar == '-')
                 {
                     yield return new Token(TokenType.Minus, "-");
+                }
+                else if (currentChar == '/')
+                {
+                    yield return new Token(TokenType.Slash, "/");
+                }
+                else if (currentChar == '*')
+                {
+                    yield return new Token(TokenType.Star, "*");
                 }
                 else if (currentChar == '(')
                 {
@@ -49,9 +86,22 @@ namespace SoltysDb
                 {
                     yield return new Token(TokenType.RParen, ")");
                 }
-                else if (currentChar == '/')
+                else if (currentChar == ',')
                 {
-                    yield return new Token(TokenType.Slash, "/");
+                    yield return new Token(TokenType.Comma, ",");
+                }
+                else if (currentChar == '.')
+                {
+                    yield return new Token(TokenType.Dot, ".");
+                }
+                else if(currentChar == '!')
+                {
+                    var nextChar = GetNextChar(i, input);
+                    if (nextChar == '=')
+                    {
+                        yield return new Token(TokenType.CompareNotEqual, "!=");
+                        i += 1;
+                    }
                 }
                 else
                 {
@@ -74,10 +124,18 @@ namespace SoltysDb
                         yield return new Token(TokenType.String, match.Groups[1].Value);
                         i += match.Length;
                     }
+                    else if(currentChar == '\"')
+                    {
+                        var match = Regex.Match(input.AsSpan().Slice(i).ToString(), "\"([^\"]*)\"", RegexOptions.Compiled);
+                        yield return new Token(TokenType.String, match.Groups[1].Value);
+                        i += match.Length;
+                    }
                 }
             }
 
         }
+
+        private static char GetNextChar(int i, string input) => (i + 1 >= input.Length) ? '\0' : input[i + 1];
 
         private (Token, int) GetNumber(ReadOnlySpan<char> slice)
         {
@@ -99,7 +157,7 @@ namespace SoltysDb
             var builder = new StringBuilder();
             int i = 0;
 
-            while (i < slice.Length && char.IsLetterOrDigit(slice[i]))
+            while (i < slice.Length && IsNameCharacter(slice[i]))
             {
                 builder.Append(slice[i]);
                 i++;
@@ -113,6 +171,12 @@ namespace SoltysDb
             }
 
             return (builder.ToString(), i - 1);
+
+            bool IsNameCharacter(char letter)
+            {
+                return char.IsLetterOrDigit(letter) ||
+                       letter == '_';
+            }
         }
 
         private Token MakeToken(string input)
@@ -131,6 +195,12 @@ namespace SoltysDb
                     return new Token(TokenType.Where, input);
                 case "from":
                     return new Token(TokenType.From, input);
+                case "and":
+                    return new Token(TokenType.And, input);
+                case "or":
+                    return new Token(TokenType.Or, input);
+                case "values":
+                    return new Token(TokenType.Values, input);
                 default:
                     return new Token(TokenType.Id, input);
             }

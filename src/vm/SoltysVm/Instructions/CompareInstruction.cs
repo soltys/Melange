@@ -25,8 +25,7 @@ namespace SoltysVm
         public override string ToString() => $"{ToString(CompareType)}";
 
         public string ToString(CompareType compareType) =>
-            compareType switch
-            {
+            compareType switch {
                 CompareType.Equals => "ceq",
                 CompareType.GreaterThan => "cgt",
                 CompareType.LessThan => "clt",

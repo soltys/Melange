@@ -38,7 +38,7 @@ namespace SoltysVm
         private static (IInstruction, int) CreateLoadConstantInstruction(ReadOnlySpan<byte> span, in int alreadyBytesRead, LoadType loadType)
         {
             int totalBytesRead = alreadyBytesRead;
-            object value = null;
+            object value;
             switch (loadType)
             {
                 case LoadType.Integer:
@@ -49,6 +49,8 @@ namespace SoltysVm
                     value = BitConverter.ToDouble(span);
                     totalBytesRead += sizeof(double);
                     break;
+                default:
+                    throw new InvalidOperationException($"LoadType: {loadType} is not supported for loading constant instruction");
             }
 
             return (new LoadConstantInstruction(loadType, value), totalBytesRead);

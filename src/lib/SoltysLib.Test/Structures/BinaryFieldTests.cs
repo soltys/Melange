@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace SoltysLib.Test.Structures
+namespace SoltysLib.Test
 {
     public class BinaryFieldTests
     {

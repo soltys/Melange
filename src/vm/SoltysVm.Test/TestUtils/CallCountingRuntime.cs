@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
-namespace SoltysVm.Test
+namespace SoltysVm.Test.TestUtils
 {
     public class CallCountingRuntime : IRuntimeVisitorFactory, IRuntimeVisitor
     {

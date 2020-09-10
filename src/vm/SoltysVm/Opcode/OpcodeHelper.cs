@@ -39,11 +39,18 @@ namespace SoltysVm
                 int i => BitConverter.GetBytes(i),
                 double d => BitConverter.GetBytes(d),
                 float f => BitConverter.GetBytes(f),
-                string s => BitConverter.GetBytes(s.Length).AsEnumerable()
-                    .Concat(Encoding.UTF8.GetBytes(s)).ToArray(),
+                string s => StringToUtf8Bytes(s),
                 _ => throw new ArgumentException("Type is not recognized", "objects")
             };
         }
+
+        private static byte[] StringToUtf8Bytes(string s)
+        {
+            var stringBytes = Encoding.UTF8.GetBytes(s);
+            return BitConverter.GetBytes(s.Length).AsEnumerable()
+                .Concat(stringBytes).ToArray();
+        }
+            
 
         public static (string, int) DecodeString(ReadOnlySpan<byte> span)
         {

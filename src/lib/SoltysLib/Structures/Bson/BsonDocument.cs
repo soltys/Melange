@@ -16,7 +16,7 @@ namespace SoltysLib.Bson
             this.elements = new List<Element>();
         }
 
-        public BsonDocument(IEnumerable<Element> elements) : this()
+        public BsonDocument(params Element[] elements) : this()
         {
             this.elements.AddRange(elements);
         }

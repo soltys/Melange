@@ -9,7 +9,7 @@ namespace SoltysDb.Test.CmdCompiler
         {
             var expectedAst = new AstBinaryExpression
             {
-                Operator = TokenType.Plus,
+                Operator = TokenKind.Plus,
                 Lhs = new AstNumberExpression
                 {
                     Value = "2"
@@ -24,7 +24,7 @@ namespace SoltysDb.Test.CmdCompiler
                     {
                         Value = "2"
                     },
-                    Operator = TokenType.Star
+                    Operator = TokenKind.Star
                 }
             };
 
@@ -36,7 +36,7 @@ namespace SoltysDb.Test.CmdCompiler
         {
             var expectedAst = new AstBinaryExpression
             {
-                Operator = TokenType.Plus,
+                Operator = TokenKind.Plus,
                 Lhs = new AstBinaryExpression
                 {
                     Lhs = new AstNumberExpression
@@ -47,7 +47,7 @@ namespace SoltysDb.Test.CmdCompiler
                     {
                         Value = "2"
                     },
-                    Operator = TokenType.Star
+                    Operator = TokenKind.Star
                 },
                 Rhs = new AstNumberExpression
                 {
@@ -63,7 +63,7 @@ namespace SoltysDb.Test.CmdCompiler
         {
             var expectedAst = new AstBinaryExpression
             {
-                Operator = TokenType.Star,
+                Operator = TokenKind.Star,
                 Lhs = new AstBinaryExpression
                 {
                     Lhs = new AstNumberExpression
@@ -74,7 +74,7 @@ namespace SoltysDb.Test.CmdCompiler
                     {
                         Value = "2"
                     },
-                    Operator = TokenType.Plus
+                    Operator = TokenKind.Plus
                 },
                 Rhs = new AstNumberExpression
                 {
@@ -90,7 +90,7 @@ namespace SoltysDb.Test.CmdCompiler
         {
             var expectedAst = new AstBinaryExpression
             {
-                Operator = TokenType.Plus,
+                Operator = TokenKind.Plus,
                 Lhs = new AstBinaryExpression
                 {
                     Lhs = new AstNumberExpression
@@ -101,7 +101,7 @@ namespace SoltysDb.Test.CmdCompiler
                     {
                         Value = "2"
                     },
-                    Operator = TokenType.Plus
+                    Operator = TokenKind.Plus
                 },
                 Rhs = new AstNumberExpression
                 {
@@ -116,7 +116,7 @@ namespace SoltysDb.Test.CmdCompiler
         {
             var expectedAst = new AstBinaryExpression
             {
-                Operator = TokenType.Star,
+                Operator = TokenKind.Star,
                 Lhs = new AstBinaryExpression
                 {
                     Lhs = new AstNumberExpression
@@ -127,7 +127,7 @@ namespace SoltysDb.Test.CmdCompiler
                     {
                         Value = "2"
                     },
-                    Operator = TokenType.Star
+                    Operator = TokenKind.Star
                 },
                 Rhs = new AstNumberExpression
                 {
@@ -143,7 +143,7 @@ namespace SoltysDb.Test.CmdCompiler
         {
             var expectedAst = new AstBinaryExpression
             {
-                Operator = TokenType.Minus,
+                Operator = TokenKind.Minus,
                 Lhs = new AstNumberExpression
                 {
                     Value = "1"
@@ -161,7 +161,7 @@ namespace SoltysDb.Test.CmdCompiler
         {
             var expectedAst = new AstBinaryExpression
             {
-                Operator = TokenType.Slash,
+                Operator = TokenKind.Slash,
                 Lhs = new AstNumberExpression
                 {
                     Value = "1"
@@ -179,10 +179,10 @@ namespace SoltysDb.Test.CmdCompiler
         {
             var expectedAst = new AstBinaryExpression
             {
-                Operator = TokenType.Star,
+                Operator = TokenKind.Star,
                 Lhs = new AstUnaryExpression
                 {
-                    Operator = TokenType.Minus,
+                    Operator = TokenKind.Minus,
                     Expression = new AstNumberExpression
                     {
                         Value = "6"
@@ -202,7 +202,7 @@ namespace SoltysDb.Test.CmdCompiler
         {
             var expectedAst = new AstUnaryExpression
             {
-                Operator = TokenType.Plus,
+                Operator = TokenKind.Plus,
                 Expression = new AstNumberExpression
                 {
                     Value = "6"
@@ -217,11 +217,11 @@ namespace SoltysDb.Test.CmdCompiler
         {
             var expectedAst = new AstBinaryExpression
             {
-                Operator = TokenType.GreaterThan,
+                Operator = TokenKind.GreaterThan,
                 Lhs = new AstNumberExpression { Value = "3" },
                 Rhs = new AstBinaryExpression
                 {
-                    Operator = TokenType.Plus,
+                    Operator = TokenKind.Plus,
                     Lhs = new AstNumberExpression { Value = "1" },
                     Rhs = new AstNumberExpression { Value = "2" },
                 }

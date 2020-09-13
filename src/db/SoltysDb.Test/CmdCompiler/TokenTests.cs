@@ -7,9 +7,9 @@ namespace SoltysDb.Test.CmdCompiler
         [Fact]
         public void Token_Holds_Value()
         {
-            var token = new Token(TokenType.Insert, "insert");
+            var token = new Token(TokenKind.Insert, "insert");
 
-            Assert.Equal(TokenType.Insert, token.TokenType);
+            Assert.Equal(TokenKind.Insert, token.TokenKind);
             Assert.Equal("insert", token.Value);
         }
 
@@ -17,14 +17,14 @@ namespace SoltysDb.Test.CmdCompiler
         public void Token_Default_Values()
         {
             var token = new Token();
-            Assert.Equal(TokenType.Undefined, token.TokenType);
+            Assert.Equal(TokenKind.Undefined, token.TokenKind);
             Assert.Null(token.Value);
         }
 
         [Fact]
         public void ToString_HasProperFormat()
         {
-            var token = new Token(TokenType.Id, "Value");
+            var token = new Token(TokenKind.Id, "Value");
             Assert.Equal("<Id,Value>", token.ToString());
         }
     }

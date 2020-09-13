@@ -5,23 +5,23 @@ namespace SoltysDb.Test.CmdCompiler
     public class TokenHelperTests
     {
         [Theory]
-        [InlineData(TokenType.Select, 0)] //default value test
-        [InlineData(TokenType.And, 1)] //keyword and operator for boolean expressions
-        [InlineData(TokenType.Plus, 2)]
-        [InlineData(TokenType.Star, 3)]
-        public void GetPrecedence_CorrectValueIsReturned(TokenType tokenType, int expectedValue)
+        [InlineData(TokenKind.Select, 0)] //default value test
+        [InlineData(TokenKind.And, 1)] //keyword and operator for boolean expressions
+        [InlineData(TokenKind.Plus, 2)]
+        [InlineData(TokenKind.Star, 3)]
+        public void GetPrecedence_CorrectValueIsReturned(TokenKind tokenKind, int expectedValue)
         {
-            Assert.Equal(expectedValue, tokenType.GetPrecedence());
+            Assert.Equal(expectedValue, tokenKind.GetPrecedence());
         }
 
         [Theory]
-        [InlineData(TokenType.Select, Associativity.Left)] //default value test
-        [InlineData(TokenType.Plus, Associativity.Left)]
-        [InlineData(TokenType.Star, Associativity.Left)]
-        [InlineData(TokenType.Power, Associativity.Right)]
-        public void GeGetAssociativity_CorrectValueIsReturned(TokenType tokenType, Associativity associativity)
+        [InlineData(TokenKind.Select, Associativity.Left)] //default value test
+        [InlineData(TokenKind.Plus, Associativity.Left)]
+        [InlineData(TokenKind.Star, Associativity.Left)]
+        [InlineData(TokenKind.Power, Associativity.Right)]
+        public void GeGetAssociativity_CorrectValueIsReturned(TokenKind tokenKind, Associativity associativity)
         {
-            Assert.Equal(associativity, tokenType.GetAssociativity());
+            Assert.Equal(associativity, tokenKind.GetAssociativity());
         }
     }
 }

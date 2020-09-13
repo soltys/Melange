@@ -20,7 +20,7 @@ namespace SoltysDb.Test.CmdCompiler
                     Value = "1"
                 },
                 new AstBinaryExpression {
-                    Operator = TokenType.Plus,
+                    Operator = TokenKind.Plus,
                     Lhs = new AstNumberExpression {Value = "2"},
                     Rhs = new AstNumberExpression {Value = "3"},
                 }

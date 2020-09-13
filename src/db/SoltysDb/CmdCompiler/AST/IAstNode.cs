@@ -1,6 +1,6 @@
 namespace SoltysDb
 {
-    interface IAstNode
+    internal interface IAstNode
     {
         void Accept(IAstVisitor visitor);
     }

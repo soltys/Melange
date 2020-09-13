@@ -4,24 +4,24 @@ using Xunit;
 
 namespace SoltysDb.Test.CmdCompiler
 {
-    class InsensitiveKeywordGenerator : TheoryData<InputTokenTypePair>
+    internal class InsensitiveKeywordGenerator : TheoryData<InputTokenTypePair>
     {
         public InsensitiveKeywordGenerator()
         {
-            var dataList = EnumHelper.GetKeywords<TokenType>()
+            var dataList = EnumHelper.GetKeywords<TokenKind>()
                 .Select(x => new InputTokenTypePair
                 {
-                    ExpectedTokenType = x,
+                    ExpectedTokenKind = x,
                     Input = x.ToString().ToLowerInvariant()
                 });
 
             foreach (var pair in dataList)
             {
-                Add(new InputTokenTypePair() { ExpectedTokenType = pair.ExpectedTokenType, Input = pair.Input });
+                Add(new InputTokenTypePair() { ExpectedTokenKind = pair.ExpectedTokenKind, Input = pair.Input });
                 var newInput = char.ToUpperInvariant(pair.Input[0]) + pair.Input.Substring(1);
-                Add(new InputTokenTypePair() { ExpectedTokenType = pair.ExpectedTokenType, Input = newInput });
+                Add(new InputTokenTypePair() { ExpectedTokenKind = pair.ExpectedTokenKind, Input = newInput });
                 newInput = pair.Input.ToUpperInvariant();
-                Add(new InputTokenTypePair() { ExpectedTokenType = pair.ExpectedTokenType, Input = newInput });
+                Add(new InputTokenTypePair() { ExpectedTokenKind = pair.ExpectedTokenKind, Input = newInput });
             }
 
         }
@@ -29,9 +29,9 @@ namespace SoltysDb.Test.CmdCompiler
 
     internal class InputTokenTypePair
     {
-        public TokenType ExpectedTokenType { get; set; }
+        public TokenKind ExpectedTokenKind { get; set; }
         public string Input { get; set; }
 
-        public override string ToString() => $"{Input} => Token: {ExpectedTokenType}";
+        public override string ToString() => $"{Input} => Token: {ExpectedTokenKind}";
     }
 }

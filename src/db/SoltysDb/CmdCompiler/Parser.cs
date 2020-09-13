@@ -1,22 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SoltysLib.TextAnalysis;
 
 namespace SoltysDb
 {
     internal class Parser
     {
-        private readonly ITokenSource ts;
+        private readonly ITokenSource<Token> ts;
 
-        public Parser(ITokenSource ts)
+        public Parser(ITokenSource<Token> ts)
         {
             this.ts = ts;
         }
 
-        private TokenType CurrentToken => this.ts.Current.TokenType;
-        private TokenType NextToken => this.ts.PeekNextToken.TokenType;
+        private TokenKind CurrentToken => this.ts.Current.TokenKind;
+        private TokenKind NextToken => this.ts.PeekNextToken.TokenKind;
 
-        private void AdvanceToken(params TokenType[] tokens)
+        private void AdvanceToken(params TokenKind[] tokens)
         {
             //
             //We are checking if current token is one of the expected ones
@@ -27,10 +28,10 @@ namespace SoltysDb
             }
             this.ts.NextToken();
         }
-        private bool IsToken(params TokenType[] tokens) => tokens.Any(x => x == CurrentToken);
-        private bool IsNextToken(params TokenType[] tokens) => tokens.Any(x => x == NextToken);
+        private bool IsToken(params TokenKind[] tokens) => tokens.Any(x => x == CurrentToken);
+        private bool IsNextToken(params TokenKind[] tokens) => tokens.Any(x => x == NextToken);
 
-        private void AdvanceIfToken(params TokenType[] tokens)
+        private void AdvanceIfToken(params TokenKind[] tokens)
         {
             if (IsToken(tokens))
             {
@@ -40,19 +41,19 @@ namespace SoltysDb
 
         public AstNode ParseExpression() => ParseExpression(0);
 
-        private readonly TokenType[] binaryTokens = new[] {
-            TokenType.Plus, TokenType.Minus, TokenType.Star, TokenType.Slash, 
+        private readonly TokenKind[] binaryTokens = new[] {
+            TokenKind.Plus, TokenKind.Minus, TokenKind.Star, TokenKind.Slash, 
             //boolean operators
-            TokenType.CompareEqual, TokenType.CompareNotEqual, TokenType.And, TokenType.Or,
-            TokenType.GreaterThan, TokenType.GreaterThanEqual, TokenType.LessThan, TokenType.LessThanEqual
+            TokenKind.CompareEqual, TokenKind.CompareNotEqual, TokenKind.And, TokenKind.Or,
+            TokenKind.GreaterThan, TokenKind.GreaterThanEqual, TokenKind.LessThan, TokenKind.LessThanEqual
         };
 
         public IAstNode ParseStatement()
         {
             return CurrentToken switch
             {
-                TokenType.Select => ParseSelect(),
-                TokenType.Insert => ParseInsert(),
+                TokenKind.Select => ParseSelect(),
+                TokenKind.Insert => ParseInsert(),
                 _ => throw new InvalidOperationException($"{nameof(ParseFactor)} could not token matching statement")
             };
         }
@@ -65,12 +66,12 @@ namespace SoltysDb
 
         private IAstNode ParseInsert()
         {
-            AdvanceToken(TokenType.Insert);
-            AdvanceToken(TokenType.Into);
+            AdvanceToken(TokenKind.Insert);
+            AdvanceToken(TokenKind.Into);
 
             var location = ParseLocation();
 
-            AdvanceToken(TokenType.Values);
+            AdvanceToken(TokenKind.Values);
 
             var values = ParseValues();
             return new AstInsertStatement() { Location = location, Values = values };
@@ -78,24 +79,24 @@ namespace SoltysDb
 
         private AstValue ParseValues()
         {
-            AdvanceToken(TokenType.LParen);
+            AdvanceToken(TokenKind.LParen);
 
             var expressions = new List<AstExpression>();
-            while (!IsToken(TokenType.RParen))
+            while (!IsToken(TokenKind.RParen))
             {
-                if (IsToken(TokenType.Id))
+                if (IsToken(TokenKind.Id))
                 {
                     expressions.Add(new AstExpression()
                     {
                         Value = this.ts.Current.Value
                     });
 
-                    AdvanceToken(TokenType.Id);
+                    AdvanceToken(TokenKind.Id);
                 }
 
-                AdvanceIfToken(TokenType.Comma);
+                AdvanceIfToken(TokenKind.Comma);
             }
-            AdvanceToken(TokenType.RParen);
+            AdvanceToken(TokenKind.RParen);
             return new AstValue(expressions.ToArray());
         }
 
@@ -104,18 +105,18 @@ namespace SoltysDb
             var location = "";
             do
             {
-                AdvanceIfToken(TokenType.Dot);
+                AdvanceIfToken(TokenKind.Dot);
 
-                if (IsToken(TokenType.Id, TokenType.String))
+                if (IsToken(TokenKind.Id, TokenKind.String))
                 {
                     location = $"{location}{this.ts.Current.Value}.";
-                    AdvanceToken(TokenType.Id, TokenType.String);
+                    AdvanceToken(TokenKind.Id, TokenKind.String);
                 }
                 else
                 {
                     throw new InvalidOperationException($"No expected location token {CurrentToken}");
                 }
-            } while (IsToken(TokenType.Dot));
+            } while (IsToken(TokenKind.Dot));
 
             return new AstLocation() { Value = location.TrimEnd('.') };
         }
@@ -143,7 +144,7 @@ namespace SoltysDb
 
             return expression;
 
-            int GetNewPrecedence(TokenType op)
+            int GetNewPrecedence(TokenKind op)
             {
                 if (op.GetAssociativity() == Associativity.Right)
                 {
@@ -157,19 +158,19 @@ namespace SoltysDb
         public AstNode ParseFactor()
         {
             // '(' expression ')'
-            if (IsToken(TokenType.LParen))
+            if (IsToken(TokenKind.LParen))
             {
-                AdvanceToken(TokenType.LParen);
+                AdvanceToken(TokenKind.LParen);
                 var expression = ParseExpression();
-                AdvanceToken(TokenType.RParen);
+                AdvanceToken(TokenKind.RParen);
                 return expression;
             }
 
             //unary operator
-            if (IsToken(TokenType.Minus, TokenType.Plus))
+            if (IsToken(TokenKind.Minus, TokenKind.Plus))
             {
                 var op = CurrentToken;
-                AdvanceToken(TokenType.Minus, TokenType.Plus);
+                AdvanceToken(TokenKind.Minus, TokenKind.Plus);
                 var unaryExpression = new AstUnaryExpression()
                 {
                     Operator = op,
@@ -179,34 +180,34 @@ namespace SoltysDb
             }
 
             // number
-            if (IsToken(TokenType.Number))
+            if (IsToken(TokenKind.Number))
             {
                 var numberExpression = new AstNumberExpression() { Value = this.ts.Current.Value };
-                AdvanceToken(TokenType.Number);
+                AdvanceToken(TokenKind.Number);
                 return numberExpression;
             }
 
             //function call
-            if (IsToken(TokenType.Id))
+            if (IsToken(TokenKind.Id))
             {
                 var id = this.ts.Current.Value;
-                AdvanceToken(TokenType.Id);
+                AdvanceToken(TokenKind.Id);
 
-                if (IsToken(TokenType.LParen))
+                if (IsToken(TokenKind.LParen))
                 {
                     var arguments = new List<AstExpression>();
-                    AdvanceToken(TokenType.LParen);
+                    AdvanceToken(TokenKind.LParen);
 
-                    while (!IsToken(TokenType.RParen))
+                    while (!IsToken(TokenKind.RParen))
                     {
                         arguments.Add((AstExpression)ParseExpression());
 
-                        AdvanceIfToken(TokenType.Comma);
+                        AdvanceIfToken(TokenKind.Comma);
 
                     }
 
                     // Adding arguments should happening here
-                    AdvanceToken(TokenType.RParen);
+                    AdvanceToken(TokenKind.RParen);
                     var functionCall = new AstFunctionCallExpression(id, arguments.ToArray());
                     return functionCall;
                 }

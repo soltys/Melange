@@ -16,14 +16,14 @@ namespace SoltysLib.Test.Bson
         [Fact]
         public void ToString_IntegerElement()
         {
-            var doc = new BsonDocument(new[] { new Element("foo", new BsonInteger(42)), });
+            var doc = new BsonDocument(new Element("foo", new BsonInteger(42)));
             Assert.Equal("{ \"foo\": 42 }", doc.ToString());
         }
 
         [Fact]
         public void ToString_TwoElements()
         {
-            var doc = new BsonDocument(new[] { new Element("foo", new BsonInteger(42)), new Element("bar", new BsonString("dog")), });
+            var doc = new BsonDocument(new Element("foo", new BsonInteger(42)), new Element("bar", new BsonString("dog")));
             Assert.Equal("{ \"foo\": 42, \"bar\": \"dog\" }", doc.ToString());
         }
     }

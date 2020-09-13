@@ -1,39 +1,39 @@
 using System.Linq;
 
-namespace SoltysDb
+namespace SoltysLib.TextAnalysis
 {
-    internal class TokenSource : ITokenSource
+    public class TokenSource<TToken> : ITokenSource<TToken>
     {
-        private readonly ILexer lexer;
-        private readonly Token[] allTokens;
+        private readonly ILexer<TToken> lexer;
+        private readonly TToken[] allTokens;
         private int tokenIndex;
 
-        public TokenSource(ILexer lexer)
+        public TokenSource(ILexer<TToken> lexer)
         {
             this.lexer = lexer;
             this.allTokens = this.lexer.GetTokens().ToArray();
             this.tokenIndex = 0;
         }
 
-        public Token Current
+        public TToken Current
         {
             get
             {
                 if (this.tokenIndex >= this.allTokens.Length)
                 {
-                    return Token.Empty;
+                    return this.lexer.GetEmpty();
                 }
                 return this.allTokens[this.tokenIndex];
             }
         }
 
-        public Token PeekNextToken
+        public TToken PeekNextToken
         {
             get
             {
                 if (this.tokenIndex + 1 >= this.allTokens.Length)
                 {
-                    return Token.Empty;
+                    return this.lexer.GetEmpty();
                 }
                 return this.allTokens[this.tokenIndex + 1];
             }

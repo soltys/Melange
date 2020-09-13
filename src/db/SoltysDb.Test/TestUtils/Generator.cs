@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SoltysDb.Test.TestUtils
 {
-    class Generator
+    internal class Generator
     {
         public static IEnumerable<KeyValuePair<string, string>> GenerateKeyValuesPairs(int count)
         {

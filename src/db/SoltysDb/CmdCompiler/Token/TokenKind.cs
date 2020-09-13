@@ -1,8 +1,6 @@
-using System;
-
 namespace SoltysDb
 {
-    public enum TokenType
+    public enum TokenKind
     {
         Undefined,
         
@@ -70,25 +68,5 @@ namespace SoltysDb
         [Keyword]
         Values,
      
-    }
-
-    [AttributeUsage(AttributeTargets.Field)]
-    public class KeywordAttribute : Attribute
-    {
-
-    }
-
-    [AttributeUsage(AttributeTargets.Field)]
-    public class OperatorAttribute : Attribute
-    {
-        public Associativity Associativity { get; set; } = Associativity.Left;
-        public int Precedence { get; set; }
-
-    }
-
-    public enum Associativity
-    {
-        Left,
-        Right
     }
 }

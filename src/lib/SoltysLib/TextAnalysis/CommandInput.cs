@@ -1,8 +1,8 @@
 using System.IO;
 
-namespace SoltysDb
+namespace SoltysLib.TextAnalysis
 {
-    internal class CommandInput : ICommandInput
+    public class CommandInput : ICommandInput
     {
         private readonly TextReader inputStream;
 

@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using SoltysLib.TextAnalysis;
 
 namespace SoltysDb
 {
-    internal class Lexer : ILexer
+    internal class Lexer : ILexer<Token>
     {
         private readonly ICommandInput commandInput;
         
@@ -26,12 +27,12 @@ namespace SoltysDb
                     var nextChar = GetNextChar(i, input);
                     if (nextChar == '=')
                     {
-                        yield return new Token(TokenType.CompareEqual, "==");
+                        yield return new Token(TokenKind.CompareEqual, "==");
                         i += 1;
                     }
                     else
                     {
-                        yield return new Token(TokenType.EqualSign, "=");
+                        yield return new Token(TokenKind.EqualSign, "=");
                     }
                 }
                
@@ -40,12 +41,12 @@ namespace SoltysDb
                     var nextChar = GetNextChar(i, input);
                     if (nextChar == '=')
                     {
-                        yield return new Token(TokenType.LessThanEqual, "<=");
+                        yield return new Token(TokenKind.LessThanEqual, "<=");
                         i += 1;
                     }
                     else
                     {
-                        yield return new Token(TokenType.LessThan, "<");
+                        yield return new Token(TokenKind.LessThan, "<");
                     }
                 }
                 else if (currentChar == '>')
@@ -53,53 +54,53 @@ namespace SoltysDb
                     var nextChar = GetNextChar(i, input);
                     if (nextChar == '=')
                     {
-                        yield return new Token(TokenType.GreaterThanEqual, ">=");
+                        yield return new Token(TokenKind.GreaterThanEqual, ">=");
                         i += 1;
                     }
                     else
                     {
-                        yield return new Token(TokenType.GreaterThan, ">");
+                        yield return new Token(TokenKind.GreaterThan, ">");
                     }
                 }
                 
                 else if (currentChar == '+')
                 {
-                    yield return new Token(TokenType.Plus, "+");
+                    yield return new Token(TokenKind.Plus, "+");
                 }
                 else if (currentChar == '-')
                 {
-                    yield return new Token(TokenType.Minus, "-");
+                    yield return new Token(TokenKind.Minus, "-");
                 }
                 else if (currentChar == '/')
                 {
-                    yield return new Token(TokenType.Slash, "/");
+                    yield return new Token(TokenKind.Slash, "/");
                 }
                 else if (currentChar == '*')
                 {
-                    yield return new Token(TokenType.Star, "*");
+                    yield return new Token(TokenKind.Star, "*");
                 }
                 else if (currentChar == '(')
                 {
-                    yield return new Token(TokenType.LParen, "(");
+                    yield return new Token(TokenKind.LParen, "(");
                 }
                 else if (currentChar == ')')
                 {
-                    yield return new Token(TokenType.RParen, ")");
+                    yield return new Token(TokenKind.RParen, ")");
                 }
                 else if (currentChar == ',')
                 {
-                    yield return new Token(TokenType.Comma, ",");
+                    yield return new Token(TokenKind.Comma, ",");
                 }
                 else if (currentChar == '.')
                 {
-                    yield return new Token(TokenType.Dot, ".");
+                    yield return new Token(TokenKind.Dot, ".");
                 }
                 else if(currentChar == '!')
                 {
                     var nextChar = GetNextChar(i, input);
                     if (nextChar == '=')
                     {
-                        yield return new Token(TokenType.CompareNotEqual, "!=");
+                        yield return new Token(TokenKind.CompareNotEqual, "!=");
                         i += 1;
                     }
                 }
@@ -121,19 +122,21 @@ namespace SoltysDb
                     else if (currentChar == '\'')
                     {
                         var match = Regex.Match(input.AsSpan().Slice(i).ToString(), "\'([^\']*)\'", RegexOptions.Compiled);
-                        yield return new Token(TokenType.String, match.Groups[1].Value);
+                        yield return new Token(TokenKind.String, match.Groups[1].Value);
                         i += match.Length;
                     }
                     else if(currentChar == '\"')
                     {
                         var match = Regex.Match(input.AsSpan().Slice(i).ToString(), "\"([^\"]*)\"", RegexOptions.Compiled);
-                        yield return new Token(TokenType.String, match.Groups[1].Value);
+                        yield return new Token(TokenKind.String, match.Groups[1].Value);
                         i += match.Length;
                     }
                 }
             }
 
         }
+
+        public Token GetEmpty() => Token.Empty;
 
         private static char GetNextChar(int i, string input) => (i + 1 >= input.Length) ? '\0' : input[i + 1];
 
@@ -148,7 +151,7 @@ namespace SoltysDb
                 i++;
             }
 
-            return (new Token(TokenType.Number, builder.ToString()), i - 1);
+            return (new Token(TokenKind.Number, builder.ToString()), i - 1);
         }
 
 
@@ -186,23 +189,23 @@ namespace SoltysDb
             switch (testString)
             {
                 case "insert":
-                    return new Token(TokenType.Insert, input);
+                    return new Token(TokenKind.Insert, input);
                 case "into":
-                    return new Token(TokenType.Into, input);
+                    return new Token(TokenKind.Into, input);
                 case "select":
-                    return new Token(TokenType.Select, input);
+                    return new Token(TokenKind.Select, input);
                 case "where":
-                    return new Token(TokenType.Where, input);
+                    return new Token(TokenKind.Where, input);
                 case "from":
-                    return new Token(TokenType.From, input);
+                    return new Token(TokenKind.From, input);
                 case "and":
-                    return new Token(TokenType.And, input);
+                    return new Token(TokenKind.And, input);
                 case "or":
-                    return new Token(TokenType.Or, input);
+                    return new Token(TokenKind.Or, input);
                 case "values":
-                    return new Token(TokenType.Values, input);
+                    return new Token(TokenKind.Values, input);
                 default:
-                    return new Token(TokenType.Id, input);
+                    return new Token(TokenKind.Id, input);
             }
         }
     }

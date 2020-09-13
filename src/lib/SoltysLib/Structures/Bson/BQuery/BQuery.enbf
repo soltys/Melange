@@ -1,0 +1,6 @@
+bquery ::= access ('.' bquery)*
+        ;
+
+access ::= ID
+       |   ID '[' NUMBER ']'
+       ;

@@ -1,3 +1,5 @@
+using SoltysLib.TextAnalysis;
+
 namespace SoltysDb.Test.CmdCompiler
 {
     internal static class AstAssert
@@ -15,7 +17,7 @@ namespace SoltysDb.Test.CmdCompiler
 
         public static Parser ParserFactory(string input) =>
             new Parser(
-                new TokenSource(
+                new TokenSource<Token>(
                     new Lexer(
                         new CommandInput(input))));
     }

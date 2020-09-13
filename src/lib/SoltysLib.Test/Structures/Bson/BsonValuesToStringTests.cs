@@ -20,7 +20,7 @@ namespace SoltysLib.Test.Bson
         [Fact]
         public void ToString_BsonNull() => AssertToString("null", BsonNull.Value);
         [Fact]
-        public void ToString_Array() => AssertToString("[1, 2, 3]", new BsonArray(new[] { new BsonInteger(1), new BsonInteger(2), new BsonInteger(3) }));
+        public void ToString_Array() => AssertToString("[1, 2, 3]", new BsonArray(new BsonInteger(1), new BsonInteger(2), new BsonInteger(3)));
         [Fact]
         public void ToString_DateTime() => AssertToString("Date(1599760732000)", new BsonDatetime(1599760732000L));
 

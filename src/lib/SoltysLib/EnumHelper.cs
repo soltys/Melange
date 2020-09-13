@@ -33,7 +33,6 @@ namespace SoltysLib
             return (TAttribute)memberInfo
                 .GetCustomAttributes(typeof(TAttribute), false)
                 .FirstOrDefault();
-
         }
     }
 }

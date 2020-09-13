@@ -4,7 +4,7 @@ namespace SoltysDb
     {
         public AstExpression Lhs { get; set; }
         public AstExpression Rhs { get; set; }
-        public TokenType Operator { get; set; }
+        public TokenKind Operator { get; set; }
 
         public override string ToString() => $"[{Lhs}] {Operator} [{Rhs}]";
         public void Accept(IAstVisitor visitor) => visitor.VisitBinaryExpression(this);

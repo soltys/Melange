@@ -15,7 +15,7 @@ namespace SoltysLib.Bson
             this.values = new List<BsonValue>();
         }
 
-        public BsonArray(IEnumerable<BsonValue> values)
+        public BsonArray(params BsonValue[] values)
         {
             this.values = new List<BsonValue>(values);
         }
@@ -25,10 +25,12 @@ namespace SoltysLib.Bson
             this.values.Add(value);
         }
 
-        public void AddRange(IEnumerable<BsonValue> values)
+        public void AddRange(IEnumerable<BsonValue> v)
         {
-            this.values.AddRange(values);
+            this.values.AddRange(v);
         }
+
+        public BsonValue this[int index] => this.values[index];
 
         public override ReadOnlySpan<byte> GetBytes() => BsonEncoder.EncodeAsDocument(ToElements());
 

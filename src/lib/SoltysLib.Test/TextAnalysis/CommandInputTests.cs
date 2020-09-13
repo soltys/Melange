@@ -1,6 +1,7 @@
+using SoltysLib.TextAnalysis;
 using Xunit;
 
-namespace SoltysDb.Test.CmdCompiler
+namespace SoltysLib.Test.TextAnalysis
 {
     public class CommandInputTests
     {

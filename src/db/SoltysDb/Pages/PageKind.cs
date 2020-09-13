@@ -1,6 +1,6 @@
 namespace SoltysDb
 {
-    public enum PageType : byte
+    public enum PageKind : byte
     {
         Undefined = 0,
         Header,

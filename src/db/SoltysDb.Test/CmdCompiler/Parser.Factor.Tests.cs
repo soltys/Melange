@@ -16,10 +16,12 @@ namespace SoltysDb.Test.CmdCompiler
         {
             var expectedArguments = new AstExpression[]
             {
-                new AstNumberExpression {
+                new AstNumberExpression 
+                {
                     Value = "1"
                 },
-                new AstBinaryExpression {
+                new AstBinaryExpression 
+                {
                     Operator = TokenKind.Plus,
                     Lhs = new AstNumberExpression {Value = "2"},
                     Rhs = new AstNumberExpression {Value = "3"},

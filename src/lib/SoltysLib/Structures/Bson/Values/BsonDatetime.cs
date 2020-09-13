@@ -4,7 +4,7 @@ namespace SoltysLib.Bson
 {
     internal class BsonDatetime : BsonValue
     {
-        private long unixEpochMs;
+        private readonly long unixEpochMs;
         internal override ElementType Type => ElementType.DateTime;
         public DateTime Value
         {

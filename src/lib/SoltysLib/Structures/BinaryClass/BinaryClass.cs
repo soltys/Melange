@@ -6,7 +6,7 @@ namespace SoltysLib
 {
     public class BinaryClass
     {
-        private List<BinaryField> binaryFields = new List<BinaryField>();
+        private readonly List<BinaryField> binaryFields = new List<BinaryField>();
 
         protected readonly byte[] memoryHandler;
         private int freeMemoryOffset;

@@ -19,12 +19,12 @@ namespace SoltysDb
 
     internal class HeaderPage : Page
     {
-        private HeaderMetadata headerMetadata;
+        private readonly HeaderMetadata headerMetadata;
         public HeaderPage()
         {
             this.headerMetadata = new HeaderMetadata(RawData, this.PageMetadata.End);
             DataBlock = new DataBlock(RawData, this.headerMetadata.End, Page.PageSize - this.headerMetadata.End);
-            PageType = PageType.Header;
+            PageKind = PageKind.Header;
         }
 
         public HeaderPage(byte[] rawData) : base(rawData)

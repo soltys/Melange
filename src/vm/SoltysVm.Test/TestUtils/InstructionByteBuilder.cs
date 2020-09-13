@@ -6,7 +6,7 @@ namespace SoltysVm.Test.TestUtils
 {
     internal class InstructionByteBuilder
     {
-        private List<byte> output;
+        private readonly List<byte> output;
 
         public InstructionByteBuilder()
         {

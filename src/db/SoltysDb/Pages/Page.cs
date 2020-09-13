@@ -5,17 +5,17 @@ namespace SoltysDb
     internal class PageMetadata : BinaryClass
     {
         private readonly BinaryByteField pageTypeField;
-        public PageType PageType
+        public PageKind PageKind
         {
-            get => (PageType)this.pageTypeField.GetValue();
+            get => (PageKind)this.pageTypeField.GetValue();
             set => this.pageTypeField.SetValue((byte)value);
         }
 
-        private readonly BinaryInt64Field positionField;
-        public long Position
+        private readonly BinaryInt32Field pageIdField;
+        public int PageId
         {
-            get => this.positionField.GetValue();
-            set => this.positionField.SetValue(value);
+            get => this.pageIdField.GetValue();
+            set => this.pageIdField.SetValue(value);
         }
 
         public int End { get; }
@@ -23,26 +23,26 @@ namespace SoltysDb
         public PageMetadata(byte[] metaDataBlock, int freeMemoryOffset) : base(metaDataBlock, freeMemoryOffset)
         {
             this.pageTypeField = AddByteField();
-            this.positionField = AddInt64Field();
+            this.pageIdField = AddInt32Field();
 
-            End = this.positionField.FieldEnd;
+            End = this.pageIdField.FieldEnd;
         }
     }
 
-    internal class Page : IPage
+    internal class Page
     {
         protected readonly PageMetadata PageMetadata;
 
-        public PageType PageType
+        public PageKind PageKind
         {
-            get => this.PageMetadata.PageType;
-            set => this.PageMetadata.PageType = value;
+            get => this.PageMetadata.PageKind;
+            set => this.PageMetadata.PageKind = value;
         }
 
-        public long Position
+        public int PageId
         {
-            get => this.PageMetadata.Position;
-            set => this.PageMetadata.Position = value;
+            get => this.PageMetadata.PageId;
+            set => this.PageMetadata.PageId = value;
         }
 
         public DataBlock DataBlock { get; protected set; }
@@ -50,10 +50,10 @@ namespace SoltysDb
         public const int PageSize = 4 * 1024; // 4 kb
         public byte[] RawData { get; } 
 
-        public Page(PageType pageType = PageType.Undefined) : this(new byte[Page.PageSize])
+        public Page(PageKind pageKind = PageKind.Undefined) : this(new byte[Page.PageSize])
         {
-            Position = -1;
-            this.PageMetadata.PageType = pageType;
+            PageId = -1;
+            this.PageMetadata.PageKind = pageKind;
         }
 
         public Page(byte[] rawData)

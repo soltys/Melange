@@ -1,3 +1,4 @@
+using System;
 using SoltysVm.Test.TestUtils;
 using Xunit;
 
@@ -7,9 +8,17 @@ namespace SoltysVm.Test
     {
 
         [Fact]
-        public void Decode_OpcodeInBinaryIsEqualToUndefined_ThrowOpcodeReadException()
+        public void Decode_ZeroBytesToDecode_RaiseArgumentException()
         {
-            var bytes = InstructionByteBuilder.Create().Opcode(Opcode.Undefined).ToArray();
+            Assert.Throws<ArgumentException>(() => InstructionDecoder.Decode(Array.Empty<byte>()));
+        }
+
+        [Theory]
+        [InlineData(Opcode.Undefined)]
+        [InlineData(Opcode.Custom)]
+        public void Decode_NotSupportedOpcode_ThrowOpcodeReadException(Opcode opcode)
+        {
+            var bytes = InstructionByteBuilder.Create().Opcode(opcode).ToArray();
             Assert.Throws<OpcodeDecodeException>(() => InstructionDecoder.Decode(bytes));
         }
 

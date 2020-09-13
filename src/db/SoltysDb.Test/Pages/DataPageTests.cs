@@ -8,14 +8,14 @@ namespace SoltysDb.Test
         [Fact]
         public void Length_DataPage_IsSameAsEveryPage()
         {
-            var sut = new Page(PageType.DataPage);
+            var sut = new Page(PageKind.DataPage);
             Assert.Equal(Page.PageSize, sut.RawData.Length);
         }
 
         [Fact]
         public void RawData_ContainsDataFromConstructor()
         {
-            var sut = new Page(PageType.DataPage);
+            var sut = new Page(PageKind.DataPage);
             sut.DataBlock.Data = new Span<byte>(new byte[] {1, 2, 3});
             Assert.Equal(Page.PageSize, sut.RawData.Length);
 

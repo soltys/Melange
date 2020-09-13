@@ -14,7 +14,6 @@ namespace SoltysLib.Bson.BQuery
             this.query = query ?? throw new ArgumentNullException(nameof(query));
         }
 
-        
         public IEnumerable<BQueryToken> GetTokens()
         {
             for (int i = 0; i < this.query.Length; i++)

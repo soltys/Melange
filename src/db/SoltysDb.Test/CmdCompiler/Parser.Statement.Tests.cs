@@ -10,7 +10,8 @@ namespace SoltysDb.Test.CmdCompiler
             var expectedAst = new AstInsertStatement()
             {
                 Location = new AstLocation() { Value = "soltysdb_kv" },
-                Values = new AstValue(new[] {
+                Values = new AstValue(new[]
+                {
                     new AstExpression() {Value = "aaa"},
                     new AstExpression() {Value = "bbb"}
                 })

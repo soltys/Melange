@@ -22,7 +22,7 @@ namespace SoltysDb.Test
         [Fact]
         public void Write_WritingHeaderFile_IsNewReturnsFalse()
         {
-            this.sut.Write(new Page(PageType.Header));
+            this.sut.Write(new Page(PageKind.Header));
             Assert.False(this.sut.IsNew());
         }
 
@@ -30,7 +30,7 @@ namespace SoltysDb.Test
         public void Read_AfterWrite_ReturnsEqualData()
         {
 
-            var dataPage = new Page(PageType.DataPage);
+            var dataPage = new Page(PageKind.DataPage);
             dataPage.DataBlock.Data = new byte[] { 1, 2, 3 };
             this.sut.Write(dataPage);
 
@@ -44,30 +44,30 @@ namespace SoltysDb.Test
         [Fact]
         public void Write_ReturnsPagePosition()
         {
-            var dataPage1 = new Page(PageType.DataPage);
-            var dataPage2 = new Page(PageType.DataPage);
+            var dataPage1 = new Page(PageKind.DataPage);
+            var dataPage2 = new Page(PageKind.DataPage);
 
             var position1 = this.sut.Write(dataPage1);
-            Assert.Equal(0, dataPage1.Position);
-            Assert.Equal(position1, dataPage1.Position);
+            Assert.Equal(0, dataPage1.PageId);
+            Assert.Equal(position1, dataPage1.PageId);
 
             var position2 = this.sut.Write(dataPage2);
-            Assert.Equal(Page.PageSize, dataPage2.Position);
-            Assert.Equal(position2, dataPage2.Position);
+            Assert.Equal(1, dataPage2.PageId);
+            Assert.Equal(position2, dataPage2.PageId);
         }
 
         [Fact]
         public void FindFirst_ReturnsCorrectTypeForHeaderPageType()
         {
             this.sut.Write(new HeaderPage());
-            var page = this.sut.FindFirst(PageType.Header);
+            var page = this.sut.FindFirst(PageKind.Header);
             Assert.IsType<HeaderPage>(page);
         }
 
         [Fact]
         public void FindFirst_IfNoPagesReturnsNull()
         {
-            Assert.Null(this.sut.FindFirst(PageType.Header));
+            Assert.Null(this.sut.FindFirst(PageKind.Header));
         }
     }
 }

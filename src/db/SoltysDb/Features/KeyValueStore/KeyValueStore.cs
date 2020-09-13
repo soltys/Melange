@@ -21,9 +21,8 @@ namespace SoltysDb
 
         public void Add(string key, string value)
         {
-            IPage kvPage = FindOrCreateKeyValuePage(this.collection);
-
-            GetWriteStore(kvPage, this.DatabaseData, (store) =>
+            var kvPage = FindOrCreateKeyValuePage(this.collection);
+            GetWriteStore(kvPage, (store) =>
             {
                 store.Add(key, value);
             });
@@ -52,10 +51,10 @@ namespace SoltysDb
             var wasRemoved = false;
             if (kvPage != null)
             {
-                GetWriteStore(kvPage, this.DatabaseData, (store) =>
-                {
-                    wasRemoved = store.Remove(key);
-                });
+                GetWriteStore(kvPage, (store) =>
+               {
+                   wasRemoved = store.Remove(key);
+               });
             }
 
             return wasRemoved;
@@ -68,43 +67,43 @@ namespace SoltysDb
             return GetReadStore(kvPage, this.DatabaseData);
         }
 
-        public Dictionary<string, string> GetReadStore(IPage firstDataPage, DatabaseData data)
+        public Dictionary<string, string> GetReadStore(Page firstDataPage, DatabaseData data)
             => KeyValueStoreSerializer.ToDictionary(data.ReadDataBlockBytes(firstDataPage));
 
-        public void GetWriteStore(IPage firstDataPage, DatabaseData data, Action<Dictionary<string, string>> modify)
+        public void GetWriteStore(Page firstDataPage, Action<Dictionary<string, string>> modify)
         {
-            var oldBytes = data.ReadDataBlockBytes(firstDataPage);
+            var oldBytes = this.DatabaseData.ReadDataBlockBytes(firstDataPage);
             var dict = KeyValueStoreSerializer.ToDictionary(oldBytes);
 
             modify(dict);
 
             var newDictBytes = KeyValueStoreSerializer.ToBytes(dict);
 
-            data.SaveDataInPages(firstDataPage, newDictBytes);
+            this.DatabaseData.SaveDataInPages(firstDataPage, newDictBytes);
         }
 
-        private IPage FindOrCreateKeyValuePage(string collectionName)
+        private Page FindOrCreateKeyValuePage(string collectionName)
         {
             var headerPage = this.DatabaseData.Read(0);
-            var location = 0L;
-            GetWriteStore(headerPage, this.DatabaseData, (store) =>
+            var pageId = 0;
+            GetWriteStore(headerPage, (store) =>
             {
                 var locationKey = collectionName + "_location";
                 if (!store.ContainsKey(locationKey))
                 {
-                    var newPage = new Page(PageType.KeyValue);
+                    var newPage = new Page(PageKind.KeyValue);
                     this.DatabaseData.Write(newPage);
 
-                    store[locationKey] = newPage.Position.ToString();
-                    location = newPage.Position;
+                    store[locationKey] = newPage.PageId.ToString();
+                    pageId = newPage.PageId;
                 }
                 else
                 {
-                    location = long.Parse(store[locationKey]);
+                    pageId = int.Parse(store[locationKey]);
                 }
             });
 
-            return this.DatabaseData.Read(location);
+            return this.DatabaseData.Read(pageId);
         }
     }
 }

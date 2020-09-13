@@ -20,21 +20,21 @@ namespace SoltysDb
         }
 
         /// <summary>
-        /// Write writes page and returns page position
+        /// Write writes page and returns page id
         /// </summary>
-        public long Write(IPage page)
+        public int Write(Page page)
         {
-            if (page.Position == -1)
+            if (page.PageId == -1)
             {
-                page.Position = this.dataStream.Length;
+                page.PageId = (int)(this.dataStream.Length / Page.PageSize);
             }
 
-            this.dataStream.Position = page.Position;
+            this.dataStream.Position = page.PageId * Page.PageSize;
             this.dataStream.Write(page.RawData, 0, page.RawData.Length);
-            return page.Position;
+            return page.PageId;
         }
         
-        public IPage Read(int pageOffset)
+        public Page Read(int pageOffset)
         {
             var offset = Page.PageSize * pageOffset;
             this.dataStream.Position = offset;
@@ -42,7 +42,7 @@ namespace SoltysDb
             var dataPage = new Page();
             int bytesRead = this.dataStream.Read(dataPage.RawData, 0, Page.PageSize);
 
-            if (dataPage.PageType == PageType.Header)
+            if (dataPage.PageKind == PageKind.Header)
             {
                 dataPage = new HeaderPage(dataPage.RawData);
             }
@@ -57,24 +57,7 @@ namespace SoltysDb
             return dataPage;
         }
 
-        public IPage Read(long location)
-        {
-            this.dataStream.Position = location;
-
-            var page = new Page();
-            int bytesRead = this.dataStream.Read(page.RawData, 0, Page.PageSize);
-
-            //Do not attempt to project a page since no data has been read
-            //TODO - throw exception here
-            if (bytesRead == 0)
-            {
-                return null;
-            }
-
-            return page;
-        }
-
-        public IEnumerable<IPage> ReadAll()
+        public IEnumerable<Page> ReadAll()
         {
             var pageAmount = this.dataStream.Length / Page.PageSize;
             for (int i = 0; i < pageAmount; i++)
@@ -83,12 +66,12 @@ namespace SoltysDb
             }
         }
 
-        public IPage FindFirst(PageType pageType)
+        public Page FindFirst(PageKind pageKind)
         {
             var allPages = ReadAll().ToArray();
             foreach (var page in allPages)
             {
-                if (page.PageType == pageType)
+                if (page.PageKind == pageKind)
                 {
                     return page;
                 }
@@ -102,7 +85,7 @@ namespace SoltysDb
             this.dataStream?.Dispose();
         }
 
-        public byte[] ReadDataBlockBytes(IPage dataPage)
+        public byte[] ReadDataBlockBytes(Page dataPage)
         {
             using var ms = new MemoryStream();
             var currentDataPage = dataPage;
@@ -112,9 +95,9 @@ namespace SoltysDb
                 var data = currentDataPage.DataBlock.Data;
                 ms.Write(data);
 
-                if (currentDataPage.DataBlock.NextPageLocation > 0)
+                if (currentDataPage.DataBlock.NextPageId > 0)
                 {
-                    currentDataPage = Read(currentDataPage.DataBlock.NextPageLocation);
+                    currentDataPage = Read(currentDataPage.DataBlock.NextPageId);
                 }
                 else
                 {
@@ -125,11 +108,11 @@ namespace SoltysDb
             return ms.ToArray();
         }
 
-        public void SaveDataInPages(IPage firstDataPage, byte[] newBytes)
+        public void SaveDataInPages(Page firstDataPage, byte[] newBytes)
         {
-            PageType pageType = firstDataPage.PageType;
+            PageKind pageKind = firstDataPage.PageKind;
             int bytesToBeWritten = newBytes.Length;
-            IPage currentPage = firstDataPage;
+            Page currentPage = firstDataPage;
             while (bytesToBeWritten > 0)
             {
                 int startIndex = newBytes.Length - bytesToBeWritten;
@@ -142,16 +125,16 @@ namespace SoltysDb
 
                 if (bytesToBeWritten > 0)
                 {
-                    if (currentPage.DataBlock.NextPageLocation > 0)
+                    if (currentPage.DataBlock.NextPageId > 0)
                     {
-                        currentPage = Read(currentPage.DataBlock.NextPageLocation);
+                        currentPage = Read(currentPage.DataBlock.NextPageId);
                     }
                     else
                     {
-                        var newKvPage = new Page(pageType);
+                        var newKvPage = new Page(pageKind);
                         Write(newKvPage);
 
-                        currentPage.DataBlock.NextPageLocation = newKvPage.Position;
+                        currentPage.DataBlock.NextPageId = newKvPage.PageId;
                         Write(currentPage);
 
                         currentPage = newKvPage;

@@ -5,21 +5,24 @@ namespace SoltysDb
 {
     internal class DataBlockMetadata : BinaryClass
     {
-        private readonly BinaryInt64Field nextBlockLocationField;
-        public long NextPageLocation
+        private readonly BinaryInt32Field nextBlockPageIdField;
+        public int NextPageId
         {
-            get => this.nextBlockLocationField.GetValue();
-            set => this.nextBlockLocationField.SetValue(value);
+            get => this.nextBlockPageIdField.GetValue();
+            set => this.nextBlockPageIdField.SetValue(value);
         }
 
         public DataBlockMetadata(byte[] metaDataBlock, int offset) : base(metaDataBlock)
         {
-            this.nextBlockLocationField = new BinaryInt64Field(metaDataBlock, offset);
+            this.nextBlockPageIdField = new BinaryInt32Field(metaDataBlock, offset);
 
-            MetaDataEnd = this.nextBlockLocationField.FieldEnd;
+            MetaDataEnd = this.nextBlockPageIdField.FieldEnd;
         }
 
-        public int MetaDataEnd { get; private set; }
+        public int MetaDataEnd
+        {
+            get;
+        }
     }
 
     internal class DataBlock
@@ -27,10 +30,10 @@ namespace SoltysDb
         private readonly Memory<byte> usableData;
         private readonly DataBlockMetadata metaData;
 
-        public long NextPageLocation
+        public int NextPageId
         {
-            get => this.metaData.NextPageLocation;
-            set => this.metaData.NextPageLocation = value;
+            get => this.metaData.NextPageId;
+            set => this.metaData.NextPageId = value;
         }
 
         public Span<byte> Data
@@ -46,7 +49,7 @@ namespace SoltysDb
                 throw new ArgumentNullException(nameof(dataBlock));
             }
 
-            this.metaData = new DataBlockMetadata(dataBlock, offset) {  };
+            this.metaData = new DataBlockMetadata(dataBlock, offset) { };
             this.usableData = new Memory<byte>(dataBlock, this.metaData.MetaDataEnd, length - this.metaData.MetaDataEnd);
         }
     }

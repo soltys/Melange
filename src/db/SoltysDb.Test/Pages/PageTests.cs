@@ -5,13 +5,13 @@ namespace SoltysDb.Test
     public class PageTests
     {
         [Theory]
-        [InlineData(0, PageType.Undefined)]
-        [InlineData(1, PageType.Header)]
-        [InlineData(2, PageType.DataPage)]
-        [InlineData(3, PageType.KeyValue)]
-        public void ConvertByte_IntoPageType(byte expectedPageTypeByte, PageType pageType)
+        [InlineData(0, PageKind.Undefined)]
+        [InlineData(1, PageKind.Header)]
+        [InlineData(2, PageKind.DataPage)]
+        [InlineData(3, PageKind.KeyValue)]
+        public void ConvertByte_IntoPageType(byte expectedPageTypeByte, PageKind pageKind)
         {
-            var page = new Page {PageType = pageType};
+            var page = new Page {PageKind = pageKind};
             Assert.Equal(expectedPageTypeByte, page.RawData[0]);
         }
 
@@ -19,7 +19,7 @@ namespace SoltysDb.Test
         public void Position_Initial_IsLessThanZero()
         {
             var page = new Page();
-            Assert.True(page.Position < 0 , "Position should be less than zero");
+            Assert.True(page.PageId < 0 , "PageId should be less than zero");
         }
     }
 }

@@ -9,11 +9,11 @@ namespace SoltysDb.Test.Structures
         public void NextBlockLocation_IsSavedInAttachedMemoryBlock()
         {
             var memoryBlock = new byte[128];
-            var sut = new DataBlock(memoryBlock, 0, memoryBlock.Length) {NextPageLocation = 123};
+            var sut = new DataBlock(memoryBlock, 0, memoryBlock.Length) {NextPageId = 123};
 
 
             var newInstance = new DataBlock(memoryBlock,0, memoryBlock.Length);
-            Assert.Equal(123, newInstance.NextPageLocation);
+            Assert.Equal(123, newInstance.NextPageId);
         }
 
         [Fact]

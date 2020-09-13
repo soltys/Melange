@@ -6,7 +6,7 @@ namespace SoltysLib.Bson.BQuery
 {
     internal class BQueryParser : IBQueryParser
     {
-        private ITokenSource<BQueryToken> ts;
+        private readonly ITokenSource<BQueryToken> ts;
         private BQueryTokenKind CurrentToken => this.ts.Current.TokenType;
 
         private void AdvanceToken(params BQueryTokenKind[] tokens)
@@ -33,9 +33,7 @@ namespace SoltysLib.Bson.BQuery
 
                 access.SubAccess = ParseValueQuery();
             }
-
             return access;
-
         }
 
         private AstValueAccess ParseAccess()
@@ -47,27 +45,26 @@ namespace SoltysLib.Bson.BQuery
 
                 if (IsToken(BQueryTokenKind.LBracket))
                 {
-                    AdvanceToken(BQueryTokenKind.LBracket);
-
-                    if (IsToken(BQueryTokenKind.Number))
-                    {
-                        var value = int.Parse(this.ts.Current.Value);
-
-                        AdvanceToken(BQueryTokenKind.Number);
-                        AdvanceToken(BQueryTokenKind.RBracket);
-
-                        return new AstArrayAccess(elementName, value);
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("Expected number in array access");
-                    }
+                    return ParseArrayAccess(elementName);
                 }
 
                 return new AstValueAccess(elementName);
             }
 
             throw new InvalidOperationException("Could not parse access");
+
+
+            AstValueAccess ParseArrayAccess(string elementName)
+            {
+                AdvanceToken(BQueryTokenKind.LBracket);
+
+                var value = int.Parse(this.ts.Current.Value);
+
+                AdvanceToken(BQueryTokenKind.Number);
+                AdvanceToken(BQueryTokenKind.RBracket);
+
+                return new AstArrayAccess(elementName, value);
+            }
         }
     }
 }

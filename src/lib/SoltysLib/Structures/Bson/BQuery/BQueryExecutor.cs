@@ -29,8 +29,7 @@ namespace SoltysLib.Bson.BQuery
                     }
                     currentQuery = currentQuery.SubAccess;
                 }
-                else
-                if (currentQuery is { } va)
+                else if (currentQuery is { } va)
                 {
                     currentElement = document.Elements.First(x => x.Name == va.ElementName);
                     if (currentElement.Value is BsonDocument newDocument)

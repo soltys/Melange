@@ -4,7 +4,7 @@ namespace SoltysVm
 {
     internal class RuntimeVisitor : IRuntimeVisitor
     {
-        private IVMContext context;
+        private readonly IVMContext context;
 
         public RuntimeVisitor(IVMContext context)
         {

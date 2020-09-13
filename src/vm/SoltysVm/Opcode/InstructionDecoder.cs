@@ -68,7 +68,7 @@ namespace SoltysVm
 
                 //Special
                 Opcode.Nop => NopInstruction.Create(span),
-                Opcode.Custom => throw new NotImplementedException(),
+                Opcode.Custom => throw new OpcodeDecodeException(),
 
                 Opcode.Undefined => throw new OpcodeDecodeException(),
                 _ => throw new OpcodeDecodeException()

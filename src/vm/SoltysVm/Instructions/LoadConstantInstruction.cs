@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace SoltysVm
 {
@@ -13,7 +14,7 @@ namespace SoltysVm
         {
             if (loadType != LoadType.Integer && loadType != LoadType.Double)
             {
-                throw  new ArgumentOutOfRangeException(nameof(loadType));
+                throw new ArgumentOutOfRangeException(nameof(loadType));
             }
 
             Value = value ?? throw new ArgumentNullException(nameof(value), "Load Constant value should not be null");
@@ -23,10 +24,18 @@ namespace SoltysVm
 
         public ReadOnlySpan<byte> GetBytes() => OpcodeHelper.SerializeOpcode(Opcode.Load, LoadType, Value);
 
-        public override string ToString() => $"ldc.{ToConstantLetter(LoadType)} {Value}";
+        public override string ToString() => $"ldc.{ToConstantLetter(LoadType)} {ToString(Value)}";
+
+        private string ToString(object o) =>
+            o switch {
+                double d => d.ToString(CultureInfo.InvariantCulture),
+                int i => i.ToString(CultureInfo.InvariantCulture),
+                _ => o.ToString()
+            };
 
         private string ToConstantLetter(LoadType loadType) =>
-            loadType switch {
+            loadType switch
+            {
                 LoadType.Integer => "i",
                 LoadType.Double => "d",
                 _ => throw new InvalidOperationException("LoadType should not be out of given range of values")

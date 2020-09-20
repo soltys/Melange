@@ -32,6 +32,15 @@ namespace SoltysDb.Test.CmdCompiler
             AssertLexer("\"foobar\"",
                 new Token(TokenKind.String, "foobar"));
 
+        [Theory]
+        [InlineData("\"foo\"+\"bar\"")]
+        [InlineData("'foo'+'bar'")]
+        internal void Lexer_StringConcatenation(string input) =>
+            AssertLexer(input,
+                new Token(TokenKind.String, "foo"),
+                new Token(TokenKind.Plus, "+"),
+                new Token(TokenKind.String, "bar"));
+
         [Fact]
         internal void Lexer_DoingSelectWithWhere() =>
             AssertLexer("select * from pool where x>2+2*2",
@@ -68,7 +77,7 @@ namespace SoltysDb.Test.CmdCompiler
                 new Token(TokenKind.Number, "42"));
 
         private static Lexer LexerFactory(string input) =>
-            new Lexer(new CommandInput(input));
+            new Lexer(new TextSource(input));
 
         private static void AssertLexer(string input, params Token[] expectedTokens)
         {

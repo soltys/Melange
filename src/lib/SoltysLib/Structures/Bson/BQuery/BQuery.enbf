@@ -4,3 +4,16 @@ bquery ::= access ('.' bquery)*
 access ::= ID
        |   ID '[' NUMBER ']'
        ;
+
+element_id ::= ID
+            |  '[' string ']'
+            ;
+
+string = 'STRING'
+        | "STRING"
+        ;
+
+
+
+ID ::= [a-zA-Z][a-zA-Z0-9]*
+STRING ::= \w+

@@ -1,26 +1,13 @@
 using System;
-using System.Linq;
 using SoltysLib.TextAnalysis;
 
 namespace SoltysLib.Bson.BQuery
 {
-    internal class BQueryParser : IBQueryParser
+    internal class BQueryParser : ParserBase<BQueryToken,BQueryTokenKind>, IBQueryParser
     {
-        private readonly ITokenSource<BQueryToken> ts;
-        private BQueryTokenKind CurrentToken => this.ts.Current.TokenType;
-
-        private void AdvanceToken(params BQueryTokenKind[] tokens)
+       
+        public BQueryParser(ITokenSource<BQueryToken, BQueryTokenKind> ts):base(ts)
         {
-            if (tokens != null && !IsToken(tokens))
-            {
-                throw new InvalidOperationException("Not expected token advancement");
-            }
-            this.ts.NextToken();
-        }
-        private bool IsToken(params BQueryTokenKind[] tokens) => tokens.Any(x => x == CurrentToken);
-        public BQueryParser(ITokenSource<BQueryToken> tokenSource)
-        {
-            this.ts = tokenSource;
         }
 
         public AstValueAccess ParseValueQuery()
@@ -38,11 +25,31 @@ namespace SoltysLib.Bson.BQuery
 
         private AstValueAccess ParseAccess()
         {
+            //e.g. foo
             if (IsToken(BQueryTokenKind.Id))
             {
                 var elementName = this.ts.Current.Value;
                 AdvanceToken(BQueryTokenKind.Id);
 
+                //e.g. foo[42]
+                if (IsToken(BQueryTokenKind.LBracket))
+                {
+                    return ParseArrayAccess(elementName);
+                }
+
+                return new AstValueAccess(elementName);
+            }
+
+            //e.g. ['foo'] or ["foo"]
+            if (IsToken(BQueryTokenKind.LBracket))
+            {
+                AdvanceToken(BQueryTokenKind.LBracket);
+
+                var elementName = this.ts.Current.Value;
+                AdvanceToken(BQueryTokenKind.String);
+                AdvanceToken(BQueryTokenKind.RBracket);
+
+                //e.g. ['foo'][42] or ["foo"][42]
                 if (IsToken(BQueryTokenKind.LBracket))
                 {
                     return ParseArrayAccess(elementName);

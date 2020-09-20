@@ -8,41 +8,42 @@ namespace SoltysDb
 {
     internal class Lexer : ILexer<Token>
     {
-        private readonly ICommandInput commandInput;
-        
-        public Lexer(ICommandInput commandInput)
+        private readonly ITextSource textSource;
+
+        public Lexer(ITextSource textSource)
         {
-            this.commandInput = commandInput;
+            this.textSource = textSource;
         }
+
+        public Token Empty => Token.Empty;
 
         public IEnumerable<Token> GetTokens()
         {
-            var input = this.commandInput.GetToEnd();
-
-            for (int i = 0; i < input.Length; i++)
+            while (!this.textSource.IsEnded)
             {
-                var currentChar = input[i];
+
+                var currentChar = this.textSource.Current;
                 if (currentChar == '=')
                 {
-                    var nextChar = GetNextChar(i, input);
+                    var nextChar = this.textSource.Next;
                     if (nextChar == '=')
                     {
                         yield return new Token(TokenKind.CompareEqual, "==");
-                        i += 1;
+                        this.textSource.AdvanceChar();
                     }
                     else
                     {
                         yield return new Token(TokenKind.EqualSign, "=");
                     }
                 }
-               
+
                 else if (currentChar == '<')
                 {
-                    var nextChar = GetNextChar(i, input);
+                    var nextChar = this.textSource.Next;
                     if (nextChar == '=')
                     {
                         yield return new Token(TokenKind.LessThanEqual, "<=");
-                        i += 1;
+                        this.textSource.AdvanceChar();
                     }
                     else
                     {
@@ -51,18 +52,18 @@ namespace SoltysDb
                 }
                 else if (currentChar == '>')
                 {
-                    var nextChar = GetNextChar(i, input);
+                    var nextChar = this.textSource.Next;
                     if (nextChar == '=')
                     {
                         yield return new Token(TokenKind.GreaterThanEqual, ">=");
-                        i += 1;
+                        this.textSource.AdvanceChar();
                     }
                     else
                     {
                         yield return new Token(TokenKind.GreaterThan, ">");
                     }
                 }
-                
+
                 else if (currentChar == '+')
                 {
                     yield return new Token(TokenKind.Plus, "+");
@@ -95,50 +96,47 @@ namespace SoltysDb
                 {
                     yield return new Token(TokenKind.Dot, ".");
                 }
-                else if(currentChar == '!')
+                else if (currentChar == '!')
                 {
-                    var nextChar = GetNextChar(i, input);
+                    var nextChar = this.textSource.Next;
                     if (nextChar == '=')
                     {
                         yield return new Token(TokenKind.CompareNotEqual, "!=");
-                        i += 1;
+                        this.textSource.AdvanceChar();
                     }
                 }
                 else
                 {
                     if (char.IsLetter(currentChar))
                     {
-                        var (ident, offset) = GetAnyName(input.AsSpan().Slice(i));
+                        var (ident, offset) = GetAnyName(this.textSource.Slice());
                         yield return MakeToken(ident);
-
-                        i += offset;
+                        this.textSource.AdvanceChar(offset);
                     }
                     else if (char.IsDigit(currentChar))
                     {
-                        var (token, offset) = GetNumber(input.AsSpan().Slice(i));
+                        var (token, offset) = GetNumber(this.textSource.Slice());
                         yield return token;
-                        i += offset;
+                        this.textSource.AdvanceChar(offset);
                     }
                     else if (currentChar == '\'')
                     {
-                        var match = Regex.Match(input.AsSpan().Slice(i).ToString(), "\'([^\']*)\'", RegexOptions.Compiled);
+                        var match = Regex.Match(this.textSource.Slice().ToString(), "\'([^\']*)\'", RegexOptions.Compiled);
                         yield return new Token(TokenKind.String, match.Groups[1].Value);
-                        i += match.Length;
+                        this.textSource.AdvanceChar(match.Length - 1);
                     }
-                    else if(currentChar == '\"')
+                    else if (currentChar == '\"')
                     {
-                        var match = Regex.Match(input.AsSpan().Slice(i).ToString(), "\"([^\"]*)\"", RegexOptions.Compiled);
+                        var match = Regex.Match(this.textSource.Slice().ToString(), "\"([^\"]*)\"", RegexOptions.Compiled);
                         yield return new Token(TokenKind.String, match.Groups[1].Value);
-                        i += match.Length;
+                        this.textSource.AdvanceChar(match.Length - 1);
                     }
                 }
+
+                this.textSource.AdvanceChar();
             }
 
         }
-
-        public Token GetEmpty() => Token.Empty;
-
-        private static char GetNextChar(int i, string input) => (i + 1 >= input.Length) ? '\0' : input[i + 1];
 
         private (Token, int) GetNumber(ReadOnlySpan<char> slice)
         {

@@ -6,7 +6,6 @@ namespace SoltysLib.Test.Bson
 {
     public class BsonSerializerTests
     {
-
         [Fact]
         public void Serialize_EmptyDocument()
         {

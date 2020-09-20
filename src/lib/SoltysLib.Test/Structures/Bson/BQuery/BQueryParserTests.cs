@@ -6,25 +6,31 @@ namespace SoltysLib.Test.Bson
 {
     public class BQueryParserTests
     {
-        [Fact]
-        public void ParseAccessQuery_OnePart_ExpectedAst()
+        [Theory]
+        [InlineData("foo")]
+        [InlineData("['foo']")]
+        [InlineData("[\"foo\"]")]
+        public void ParseAccessQuery_OnePart_ExpectedAst(string query)
         {
             var expectedAst = new AstValueAccess("foo");
-            var actualAst = GetAccessQueryAst("foo");
+            var actualAst = GetAccessQueryAst(query);
 
             Assert.Equal(expectedAst.ElementName, actualAst.ElementName);
             Assert.Null(actualAst.SubAccess);
         }
 
-        [Fact]
-        public void ParseAccessQuery_WithSubAccess_ExpectedAst()
+        [Theory]
+        [InlineData("foo.bar")]
+        [InlineData("['foo'].['bar']")]
+        [InlineData("[\"foo\"].['bar']")]
+        public void ParseAccessQuery_WithSubAccess_ExpectedAst(string query)
         {
             var expectedAst = new AstValueAccess("foo")
             {
                 SubAccess = new AstValueAccess("bar")
             };
 
-            var actualAst = GetAccessQueryAst("foo.bar");
+            var actualAst = GetAccessQueryAst(query);
 
             Assert.Equal(expectedAst.ElementName, actualAst.ElementName);
             Assert.Equal(expectedAst.SubAccess.ElementName, actualAst.SubAccess.ElementName);
@@ -62,7 +68,7 @@ namespace SoltysLib.Test.Bson
 
         private static AstValueAccess GetAccessQueryAst(string input)
         {
-            var parser = new BQueryParser(new TokenSource<BQueryToken>(new BQueryLexer(input)));
+            var parser = new BQueryParser(new TokenSource<BQueryToken, BQueryTokenKind>(new BQueryLexer(new TextSource(input))));
             return parser.ParseValueQuery();
         }
     }

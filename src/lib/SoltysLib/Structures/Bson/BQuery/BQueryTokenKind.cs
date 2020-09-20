@@ -1,4 +1,4 @@
-﻿namespace SoltysLib.Bson.BQuery
+namespace SoltysLib.Bson.BQuery
 {
     internal enum BQueryTokenKind
     {
@@ -7,6 +7,7 @@
         Number,
         RBracket,
         LBracket,
-        Dot
+        Dot,
+        String
     }
 }

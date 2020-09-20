@@ -7,8 +7,8 @@ namespace SoltysDb.Test.CmdCompiler
 {
     public class TokenStreamTests
     {
-        private TokenSource<Token> TokenStreamFactory(Token[] tokens) =>
-            new TokenSource<Token>(new TestTokenProvider(tokens));
+        private TokenSource<Token, TokenKind> TokenStreamFactory(Token[] tokens) =>
+            new TokenSource<Token, TokenKind>(new TestTokenProvider(tokens));
 
         [Fact]
         internal void Current_WithGivenListAfterConstruction_ReturnsFirstToken()
@@ -51,7 +51,7 @@ namespace SoltysDb.Test.CmdCompiler
         [Fact]
         internal void PeekNextToken_WithEmptyTokenList_ReturnsTokenEmpty()
         {
-            var tokenStream =  TokenStreamFactory(Array.Empty<Token>());
+            var tokenStream = TokenStreamFactory(Array.Empty<Token>());
             Assert.Equal(tokenStream.PeekNextToken.TokenKind, Token.Empty.TokenKind);
             Assert.Equal(tokenStream.PeekNextToken.Value, Token.Empty.Value);
         }
@@ -80,7 +80,7 @@ namespace SoltysDb.Test.CmdCompiler
                 this.tokens = tokens;
             }
             public IEnumerable<Token> GetTokens() => this.tokens;
-            public Token GetEmpty() => Token.Empty;
+            public Token Empty => Token.Empty;
         }
     }
 }

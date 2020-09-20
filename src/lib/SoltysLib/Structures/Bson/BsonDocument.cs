@@ -21,19 +21,23 @@ namespace SoltysLib.Bson
             this.elements.AddRange(elements);
         }
 
-        public void Add(Element element)
+        public BsonDocument(Dictionary<string, BsonValue> dictionary) : this()
         {
-            this.elements.Add(element);
+            foreach (var entry in dictionary)
+            {
+                this.elements.Add(new Element(entry.Key, entry.Value));
+            }
         }
 
-        public void AddRange(List<Element> list)
-        {
-            this.elements.AddRange(list);
-        }
+        public void Add(Element element) => this.elements.Add(element);
+
+        public void AddRange(List<Element> list) => this.elements.AddRange(list);
 
         public override ReadOnlySpan<byte> GetBytes() => BsonEncoder.EncodeAsDocument(this.elements);
 
         public override string ToString() => $"{{ {ToString(this.elements)} }}";
         private static string ToString(IEnumerable<Element> elements) => string.Join(", ", elements.Select(x => x.ToString()));
+
+        public Dictionary<string, BsonValue> ToDictionary() => this.elements.ToDictionary(x => x.Name, x => x.Value);
     }
 }

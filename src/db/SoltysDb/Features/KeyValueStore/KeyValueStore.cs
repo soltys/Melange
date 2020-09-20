@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using SoltysLib.Bson;
 
 namespace SoltysDb
 {
@@ -19,7 +20,7 @@ namespace SoltysDb
             this.collection = name;
         }
 
-        public void Add(string key, string value)
+        public void Add(string key, BsonValue value)
         {
             var kvPage = FindOrCreateKeyValuePage(this.collection);
             GetWriteStore(kvPage, (store) =>
@@ -30,7 +31,10 @@ namespace SoltysDb
             this.DatabaseData.Write(kvPage);
         }
 
-        public string Get(string key)
+        public void Add(string key, string value) => Add(key, new BsonString(value));
+        public void Add(string key, int value) => Add(key, new BsonInteger(value));
+
+        public BsonValue Get(string key)
         {
             var kvPage = FindOrCreateKeyValuePage(this.collection);
             if (kvPage != null)
@@ -44,6 +48,21 @@ namespace SoltysDb
 
             throw new DbKeyNotFoundException(key);
         }
+
+        public string GetString(string key) => GetAndCastTo<BsonString>(key).Value;
+        public int GetInteger(string key) => GetAndCastTo<BsonInteger>(key).Value;
+
+        private TBsonValue GetAndCastTo<TBsonValue>(string key) where TBsonValue : BsonValue
+        {
+            var entry = Get(key);
+            if (!(entry is TBsonValue bsonValue))
+            {
+                throw new DbWrongTypeCastException(key, entry.GetType());
+            }
+
+            return bsonValue;
+        }
+
 
         public bool Remove(string key)
         {
@@ -60,24 +79,24 @@ namespace SoltysDb
             return wasRemoved;
         }
 
-        public Dictionary<string, string> AsDictionary()
+        public Dictionary<string, BsonValue> AsDictionary()
         {
             var kvPage = FindOrCreateKeyValuePage(this.collection);
 
             return GetReadStore(kvPage, this.DatabaseData);
         }
 
-        public Dictionary<string, string> GetReadStore(Page firstDataPage, DatabaseData data)
-            => KeyValueStoreSerializer.ToDictionary(data.ReadDataBlockBytes(firstDataPage));
+        public Dictionary<string, BsonValue> GetReadStore(Page firstDataPage, DatabaseData data)
+            => BsonSerializer.Deserialize(data.ReadDataBlockBytes(firstDataPage)).ToDictionary();
 
-        public void GetWriteStore(Page firstDataPage, Action<Dictionary<string, string>> modify)
+        public void GetWriteStore(Page firstDataPage, Action<Dictionary<string, BsonValue>> modify)
         {
             var oldBytes = this.DatabaseData.ReadDataBlockBytes(firstDataPage);
-            var dict = KeyValueStoreSerializer.ToDictionary(oldBytes);
+            var dict = BsonSerializer.Deserialize(oldBytes).ToDictionary();
 
             modify(dict);
 
-            var newDictBytes = KeyValueStoreSerializer.ToBytes(dict);
+            var newDictBytes = BsonSerializer.Serialize(new BsonDocument(dict));
 
             this.DatabaseData.SaveDataInPages(firstDataPage, newDictBytes);
         }
@@ -94,12 +113,20 @@ namespace SoltysDb
                     var newPage = new Page(PageKind.KeyValue);
                     this.DatabaseData.Write(newPage);
 
-                    store[locationKey] = newPage.PageId.ToString();
+                    store[locationKey] = new BsonInteger(newPage.PageId);
                     pageId = newPage.PageId;
                 }
                 else
                 {
-                    pageId = int.Parse(store[locationKey]);
+                    var entry = store[locationKey] as BsonInteger;
+                    if (entry != null)
+                    {
+                        pageId = entry.Value;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Unexpected value type");
+                    }
                 }
             });
 

@@ -2,7 +2,7 @@ using System.Linq;
 
 namespace SoltysLib.TextAnalysis
 {
-    public class TokenSource<TToken> : ITokenSource<TToken>
+    public class TokenSource<TToken, TTokenKind> : ITokenSource<TToken, TTokenKind> where TToken : IToken<TTokenKind>
     {
         private readonly ILexer<TToken> lexer;
         private readonly TToken[] allTokens;
@@ -17,11 +17,11 @@ namespace SoltysLib.TextAnalysis
 
         public TToken Current
         {
-            get
+            get 
             {
                 if (this.tokenIndex >= this.allTokens.Length)
                 {
-                    return this.lexer.GetEmpty();
+                    return this.lexer.Empty;
                 }
                 return this.allTokens[this.tokenIndex];
             }
@@ -29,11 +29,11 @@ namespace SoltysLib.TextAnalysis
 
         public TToken PeekNextToken
         {
-            get
+            get 
             {
                 if (this.tokenIndex + 1 >= this.allTokens.Length)
                 {
-                    return this.lexer.GetEmpty();
+                    return this.lexer.Empty;
                 }
                 return this.allTokens[this.tokenIndex + 1];
             }

@@ -1,42 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using SoltysLib.TextAnalysis;
 
 namespace SoltysDb
 {
-    internal class Parser
+    internal sealed class Parser : ParserBase<Token, TokenKind>
     {
-        private readonly ITokenSource<Token> ts;
-
-        public Parser(ITokenSource<Token> ts)
+        public Parser(ITokenSource<Token, TokenKind> ts) : base(ts)
         {
-            this.ts = ts;
-        }
-
-        private TokenKind CurrentToken => this.ts.Current.TokenKind;
-        private TokenKind NextToken => this.ts.PeekNextToken.TokenKind;
-
-        private void AdvanceToken(params TokenKind[] tokens)
-        {
-            //
-            //We are checking if current token is one of the expected ones
-            //TODO: this could/should be disabled in final product
-            if (tokens != null && !IsToken(tokens))
-            {
-                throw new InvalidOperationException("Not expected token advancement");
-            }
-            this.ts.NextToken();
-        }
-        private bool IsToken(params TokenKind[] tokens) => tokens.Any(x => x == CurrentToken);
-        private bool IsNextToken(params TokenKind[] tokens) => tokens.Any(x => x == NextToken);
-
-        private void AdvanceIfToken(params TokenKind[] tokens)
-        {
-            if (IsToken(tokens))
-            {
-                AdvanceToken(tokens);
-            }
         }
 
         public AstNode ParseExpression() => ParseExpression(0);
@@ -215,7 +186,5 @@ namespace SoltysDb
 
             throw new InvalidOperationException($"{nameof(ParseFactor)} could not find expression");
         }
-
-
     }
 }

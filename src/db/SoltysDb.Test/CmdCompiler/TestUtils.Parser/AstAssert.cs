@@ -17,8 +17,8 @@ namespace SoltysDb.Test.CmdCompiler
 
         public static Parser ParserFactory(string input) =>
             new Parser(
-                new TokenSource<Token>(
+                new TokenSource<Token, TokenKind>(
                     new Lexer(
-                        new CommandInput(input))));
+                        new TextSource(input))));
     }
 }

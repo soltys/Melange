@@ -1,6 +1,6 @@
 namespace SoltysLib.TextAnalysis
 {
-    public interface ITokenSource<out TToken>
+    public interface ITokenSource<out TToken, TTokenKind> where TToken: IToken<TTokenKind>
     {
         TToken Current
         {

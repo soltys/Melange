@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using SoltysDb.Test.TestUtils;
+using SoltysLib.Bson;
 using Xunit;
 
 namespace SoltysDb.Test.Features
@@ -15,7 +16,7 @@ namespace SoltysDb.Test.Features
             sut.KV.Add("key2", "value2");
             sut.KV.Add("key1", "value1");
 
-            var value = sut.KV.Get("key1");
+            var value = sut.KV.GetString("key1");
 
             Assert.Equal("value1", value);
         }
@@ -27,6 +28,32 @@ namespace SoltysDb.Test.Features
             const string keyName = "key";
             var ex = Assert.Throws<DbKeyNotFoundException>(() => sut.KV.Get(keyName));
             Assert.Equal(keyName, ex.KeyNotFound);
+        }
+
+        [Fact]
+        public void GetString_ImproperCasting_RaisesWrongTypeException()
+        {
+            using var sut  = new Soltys.SoltysDb();
+            
+            const string keyName = "key";
+            sut.KV.Add(keyName, 42);
+
+            var ex = Assert.Throws<DbWrongTypeCastException>(() => sut.KV.GetString(keyName));
+            Assert.Equal(keyName, ex.Key);
+            Assert.Equal(typeof(BsonInteger), ex.KeyType);
+        }
+
+        [Fact]
+        public void GetInteger_ImproperCasting_RaisesWrongTypeException()
+        {
+            using var sut = new Soltys.SoltysDb();
+
+            const string keyName = "key";
+            sut.KV.Add(keyName, "42");
+
+            var ex = Assert.Throws<DbWrongTypeCastException>(() => sut.KV.GetInteger(keyName));
+            Assert.Equal(keyName, ex.Key);
+            Assert.Equal(typeof(BsonString), ex.KeyType);
         }
 
         [Fact]
@@ -43,7 +70,7 @@ namespace SoltysDb.Test.Features
             }
 
             //just checking if KV store is not only write-only :)
-            var dbValue = sut.KV.Get(lastPair.Key);
+            var dbValue = sut.KV.GetString(lastPair.Key);
             Assert.Equal(lastPair.Value, dbValue);
         }
 
@@ -59,7 +86,9 @@ namespace SoltysDb.Test.Features
             var dict = sut.KV.AsDictionary();
 
             Assert.Equal(3, dict.Count);
-            Assert.Equal("value", dict["key"]);
+            Assert.IsType<BsonString>(dict["key"]);
+            var entry = dict["key"] as BsonString;
+            Assert.Equal("value", entry.Value);
         }
 
         [Fact]
@@ -103,10 +132,10 @@ namespace SoltysDb.Test.Features
             sut.KV.ChangeCollection("myOwn");
             sut.KV.Add("foo", "baz");
 
-            Assert.Equal("baz", sut.KV.Get("foo"));
+            Assert.Equal("baz", sut.KV.GetString("foo"));
 
             sut.KV.ChangeCollection(sut.KV.DefaultCollection);
-            Assert.Equal("bar", sut.KV.Get("foo"));
+            Assert.Equal("bar", sut.KV.GetString("foo"));
         }
     }
 }

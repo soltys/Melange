@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "db", "db", "{6C7CFF15-A3EF-410A-ACEF-B0793D3006A7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoltysDb", "src\db\SoltysDb\SoltysDb.csproj", "{A6A5129C-3214-4F71-9D67-1622F3DFED56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.Database", "src\Database\Soltys.Database\Soltys.Database.csproj", "{A6A5129C-3214-4F71-9D67-1622F3DFED56}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoltysDb.Test", "src\db\SoltysDb.Test\SoltysDb.Test.csproj", "{4D2F04E2-B393-401D-AAAE-E57408F5D8FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.Database.Test", "src\Database\Soltys.Database.Test\Soltys.Database.Test.csproj", "{4D2F04E2-B393-401D-AAAE-E57408F5D8FB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoltysDb.Example", "src\db\SoltysDb.Example\SoltysDb.Example.csproj", "{8E06FDC7-EB5E-4BCB-BF8C-8C51836DA812}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.Database.Example", "src\Database\Soltys.Database.Example\Soltys.Database.Example.csproj", "{8E06FDC7-EB5E-4BCB-BF8C-8C51836DA812}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "example", "example", "{EB80B078-DE8C-4D0E-8F76-E74E2769BFF7}"
 EndProject
@@ -17,13 +17,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "vm", "vm", "{1F097198-F333-
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app", "app", "{B71DB652-E350-4BBB-A724-1F0453BC49CD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoltysVm", "src\vm\SoltysVm\SoltysVm.csproj", "{821FA975-98AC-41D7-A61C-F0DDD1500A8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.VirtualMachine", "src\VirtualMachine\Soltys.VirtualMachine\Soltys.VirtualMachine.csproj", "{821FA975-98AC-41D7-A61C-F0DDD1500A8B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoltysVm.Test", "src\vm\SoltysVm.Test\SoltysVm.Test.csproj", "{C67CD1BA-F675-4559-B1FD-A886315A2D1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.VirtualMachine.Test", "src\VirtualMachine\Soltys.VirtualMachine.Test\Soltys.VirtualMachine.Test.csproj", "{C67CD1BA-F675-4559-B1FD-A886315A2D1B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoltysVm.Asm", "src\vm\SoltysVm.Asm\SoltysVm.Asm.csproj", "{8DFEEABB-901B-4065-99BA-6C037E10869C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.VirtualMachine.Asm", "src\VirtualMachine\Soltys.VirtualMachine.Asm\Soltys.VirtualMachine.Asm.csproj", "{8DFEEABB-901B-4065-99BA-6C037E10869C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoltysVm.Deasm", "src\vm\SoltysVm.Deasm\SoltysVm.Deasm.csproj", "{4AC29DA3-3CA6-4FC8-BE3E-0D40DF124FC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.VirtualMachine.Deasm", "src\VirtualMachine\Soltys.VirtualMachine.Deasm\Soltys.VirtualMachine.Deasm.csproj", "{4AC29DA3-3CA6-4FC8-BE3E-0D40DF124FC3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_solution config", "_solution config", "{9D1C68F4-B8A6-44BF-8A2A-ACD8A7BD05CC}"
 	ProjectSection(SolutionItems) = preProject
@@ -32,9 +32,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_solution config", "_soluti
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{DF60E4DC-A138-4436-9D02-AA02B89BF836}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoltysLib", "src\lib\SoltysLib\SoltysLib.csproj", "{02514068-FEF9-4D89-A9F8-3B4713E6E508}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.Library", "src\Library\Soltys.Library\Soltys.Library.csproj", "{02514068-FEF9-4D89-A9F8-3B4713E6E508}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoltysLib.Test", "src\lib\SoltysLib.Test\SoltysLib.Test.csproj", "{EB8B0A4B-822E-4162-A4F1-141CAFBE9940}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.Library.Test", "src\Library\Soltys.Library.Test\Soltys.Library.Test.csproj", "{EB8B0A4B-822E-4162-A4F1-141CAFBE9940}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

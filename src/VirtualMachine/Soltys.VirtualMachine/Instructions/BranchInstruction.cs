@@ -4,7 +4,7 @@ namespace Soltys.VirtualMachine
 {
     public class BranchInstruction : IInstruction
     {
-        public BranchType BranchType
+        public BranchKind BranchKind
         {
             get;
         }
@@ -14,31 +14,31 @@ namespace Soltys.VirtualMachine
             get;
         }
 
-        public BranchInstruction(BranchType branchType, int target)
+        public BranchInstruction(BranchKind branchKind, int target)
         {
-            BranchType = branchType;
+            BranchKind = branchKind;
             Target = target;
         }
 
         public void Accept(IRuntimeVisitor visitor) => visitor.VisitBranch(this);
 
-        public ReadOnlySpan<byte> GetBytes() => OpcodeHelper.SerializeOpcode(Opcode.Branch, BranchType, Target);
-        public override string ToString() => $"br{ToString(BranchType)} {Target}";
+        public ReadOnlySpan<byte> GetBytes() => OpcodeHelper.SerializeOpcode(Opcode.Branch, BranchKind, Target);
+        public override string ToString() => $"br{ToString(BranchKind)} {Target}";
 
-        private string ToString(BranchType branchType) =>
-            branchType switch {
-                BranchType.Jump => "",
-                BranchType.IfTrue => ".true",
-                BranchType.IfFalse => ".false",
-                _ => throw new ArgumentOutOfRangeException(nameof(branchType), branchType, null)
+        private string ToString(BranchKind branchKind) =>
+            branchKind switch {
+                BranchKind.Jump => "",
+                BranchKind.IfTrue => ".true",
+                BranchKind.IfFalse => ".false",
+                _ => throw new ArgumentOutOfRangeException(nameof(branchKind), branchKind, null)
             };
 
         public static (BranchInstruction,int) Create(ReadOnlySpan<byte> span)
         {
-            var branchType = (BranchType)span[0];
-            var target = BitConverter.ToInt32(span.Slice(sizeof(BranchType)));
+            var branchType = (BranchKind)span[0];
+            var target = BitConverter.ToInt32(span.Slice(sizeof(BranchKind)));
 
-            var bytesRead = sizeof(BranchType) + sizeof(int);
+            var bytesRead = sizeof(BranchKind) + sizeof(int);
 
             return (new BranchInstruction(branchType, target), bytesRead);
         }

@@ -4,13 +4,13 @@ namespace Soltys.VirtualMachine
 {
     public class StoreInstruction : IInstruction
     {
-        public StoreInstruction(StoreType storeType, byte index)
+        public StoreInstruction(StoreKind storeKind, byte index)
         {
-            StoreType = storeType;
+            StoreKind = storeKind;
             Index = index;
         }
 
-        public StoreType StoreType
+        public StoreKind StoreKind
         {
             get;
         }
@@ -21,21 +21,21 @@ namespace Soltys.VirtualMachine
         }
 
         public static (StoreInstruction, int) Create(in ReadOnlySpan<byte> span) =>
-            (new StoreInstruction((StoreType)span[0], span[1]), 2);
+            (new StoreInstruction((StoreKind)span[0], span[1]), 2);
 
         public void Accept(IRuntimeVisitor visitor) => visitor.VisitStore(this);
 
-        public ReadOnlySpan<byte> GetBytes() => OpcodeHelper.SerializeOpcode(Opcode.Store, StoreType, Index);
+        public ReadOnlySpan<byte> GetBytes() => OpcodeHelper.SerializeOpcode(Opcode.Store, StoreKind, Index);
 
-        public override string ToString() => $"st{ToString(StoreType)}.{Index}";
+        public override string ToString() => $"st{ToString(StoreKind)}.{Index}";
 
-        private string ToString(StoreType storeType) =>
-            storeType switch {
-                StoreType.Local => "loc",
-                StoreType.Argument => "arg",
-                StoreType.Field => "fld",
-                StoreType.StaticField => "sfld",
-                _ => throw new ArgumentOutOfRangeException(nameof(storeType), storeType, null)
+        private string ToString(StoreKind storeKind) =>
+            storeKind switch {
+                StoreKind.Local => "loc",
+                StoreKind.Argument => "arg",
+                StoreKind.Field => "fld",
+                StoreKind.StaticField => "sfld",
+                _ => throw new ArgumentOutOfRangeException(nameof(storeKind), storeKind, null)
             };
     }
 }

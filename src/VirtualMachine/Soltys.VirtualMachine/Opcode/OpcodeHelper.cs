@@ -10,7 +10,7 @@ namespace Soltys.VirtualMachine
         public static byte[] GetBytes(this Opcode opcode) => new[] { (byte)opcode };
         public static Opcode ToOpcode(ReadOnlySpan<byte> span) => (Opcode)span[0];
 
-        public static LoadType ToLoadType(byte value) => (LoadType)value;
+        public static LoadKind ToLoadType(byte value) => (LoadKind)value;
 
         public static byte[] SerializeOpcode(Opcode opcode, params object[] objects)
         {

@@ -15,12 +15,12 @@ namespace Soltys.VirtualMachine
         Division,
 
         //Boolean compare
-        Compare, //Compare [CompareType: Enum]
+        Compare, //Compare [CompareKind: Enum]
 
         //Branching
         Return,
-        Call, // Call [MethodName: String]
-        Branch, //Branch [BranchType: Enum] [Target: Int]
+        Call, //Call [MethodName: String]
+        Branch, //Branch [BranchKind: Enum] [Target: Int]
 
         //Special
         Nop,

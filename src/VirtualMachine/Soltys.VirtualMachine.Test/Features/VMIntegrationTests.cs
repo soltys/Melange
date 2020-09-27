@@ -10,8 +10,8 @@ namespace Soltys.VirtualMachine.Test
         public void Run_ExecuteInstructions_VisitingInstructionMethods()
         {
             var bytesStream = InstructionByteBuilder.Create()
-                .Opcode(Opcode.Load, LoadType.Integer, 69)
-                .Opcode(Opcode.Load, LoadType.Integer, 42)
+                .Opcode(Opcode.Load, LoadKind.Integer, 69)
+                .Opcode(Opcode.Load, LoadKind.Integer, 42)
                 .Opcode(Opcode.Add)
                 .AsStream();
             var callCountingRuntime = new CallCountingRuntime();
@@ -32,8 +32,8 @@ namespace Soltys.VirtualMachine.Test
         public void Run_MathIntOperation_ResultIsCorrect(Opcode opcode, int expectedValue)
         {
             var bytesStream = InstructionByteBuilder.Create()
-                .Opcode(Opcode.Load, LoadType.Integer, 69)
-                .Opcode(Opcode.Load, LoadType.Integer, 42)
+                .Opcode(Opcode.Load, LoadKind.Integer, 69)
+                .Opcode(Opcode.Load, LoadKind.Integer, 42)
                 .Opcode(opcode)
                 .AsStream();
             AssertIntValue(bytesStream, expectedValue);
@@ -47,8 +47,8 @@ namespace Soltys.VirtualMachine.Test
         public void Run_MathFloatingPointOperation_ResultIsCorrect(Opcode opcode, double expectedValue)
         {
             var bytesStream = InstructionByteBuilder.Create()
-                .Opcode(Opcode.Load, LoadType.Double, 69.1)
-                .Opcode(Opcode.Load, LoadType.Double, 42.1)
+                .Opcode(Opcode.Load, LoadKind.Double, 69.1)
+                .Opcode(Opcode.Load, LoadKind.Double, 42.1)
                 .Opcode(opcode)
                 .AsStream();
             AssertDoubleValue(bytesStream, expectedValue);
@@ -58,10 +58,10 @@ namespace Soltys.VirtualMachine.Test
         public void Run_MathOperationChain_ResultIsCorrect()
         {
             var bytesStream = InstructionByteBuilder.Create()
-                .Opcode(Opcode.Load, LoadType.Integer, 2)
-                .Opcode(Opcode.Load, LoadType.Integer, 2)
+                .Opcode(Opcode.Load, LoadKind.Integer, 2)
+                .Opcode(Opcode.Load, LoadKind.Integer, 2)
                 .Opcode(Opcode.Multiplication)
-                .Opcode(Opcode.Load, LoadType.Integer, 2)
+                .Opcode(Opcode.Load, LoadKind.Integer, 2)
                 .Opcode(Opcode.Add)
                 .AsStream();
             AssertIntValue(bytesStream, 6);

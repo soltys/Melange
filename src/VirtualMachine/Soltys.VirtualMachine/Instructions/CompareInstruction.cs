@@ -4,32 +4,32 @@ namespace Soltys.VirtualMachine
 {
     public class CompareInstruction : IInstruction
     {
-        public CompareType CompareType
+        public CompareKind CompareKind
         {
             get;
         }
 
-        public CompareInstruction(CompareType compareType)
+        public CompareInstruction(CompareKind compareKind)
         {
-            CompareType = compareType;
+            CompareKind = compareKind;
         }
 
         public void Accept(IRuntimeVisitor visitor) => visitor.VisitCompare(this);
 
-        public ReadOnlySpan<byte> GetBytes() => OpcodeHelper.SerializeOpcode(Opcode.Compare, CompareType);
+        public ReadOnlySpan<byte> GetBytes() => OpcodeHelper.SerializeOpcode(Opcode.Compare, CompareKind);
 
         public static (IInstruction, int) Create(in ReadOnlySpan<byte> span) =>
-            (new CompareInstruction((CompareType)span[0]), 1);
+            (new CompareInstruction((CompareKind)span[0]), 1);
 
 
-        public override string ToString() => $"{ToString(CompareType)}";
+        public override string ToString() => $"{ToString(CompareKind)}";
 
-        public string ToString(CompareType compareType) =>
-            compareType switch {
-                CompareType.Equals => "ceq",
-                CompareType.GreaterThan => "cgt",
-                CompareType.LessThan => "clt",
-                _ => throw new ArgumentOutOfRangeException(nameof(compareType), compareType, null)
+        public string ToString(CompareKind compareKind) =>
+            compareKind switch {
+                CompareKind.Equals => "ceq",
+                CompareKind.GreaterThan => "cgt",
+                CompareKind.LessThan => "clt",
+                _ => throw new ArgumentOutOfRangeException(nameof(compareKind), compareKind, null)
             };
     }
 }

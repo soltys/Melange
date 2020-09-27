@@ -10,8 +10,8 @@ namespace Soltys.VirtualMachine.Test
         public void DecodeStream_StreamWithMultipleOpcode_DecodesInstructions()
         {
             var bytesStream = InstructionByteBuilder.Create()
-                .Opcode(Opcode.Load, LoadType.Integer, 42)
-                .Opcode(Opcode.Load, LoadType.Integer, 69)
+                .Opcode(Opcode.Load, LoadKind.Integer, 42)
+                .Opcode(Opcode.Load, LoadKind.Integer, 69)
                 .Opcode(Opcode.Add)
                 .Opcode(Opcode.Return)
                 .AsStream();

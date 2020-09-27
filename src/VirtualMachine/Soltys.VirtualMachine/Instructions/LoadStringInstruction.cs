@@ -9,14 +9,14 @@ namespace Soltys.VirtualMachine
             get;
         }
 
-        public LoadStringInstruction(string value) : base(LoadType.String)
+        public LoadStringInstruction(string value) : base(LoadKind.String)
         {
             Value = value;
         }
 
         public void Accept(IRuntimeVisitor visitor) => visitor.VisitLoadString(this);
 
-        public ReadOnlySpan<byte> GetBytes() => OpcodeHelper.SerializeOpcode(Opcode.Load, LoadType.String, Value);
+        public ReadOnlySpan<byte> GetBytes() => OpcodeHelper.SerializeOpcode(Opcode.Load, LoadKind.String, Value);
 
         public override string ToString() => $"ldstr {Value}";
     }

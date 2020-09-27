@@ -25,7 +25,7 @@ namespace Soltys.VirtualMachine.Test
         [Fact]
         public void Decode_StoreInstructionFromByteArray_RegistryIndexAndStoreTypeAreSet()
         {
-            const StoreType expectedStoreType = StoreType.Field;
+            const StoreKind expectedStoreType = StoreKind.Field;
             const byte expectedIndex = 0x05;
             var bytes = InstructionByteBuilder.Create()
                 .Opcode(Opcode.Store, expectedStoreType, expectedIndex)
@@ -34,13 +34,13 @@ namespace Soltys.VirtualMachine.Test
             var storeInstruction = AssertBytesDecodedAs<StoreInstruction>(bytes);
 
             Assert.Equal(expectedIndex, storeInstruction.Index);
-            Assert.Equal(expectedStoreType, storeInstruction.StoreType);
+            Assert.Equal(expectedStoreType, storeInstruction.StoreKind);
         }
 
         [Fact]
         public void Decode_LoadPlaceInstruction_FromByteArray_RegistryIndexAndLoadTypeAreSet()
         {
-            const LoadType expectedLoadType = LoadType.StaticField;
+            const LoadKind expectedLoadType = LoadKind.StaticField;
             const byte expectedIndex = 0x07;
             var bytes = InstructionByteBuilder.Create()
                 .Opcode(Opcode.Load, expectedLoadType, expectedIndex)
@@ -49,7 +49,7 @@ namespace Soltys.VirtualMachine.Test
             var loadInstruction = AssertBytesDecodedAs<LoadPlaceInstruction>(bytes);
 
             Assert.Equal(expectedIndex, loadInstruction.Index);
-            Assert.Equal(expectedLoadType, loadInstruction.LoadType);
+            Assert.Equal(expectedLoadType, loadInstruction.LoadKind);
         }
 
         [Fact]
@@ -57,56 +57,56 @@ namespace Soltys.VirtualMachine.Test
         {
             const string value = "helloWorld";
             var bytes = InstructionByteBuilder.Create()
-                .Opcode(Opcode.Load, LoadType.String, value)
+                .Opcode(Opcode.Load, LoadKind.String, value)
                 .ToArray();
 
             var loadInstruction = AssertBytesDecodedAs<LoadStringInstruction>(bytes);
 
-            Assert.Equal(LoadType.String, loadInstruction.LoadType);
+            Assert.Equal(LoadKind.String, loadInstruction.LoadKind);
             Assert.Equal(value, loadInstruction.Value);
         }
 
         [Theory]
-        [InlineData(LoadType.Integer, 42)]
-        [InlineData(LoadType.Double, 42.69)]
-        public void Decode_LoadConstantInstruction_FromByteArray(LoadType loadType, object expectedValue)
+        [InlineData(LoadKind.Integer, 42)]
+        [InlineData(LoadKind.Double, 42.69)]
+        public void Decode_LoadConstantInstruction_FromByteArray(LoadKind loadKind, object expectedValue)
         {
             var bytes = InstructionByteBuilder.Create()
-                .Opcode(Opcode.Load, loadType, expectedValue)
+                .Opcode(Opcode.Load, loadKind, expectedValue)
                 .ToArray();
 
             var loadInstruction = AssertBytesDecodedAs<LoadConstantInstruction>(bytes);
 
-            Assert.Equal(loadType, loadInstruction.LoadType);
+            Assert.Equal(loadKind, loadInstruction.LoadKind);
             Assert.Equal(expectedValue, loadInstruction.Value);
         }
 
         [Theory]
-        [InlineData(CompareType.Equals)]
-        [InlineData(CompareType.GreaterThan)]
-        [InlineData(CompareType.LessThan)]
-        public void Decode_CompareInstruction_FromBytesArray(CompareType compareType)
+        [InlineData(CompareKind.Equals)]
+        [InlineData(CompareKind.GreaterThan)]
+        [InlineData(CompareKind.LessThan)]
+        public void Decode_CompareInstruction_FromBytesArray(CompareKind compareKind)
         {
             var bytes = InstructionByteBuilder.Create()
-                .Opcode(Opcode.Compare, compareType)
+                .Opcode(Opcode.Compare, compareKind)
                 .ToArray();
             var compareInstruction = AssertBytesDecodedAs<CompareInstruction>(bytes);
-            Assert.Equal(compareType, compareInstruction.CompareType);
+            Assert.Equal(compareKind, compareInstruction.CompareKind);
         }
 
         [Theory]
-        [InlineData(BranchType.Jump)]
-        [InlineData(BranchType.IfFalse)]
-        [InlineData(BranchType.IfTrue)]
-        public void Decode_BranchInstruction_FromByteArray(BranchType branchType)
+        [InlineData(BranchKind.Jump)]
+        [InlineData(BranchKind.IfFalse)]
+        [InlineData(BranchKind.IfTrue)]
+        public void Decode_BranchInstruction_FromByteArray(BranchKind branchKind)
         {
             var bytes = InstructionByteBuilder.Create()
-                .Opcode(Opcode.Branch, branchType, 42)
+                .Opcode(Opcode.Branch, branchKind, 42)
                 .ToArray();
 
             var branchInstruction = AssertBytesDecodedAs<BranchInstruction>(bytes);
 
-            Assert.Equal(branchType, branchInstruction.BranchType);
+            Assert.Equal(branchKind, branchInstruction.BranchKind);
         }
 
         [Fact]

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Soltys.Library.TextAnalysis;
 
 namespace Soltys.Database.Test.TestUtils
 {

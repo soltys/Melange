@@ -9,24 +9,24 @@ namespace Soltys.VirtualMachine
             get;
         }
 
-        public LoadPlaceInstruction(LoadType loadType, byte index) : base(loadType)
+        public LoadPlaceInstruction(LoadKind loadKind, byte index) : base(loadKind)
         {
             Index = index;
         }
 
-        public override string ToString() => $"ld{ToString(LoadType)}.{Index}";
+        public override string ToString() => $"ld{ToString(LoadKind)}.{Index}";
 
-        private string ToString(LoadType loadType) =>
-            loadType switch
+        private string ToString(LoadKind loadKind) =>
+            loadKind switch
             {
-                LoadType.Argument => "arg",
-                LoadType.Local => "loc",
-                LoadType.StaticField => "sfld",
+                LoadKind.Argument => "arg",
+                LoadKind.Local => "loc",
+                LoadKind.StaticField => "sfld",
                 _ => throw new NotImplementedException()
             };
 
         public void Accept(IRuntimeVisitor visitor) => visitor.VisitLoadPlace(this);
 
-        public ReadOnlySpan<byte> GetBytes() => OpcodeHelper.SerializeOpcode(Opcode.Load, LoadType, Index);
+        public ReadOnlySpan<byte> GetBytes() => OpcodeHelper.SerializeOpcode(Opcode.Load, LoadKind, Index);
     }
 }

@@ -11,15 +11,15 @@ namespace Soltys.VirtualMachine.Test
         public void Assemble_ToExpectedFormat()
         {
             var expectedBytes = InstructionByteBuilder.Create()
-                .Opcode(Opcode.Load, LoadType.Integer, 42)
-                .Opcode(Opcode.Load, LoadType.Integer, 69)
+                .Opcode(Opcode.Load, LoadKind.Integer, 42)
+                .Opcode(Opcode.Load, LoadKind.Integer, 69)
                 .Opcode(Opcode.Add)
                 .Opcode(Opcode.Return)
                 .ToArray();
 
             var instructions = new List<IInstruction> {
-                new LoadConstantInstruction(LoadType.Integer, 42),
-                new LoadConstantInstruction(LoadType.Integer, 69),
+                new LoadConstantInstruction(LoadKind.Integer, 42),
+                new LoadConstantInstruction(LoadKind.Integer, 69),
                 new AddInstruction(),
                 new ReturnInstruction()
             };

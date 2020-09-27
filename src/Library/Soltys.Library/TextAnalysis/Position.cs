@@ -16,5 +16,10 @@ namespace Soltys.Library.TextAnalysis
         {
             get;
         }
+
+        public static Position Empty
+        {
+            get;
+        } = new Position(0, 0);
     }
 }

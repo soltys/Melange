@@ -10,11 +10,11 @@ namespace Soltys.VirtualMachine
             get;
         }
 
-        public LoadConstantInstruction(LoadType loadType, object value) : base(loadType)
+        public LoadConstantInstruction(LoadKind loadKind, object value) : base(loadKind)
         {
-            if (loadType != LoadType.Integer && loadType != LoadType.Double)
+            if (loadKind != LoadKind.Integer && loadKind != LoadKind.Double)
             {
-                throw new ArgumentOutOfRangeException(nameof(loadType));
+                throw new ArgumentOutOfRangeException(nameof(loadKind));
             }
 
             Value = value ?? throw new ArgumentNullException(nameof(value), "Load Constant value should not be null");
@@ -22,9 +22,9 @@ namespace Soltys.VirtualMachine
 
         public void Accept(IRuntimeVisitor visitor) => visitor.VisitLoadConstant(this);
 
-        public ReadOnlySpan<byte> GetBytes() => OpcodeHelper.SerializeOpcode(Opcode.Load, LoadType, Value);
+        public ReadOnlySpan<byte> GetBytes() => OpcodeHelper.SerializeOpcode(Opcode.Load, LoadKind, Value);
 
-        public override string ToString() => $"ldc.{ToConstantLetter(LoadType)} {ToString(Value)}";
+        public override string ToString() => $"ldc.{ToConstantLetter(LoadKind)} {ToString(Value)}";
 
         private string ToString(object o) =>
             o switch {
@@ -33,12 +33,12 @@ namespace Soltys.VirtualMachine
                 _ => o.ToString()
             };
 
-        private string ToConstantLetter(LoadType loadType) =>
-            loadType switch
+        private string ToConstantLetter(LoadKind loadKind) =>
+            loadKind switch
             {
-                LoadType.Integer => "i",
-                LoadType.Double => "d",
-                _ => throw new InvalidOperationException("LoadType should not be out of given range of values")
+                LoadKind.Integer => "i",
+                LoadKind.Double => "d",
+                _ => throw new InvalidOperationException("LoadKind should not be out of given range of values")
             };
     }
 }

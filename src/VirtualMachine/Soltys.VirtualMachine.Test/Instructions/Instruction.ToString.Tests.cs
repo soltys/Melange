@@ -5,23 +5,23 @@ namespace Soltys.VirtualMachine.Test
     public class InstructionToStringTests
     {
         [Theory]
-        [InlineData(LoadType.Local, 1, "ldloc.1")]
-        [InlineData(LoadType.Argument, 0, "ldarg.0")]
-        [InlineData(LoadType.StaticField, 3, "ldsfld.3")]
-        public void ToString_LoadPlaceInstruction(LoadType loadType, byte index, string expectedString)
+        [InlineData(LoadKind.Local, 1, "ldloc.1")]
+        [InlineData(LoadKind.Argument, 0, "ldarg.0")]
+        [InlineData(LoadKind.StaticField, 3, "ldsfld.3")]
+        public void ToString_LoadPlaceInstruction(LoadKind loadKind, byte index, string expectedString)
         {
-            var loadInstruction = new LoadPlaceInstruction(loadType, index);
+            var loadInstruction = new LoadPlaceInstruction(loadKind, index);
             Assert.Equal(expectedString, loadInstruction.ToString());
         }
 
         [Theory]
-        [InlineData(StoreType.Local, 1, "stloc.1")]
-        [InlineData(StoreType.Argument, 3, "starg.3")]
-        [InlineData(StoreType.Field, 2, "stfld.2")]
-        [InlineData(StoreType.StaticField, 2, "stsfld.2")]
-        public void ToString_StoreInstruction(StoreType storeType, byte index, string expectedString)
+        [InlineData(StoreKind.Local, 1, "stloc.1")]
+        [InlineData(StoreKind.Argument, 3, "starg.3")]
+        [InlineData(StoreKind.Field, 2, "stfld.2")]
+        [InlineData(StoreKind.StaticField, 2, "stsfld.2")]
+        public void ToString_StoreInstruction(StoreKind storeKind, byte index, string expectedString)
         {
-            var storeInstruction = new StoreInstruction(storeType, index);
+            var storeInstruction = new StoreInstruction(storeKind, index);
             Assert.Equal(expectedString, storeInstruction.ToString());
         }
 
@@ -35,34 +35,34 @@ namespace Soltys.VirtualMachine.Test
         [Fact]
         public void ToString_LoadConstantInstruction_Integer()
         {
-            var loadInstruction = new LoadConstantInstruction(LoadType.Integer, 42);
+            var loadInstruction = new LoadConstantInstruction(LoadKind.Integer, 42);
             Assert.Equal("ldc.i 42", loadInstruction.ToString());
         }
 
         [Fact]
         public void ToString_LoadConstantInstruction_Double()
         {
-            var loadInstruction = new LoadConstantInstruction(LoadType.Double, 0.69);
+            var loadInstruction = new LoadConstantInstruction(LoadKind.Double, 0.69);
             Assert.Equal("ldc.d 0.69", loadInstruction.ToString());
         }
 
         [Theory]
-        [InlineData(CompareType.Equals, "ceq")]
-        [InlineData(CompareType.GreaterThan, "cgt")]
-        [InlineData(CompareType.LessThan, "clt")]
-        public void ToString_CompareInstruction(CompareType compareType, string expectedString)
+        [InlineData(CompareKind.Equals, "ceq")]
+        [InlineData(CompareKind.GreaterThan, "cgt")]
+        [InlineData(CompareKind.LessThan, "clt")]
+        public void ToString_CompareInstruction(CompareKind compareKind, string expectedString)
         {
-            var compareInstruction = new CompareInstruction(compareType);
+            var compareInstruction = new CompareInstruction(compareKind);
             Assert.Equal(expectedString, compareInstruction.ToString());
         }
 
         [Theory]
-        [InlineData(BranchType.Jump, "br 42")]
-        [InlineData(BranchType.IfFalse, "br.false 42")]
-        [InlineData(BranchType.IfTrue, "br.true 42")]
-        public void ToString_BranchInstruction(BranchType branchType, string expectedString)
+        [InlineData(BranchKind.Jump, "br 42")]
+        [InlineData(BranchKind.IfFalse, "br.false 42")]
+        [InlineData(BranchKind.IfTrue, "br.true 42")]
+        public void ToString_BranchInstruction(BranchKind branchKind, string expectedString)
         {
-            var branchInstruction = new BranchInstruction(branchType, 42);
+            var branchInstruction = new BranchInstruction(branchKind, 42);
             Assert.Equal(expectedString, branchInstruction.ToString());
         }
 

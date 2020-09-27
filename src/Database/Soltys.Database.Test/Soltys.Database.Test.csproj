@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="CmdCompiler\LexerTestsCases.xml" />
+        <None Remove="Cmd\LexerTestsCases.xml" />
     </ItemGroup>
 
     <ItemGroup>

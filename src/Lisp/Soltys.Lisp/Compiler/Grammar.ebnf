@@ -1,0 +1,17 @@
+
+program ::= expression_list ;;
+
+expression_list ::= expression expression_list ;;
+
+expression ::= 
+    '\''? list
+    ;;
+
+list ::= '(' atoms ')' ;;
+
+atoms ::= atom+ ;;
+
+atom ::= Symbol
+    | Number
+    | String
+    ;;

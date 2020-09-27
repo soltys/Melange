@@ -1,13 +1,23 @@
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO;
 
 namespace Soltys.VirtualMachine
 {
-    internal class VM
+    public class VM
     {
+        public static RuntimeFactory DefaultRuntime
+        {
+            get;
+        } = new RuntimeFactory();
         private readonly VMContext context;
         private readonly IRuntimeVisitor runtimeVisitor;
 
         public object PeekValueStack => this.context.ValueStack.Peek();
+
+        public VM() : this(DefaultRuntime)
+        {
+        }
 
         public VM(IRuntimeVisitorFactory runtimeVisitor)
         {
@@ -19,6 +29,9 @@ namespace Soltys.VirtualMachine
         {
             this.context.Load(InstructionDecoder.DecodeStream(source));
         }
+
+        public void Load(IEnumerable<IInstruction> instructions) =>
+            this.context.Load(instructions);
 
         public void Run()
         {

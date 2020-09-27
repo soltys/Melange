@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "db", "db", "{6C7CFF15-A3EF-410A-ACEF-B0793D3006A7}"
+	ProjectSection(SolutionItems) = preProject
+		src\Database\README.md = src\Database\README.md
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.Database", "src\Database\Soltys.Database\Soltys.Database.csproj", "{A6A5129C-3214-4F71-9D67-1622F3DFED56}"
 EndProject
@@ -14,6 +17,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "example", "example", "{EB80B078-DE8C-4D0E-8F76-E74E2769BFF7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "vm", "vm", "{1F097198-F333-41B9-914D-3740881F908D}"
+	ProjectSection(SolutionItems) = preProject
+		src\VirtualMachine\README.md = src\VirtualMachine\README.md
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app", "app", "{B71DB652-E350-4BBB-A724-1F0453BC49CD}"
 EndProject
@@ -28,13 +34,30 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_solution config", "_solution config", "{9D1C68F4-B8A6-44BF-8A2A-ACD8A7BD05CC}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{DF60E4DC-A138-4436-9D02-AA02B89BF836}"
+	ProjectSection(SolutionItems) = preProject
+		src\Library\README.md = src\Library\README.md
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.Library", "src\Library\Soltys.Library\Soltys.Library.csproj", "{02514068-FEF9-4D89-A9F8-3B4713E6E508}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.Library.Test", "src\Library\Soltys.Library.Test\Soltys.Library.Test.csproj", "{EB8B0A4B-822E-4162-A4F1-141CAFBE9940}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lisp", "lisp", "{201DE1F5-46D9-4016-902B-A73FB10C533F}"
+	ProjectSection(SolutionItems) = preProject
+		src\Lisp\README.md = src\Lisp\README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.Lisp", "src\Lisp\Soltys.Lisp\Soltys.Lisp.csproj", "{078D76EC-1E62-4B86-B1F5-852DAF6FA588}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.Lisp.Test", "src\Lisp\Soltys.Lisp.Test\Soltys.Lisp.Test.csproj", "{13EE77E7-E61D-4535-A653-E82EF2CC27B4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app", "app", "{2330CC15-0D80-44C6-B350-E12A2DE16E08}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.Lisp.REPL", "src\Lisp\Soltys.Lisp.REPL\Soltys.Lisp.REPL.csproj", "{DD3969EB-9D08-454D-88AD-AB4D21EA802C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,6 +101,18 @@ Global
 		{EB8B0A4B-822E-4162-A4F1-141CAFBE9940}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB8B0A4B-822E-4162-A4F1-141CAFBE9940}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB8B0A4B-822E-4162-A4F1-141CAFBE9940}.Release|Any CPU.Build.0 = Release|Any CPU
+		{078D76EC-1E62-4B86-B1F5-852DAF6FA588}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{078D76EC-1E62-4B86-B1F5-852DAF6FA588}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{078D76EC-1E62-4B86-B1F5-852DAF6FA588}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{078D76EC-1E62-4B86-B1F5-852DAF6FA588}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13EE77E7-E61D-4535-A653-E82EF2CC27B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13EE77E7-E61D-4535-A653-E82EF2CC27B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13EE77E7-E61D-4535-A653-E82EF2CC27B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13EE77E7-E61D-4535-A653-E82EF2CC27B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD3969EB-9D08-454D-88AD-AB4D21EA802C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD3969EB-9D08-454D-88AD-AB4D21EA802C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD3969EB-9D08-454D-88AD-AB4D21EA802C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD3969EB-9D08-454D-88AD-AB4D21EA802C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,6 +129,10 @@ Global
 		{4AC29DA3-3CA6-4FC8-BE3E-0D40DF124FC3} = {B71DB652-E350-4BBB-A724-1F0453BC49CD}
 		{02514068-FEF9-4D89-A9F8-3B4713E6E508} = {DF60E4DC-A138-4436-9D02-AA02B89BF836}
 		{EB8B0A4B-822E-4162-A4F1-141CAFBE9940} = {DF60E4DC-A138-4436-9D02-AA02B89BF836}
+		{078D76EC-1E62-4B86-B1F5-852DAF6FA588} = {201DE1F5-46D9-4016-902B-A73FB10C533F}
+		{13EE77E7-E61D-4535-A653-E82EF2CC27B4} = {201DE1F5-46D9-4016-902B-A73FB10C533F}
+		{2330CC15-0D80-44C6-B350-E12A2DE16E08} = {201DE1F5-46D9-4016-902B-A73FB10C533F}
+		{DD3969EB-9D08-454D-88AD-AB4D21EA802C} = {2330CC15-0D80-44C6-B350-E12A2DE16E08}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {59A0D75B-082D-4AFA-803F-F88334EE0A65}

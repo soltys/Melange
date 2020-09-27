@@ -4,56 +4,56 @@ namespace Soltys.VirtualMachine
 {
     public abstract class LoadInstruction
     {
-        public LoadType LoadType
+        public LoadKind LoadKind
         {
             get;
         }
 
-        protected LoadInstruction(LoadType loadType)
+        protected LoadInstruction(LoadKind loadKind)
         {
-            LoadType = loadType;
+            LoadKind = loadKind;
         }
 
 
         public static (IInstruction, int) Create(in ReadOnlySpan<byte> span)
         {
             var loadType = OpcodeHelper.ToLoadType(span[0]);
-            var bytesRead = 1; // for LoadType
+            var bytesRead = 1; // for LoadKind
             switch (loadType)
             {
-                case LoadType.Argument:
-                case LoadType.Local:
-                case LoadType.StaticField:
+                case LoadKind.Argument:
+                case LoadKind.Local:
+                case LoadKind.StaticField:
                     return (new LoadPlaceInstruction(loadType, span[1]), bytesRead + 1);
-                case LoadType.String:
+                case LoadKind.String:
                     return CreateLoadStringInstruction(span.Slice(bytesRead), bytesRead);
-                case LoadType.Integer:
-                case LoadType.Double:
+                case LoadKind.Integer:
+                case LoadKind.Double:
                     return CreateLoadConstantInstruction(span.Slice(bytesRead), bytesRead, loadType);
                 default:
                     throw new LoadTypeDecodeException();
             }
         }
 
-        private static (IInstruction, int) CreateLoadConstantInstruction(ReadOnlySpan<byte> span, in int alreadyBytesRead, LoadType loadType)
+        private static (IInstruction, int) CreateLoadConstantInstruction(ReadOnlySpan<byte> span, in int alreadyBytesRead, LoadKind loadKind)
         {
             int totalBytesRead = alreadyBytesRead;
             object value;
-            switch (loadType)
+            switch (loadKind)
             {
-                case LoadType.Integer:
+                case LoadKind.Integer:
                     value = BitConverter.ToInt32(span);
                     totalBytesRead += sizeof(int);
                     break;
-                case LoadType.Double:
+                case LoadKind.Double:
                     value = BitConverter.ToDouble(span);
                     totalBytesRead += sizeof(double);
                     break;
                 default:
-                    throw new InvalidOperationException($"LoadType: {loadType} is not supported for loading constant instruction");
+                    throw new InvalidOperationException($"LoadKind: {loadKind} is not supported for loading constant instruction");
             }
 
-            return (new LoadConstantInstruction(loadType, value), totalBytesRead);
+            return (new LoadConstantInstruction(loadKind, value), totalBytesRead);
         }
 
         private static (IInstruction, int) CreateLoadStringInstruction(in ReadOnlySpan<byte> span, int alreadyBytesRead)

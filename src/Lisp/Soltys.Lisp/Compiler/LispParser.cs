@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Soltys.Library.TextAnalysis;
 
 namespace Soltys.Lisp.Compiler
@@ -76,7 +77,7 @@ namespace Soltys.Lisp.Compiler
                 return new AstIntNumber(i);
             }
 
-            if (double.TryParse(value, out var d))
+            if (double.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out var d))
             {
                 return new AstDoubleNumber(d);
             }

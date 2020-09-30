@@ -1,3 +1,4 @@
+#nullable disable
 //
 // getline.cs: A command line editor
 //

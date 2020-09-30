@@ -25,7 +25,7 @@ namespace Soltys.VirtualMachine
 
         public void Accept(IRuntimeVisitor visitor) => visitor.VisitStore(this);
 
-        public ReadOnlySpan<byte> GetBytes() => OpcodeHelper.SerializeOpcode(Opcode.Store, StoreKind, Index);
+        public ReadOnlySpan<byte> GetBytes() => InstructionEncoder.Encode(Opcode.Store, StoreKind, Index);
 
         public override string ToString() => $"st{ToString(StoreKind)}.{Index}";
 

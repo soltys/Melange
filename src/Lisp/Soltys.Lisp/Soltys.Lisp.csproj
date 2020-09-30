@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Library\Soltys.Library\Soltys.Library.csproj" />
+    <ProjectReference Include="..\..\VirtualMachine\Soltys.VirtualMachine.Contracts\Soltys.VirtualMachine.Contracts.csproj" />
     <ProjectReference Include="..\..\VirtualMachine\Soltys.VirtualMachine\Soltys.VirtualMachine.csproj" />
   </ItemGroup>
 

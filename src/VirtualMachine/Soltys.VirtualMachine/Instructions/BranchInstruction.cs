@@ -22,7 +22,7 @@ namespace Soltys.VirtualMachine
 
         public void Accept(IRuntimeVisitor visitor) => visitor.VisitBranch(this);
 
-        public ReadOnlySpan<byte> GetBytes() => OpcodeHelper.SerializeOpcode(Opcode.Branch, BranchKind, Target);
+        public ReadOnlySpan<byte> GetBytes() => InstructionEncoder.Encode(Opcode.Branch, BranchKind, Target);
         public override string ToString() => $"br{ToString(BranchKind)} {Target}";
 
         private string ToString(BranchKind branchKind) =>

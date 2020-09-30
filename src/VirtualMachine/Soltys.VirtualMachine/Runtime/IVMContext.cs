@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Soltys.VirtualMachine.Contracts;
 
 namespace Soltys.VirtualMachine
 {
@@ -8,5 +9,10 @@ namespace Soltys.VirtualMachine
         {
             get;
         }
+
+        void AddVMLibrary(IVMLibrary library);
+        IVMExternalFunction FindExternalFunction(string methodName);
+        bool TryChangeFunction(string methodName);
+        void Return();
     }
 }

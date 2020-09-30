@@ -60,6 +60,16 @@ namespace Soltys.VirtualMachine.Test
             Assert.True(expectedBytes.SequenceEqual(instruction.GetBytes()));
         }
 
+        [Fact]
+        public void GetBytes_LoadLibraryInstruction()
+        {
+            var instruction = new LoadLibraryInstruction("MyLib");
+            var expectedBytes = InstructionByteBuilder.Create()
+                .Opcode(Opcode.Load, LoadKind.Library, "MyLib")
+                .AsSpan();
+            Assert.True(expectedBytes.SequenceEqual(instruction.GetBytes()));
+        }
+
         [Theory]
         [InlineData(CompareKind.Equals)]
         [InlineData(CompareKind.GreaterThan)]

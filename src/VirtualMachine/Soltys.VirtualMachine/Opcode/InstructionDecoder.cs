@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace Soltys.VirtualMachine
 {
@@ -73,5 +74,15 @@ namespace Soltys.VirtualMachine
                 Opcode.Undefined => throw new OpcodeDecodeException(),
                 _ => throw new OpcodeDecodeException()
             };
+
+        public static (string, int) DecodeString(ReadOnlySpan<byte> span)
+        {
+            var lengthBytesRead = sizeof(int);
+            var stringLength = BitConverter.ToInt32(span);
+            var stringItself = Encoding.UTF8.GetString(span.Slice(lengthBytesRead, stringLength));
+
+            var totalBytesRead = lengthBytesRead + stringItself.Length;
+            return (stringItself, totalBytesRead);
+        }
     }
 }

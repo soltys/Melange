@@ -23,6 +23,7 @@ namespace Soltys.Lisp.Test.Compiler
         [InlineData("=", LispTokenKind.Symbol)]
         [InlineData(">", LispTokenKind.Symbol)]
         [InlineData("<", LispTokenKind.Symbol)]
+        [InlineData("def!", LispTokenKind.Symbol)]
         [InlineData("42", LispTokenKind.Number)]
         [InlineData("-42", LispTokenKind.Number)]
         [InlineData("42.69", LispTokenKind.Number)]

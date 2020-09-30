@@ -16,7 +16,7 @@ namespace Soltys.VirtualMachine
 
         public void Accept(IRuntimeVisitor visitor) => visitor.VisitCompare(this);
 
-        public ReadOnlySpan<byte> GetBytes() => OpcodeHelper.SerializeOpcode(Opcode.Compare, CompareKind);
+        public ReadOnlySpan<byte> GetBytes() => InstructionEncoder.Encode(Opcode.Compare, CompareKind);
 
         public static (IInstruction, int) Create(in ReadOnlySpan<byte> span) =>
             (new CompareInstruction((CompareKind)span[0]), 1);

@@ -46,6 +46,13 @@ namespace Soltys.VirtualMachine.Test
             Assert.Equal("ldc.d 0.69", loadInstruction.ToString());
         }
 
+        [Fact]
+        public void ToString_LoadLibraryInstruction()
+        {
+            var loadInstruction = new LoadLibraryInstruction("MyLib");
+            Assert.Equal("ldl MyLib", loadInstruction.ToString());
+        }
+
         [Theory]
         [InlineData(CompareKind.Equals, "ceq")]
         [InlineData(CompareKind.GreaterThan, "cgt")]

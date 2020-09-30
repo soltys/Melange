@@ -15,7 +15,7 @@ namespace Soltys.VirtualMachine.Test.TestUtils
 
         public InstructionByteBuilder Opcode(Opcode opcode, params object[] objects)
         {
-            this.output.AddRange(OpcodeHelper.SerializeOpcode(opcode, objects));
+            this.output.AddRange(InstructionEncoder.Encode(opcode, objects));
             return this;
         }
 

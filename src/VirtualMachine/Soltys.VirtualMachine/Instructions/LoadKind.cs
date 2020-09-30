@@ -7,6 +7,8 @@ namespace Soltys.VirtualMachine
         StaticField,
         String,
         Integer,
-        Double
+        Double,
+
+        Library
     }
 }

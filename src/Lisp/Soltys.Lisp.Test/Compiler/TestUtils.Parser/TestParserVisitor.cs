@@ -1,4 +1,4 @@
-﻿using Soltys.Lisp.Compiler;
+using Soltys.Lisp.Compiler;
 using Xunit;
 
 namespace Soltys.Lisp.Test.Compiler
@@ -19,9 +19,9 @@ namespace Soltys.Lisp.Test.Compiler
         {
             Assert.IsType<AstList>(this.expected);
             var expectedAst = (AstList)this.expected;
-            Assert.True(expectedAst.Elements.Count == ast.Elements.Count, "Expected length of elements in the list is not equal");
+            Assert.True(expectedAst.Length == ast.Length, "Expected length of elements in the list is not equal");
 
-            for (int i = 0; i < ast.Elements.Count; i++)
+            for (int i = 0; i < ast.Length; i++)
             {
                 AssertVisit(expectedAst[i], ast[i]);
             }

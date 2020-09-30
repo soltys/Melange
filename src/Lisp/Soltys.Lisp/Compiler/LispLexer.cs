@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Soltys.Library.TextAnalysis;
 
 namespace Soltys.Lisp.Compiler
@@ -66,9 +67,9 @@ namespace Soltys.Lisp.Compiler
                 {
                     if (char.IsLetter(c))
                     {
-                        var (ident, offset) = LexerHelper.GetAnyName(this.textSource.Slice());
-                        yield return new LispToken(LispTokenKind.Symbol, ident, this.textSource.GetPosition());
-                        this.textSource.AdvanceChar(offset);
+                        var match = Regex.Match(this.textSource.Slice().ToString(), @"[\w!_]+", RegexOptions.Compiled);
+                        yield return new LispToken(LispTokenKind.Symbol, match.Value, this.textSource.GetPosition());
+                        this.textSource.AdvanceChar(match.Length - 1);
                     }
                     else if (char.IsDigit(c))
                     {

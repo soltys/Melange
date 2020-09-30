@@ -22,7 +22,7 @@ namespace Soltys.VirtualMachine
 
         public void Accept(IRuntimeVisitor visitor) => visitor.VisitLoadConstant(this);
 
-        public ReadOnlySpan<byte> GetBytes() => OpcodeHelper.SerializeOpcode(Opcode.Load, LoadKind, Value);
+        public ReadOnlySpan<byte> GetBytes() => InstructionEncoder.Encode(Opcode.Load, LoadKind, Value);
 
         public override string ToString() => $"ldc.{ToConstantLetter(LoadKind)} {ToString(Value)}";
 

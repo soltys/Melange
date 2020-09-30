@@ -5,9 +5,8 @@ namespace Soltys.Lisp.Compiler
 {
     internal class AstList : IAstNode
     {
-        private List<IAstNode> elements;
-        public IReadOnlyCollection<IAstNode> Elements => this.elements;
-
+        private readonly List<IAstNode> elements;
+        public int Length => this.elements.Count;
         public AstList()
         {
             this.elements = new List<IAstNode>();

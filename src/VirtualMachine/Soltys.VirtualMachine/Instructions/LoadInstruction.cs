@@ -30,6 +30,8 @@ namespace Soltys.VirtualMachine
                 case LoadKind.Integer:
                 case LoadKind.Double:
                     return CreateLoadConstantInstruction(span.Slice(bytesRead), bytesRead, loadType);
+                case LoadKind.Library:
+                    return CreateLoadLibraryInstruction(span.Slice(bytesRead), bytesRead);
                 default:
                     throw new LoadTypeDecodeException();
             }
@@ -58,8 +60,14 @@ namespace Soltys.VirtualMachine
 
         private static (IInstruction, int) CreateLoadStringInstruction(in ReadOnlySpan<byte> span, int alreadyBytesRead)
         {
-            var (stringItself, stringBytesRead) = OpcodeHelper.DecodeString(span);
+            var (stringItself, stringBytesRead) = InstructionDecoder.DecodeString(span);
             return (new LoadStringInstruction(stringItself), alreadyBytesRead + stringBytesRead);
+        }
+
+        private static (IInstruction, int) CreateLoadLibraryInstruction(ReadOnlySpan<byte> span, in int alreadyBytesRead)
+        {
+            var (stringItself, stringBytesRead) = InstructionDecoder.DecodeString(span);
+            return (new LoadLibraryInstruction(stringItself), alreadyBytesRead + stringBytesRead);
         }
     }
 }

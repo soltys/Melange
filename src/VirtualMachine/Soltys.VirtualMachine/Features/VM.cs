@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.IO;
 
 namespace Soltys.VirtualMachine
 {
@@ -10,10 +8,11 @@ namespace Soltys.VirtualMachine
         {
             get;
         } = new RuntimeFactory();
+
         private readonly VMContext context;
         private readonly IRuntimeVisitor runtimeVisitor;
 
-        public object PeekValueStack => this.context.ValueStack.Peek();
+        public object? PeekValueStack => this.context.ValueStack.Count == 0 ? null : this.context.ValueStack.Peek();
 
         public VM() : this(DefaultRuntime)
         {
@@ -25,23 +24,23 @@ namespace Soltys.VirtualMachine
             this.runtimeVisitor = runtimeVisitor.Create(this.context);
         }
 
-        public void Load(Stream source)
-        {
-            this.context.Load(InstructionDecoder.DecodeStream(source));
-        }
-
-        public void Load(IEnumerable<IInstruction> instructions) =>
+        public void Load(IEnumerable<VMFunction> instructions) =>
             this.context.Load(instructions);
 
         public void Run()
         {
-            this.context.Reset();
+            this.context.ChangeMethod(new CallEntry("Main", 0));
 
             while (this.context.IsHalted())
             {
-                this.context.GetCurrentInstruction().Accept(this.runtimeVisitor);
+                this.context.GetCurrentInstruction()?.Accept(this.runtimeVisitor);
                 this.context.AdvanceInstructionPointer();
             }
+        }
+
+        public void Clear()
+        {
+            this.context.Clear();
         }
     }
 }

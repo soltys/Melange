@@ -29,6 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Soltys.VirtualMachine.Contracts\Soltys.VirtualMachine.Contracts.csproj" />
         <ProjectReference Include="..\Soltys.VirtualMachine\Soltys.VirtualMachine.csproj" />
     </ItemGroup>
 

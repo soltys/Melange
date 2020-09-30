@@ -29,6 +29,7 @@ namespace Soltys.VirtualMachine.Test.TestUtils
         public void VisitLoadConstant(LoadConstantInstruction instruction) => IncrementCallCount(nameof(VisitLoadConstant));
         public void VisitLoadPlace(LoadPlaceInstruction instruction) => IncrementCallCount(nameof(VisitLoadPlace));
         public void VisitLoadString(LoadStringInstruction instruction) => IncrementCallCount(nameof(VisitLoadString));
+        public void VisitLoadLibrary(LoadLibraryInstruction instruction) => IncrementCallCount(nameof(VisitLoadLibrary));
         public void VisitMultiplication(MultiplicationInstruction instruction) => IncrementCallCount(nameof(VisitMultiplication));
         public void VisitNop(NopInstruction instruction) => IncrementCallCount(nameof(VisitNop));
         public void VisitReturn(ReturnInstruction instruction) => IncrementCallCount(nameof(VisitReturn));

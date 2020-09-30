@@ -81,6 +81,20 @@ namespace Soltys.VirtualMachine.Test
             Assert.Equal(expectedValue, loadInstruction.Value);
         }
 
+        [Fact]
+        public void Decode_LoadLibraryInstruction_FromByteArray()
+        {
+            var bytes = InstructionByteBuilder.Create()
+                .Opcode(Opcode.Load, LoadKind.Library, "MyLibraryCore")
+                .ToArray();
+
+            var loadInstruction = AssertBytesDecodedAs<LoadLibraryInstruction>(bytes);
+
+            Assert.Equal(LoadKind.Library, loadInstruction.LoadKind);
+            Assert.Equal("MyLibraryCore", loadInstruction.LibraryName);
+        }
+
+
         [Theory]
         [InlineData(CompareKind.Equals)]
         [InlineData(CompareKind.GreaterThan)]
@@ -118,7 +132,7 @@ namespace Soltys.VirtualMachine.Test
                 .ToArray();
 
             var callInstruction = AssertBytesDecodedAs<CallInstruction>(bytes);
-            Assert.Equal(methodCall, callInstruction.MethodCall);
+            Assert.Equal(methodCall, callInstruction.MethodName);
         }
 
         #region Decode Opcode without opperands

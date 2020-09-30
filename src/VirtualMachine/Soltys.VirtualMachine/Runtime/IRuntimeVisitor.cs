@@ -10,6 +10,7 @@ namespace Soltys.VirtualMachine
         void VisitLoadConstant(LoadConstantInstruction instruction);
         void VisitLoadPlace(LoadPlaceInstruction instruction);
         void VisitLoadString(LoadStringInstruction instruction);
+        void VisitLoadLibrary(LoadLibraryInstruction instruction);
         void VisitMultiplication(MultiplicationInstruction instruction);
         void VisitNop(NopInstruction instruction);
         void VisitReturn(ReturnInstruction instruction);

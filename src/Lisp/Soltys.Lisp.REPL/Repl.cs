@@ -16,17 +16,18 @@ namespace Soltys.Lisp
         {
             PrintWelcome();
             using var slisp = new SoltysLisp();
-
+            slisp.Initialize();
             while (true)
             {
                 var input = this.lineEdit.Edit("slisp> ", "");
-                if (input == "!exit")
+                if (input.Trim() == "!exit")
                 {
                     break;
                 }
 
-                Console.Write("<-- ");
-                Console.WriteLine(slisp.Do(input));
+                var result = slisp.Do(input);
+                Console.Write($"<-- {result}");
+                Console.WriteLine();
             }
         }
 

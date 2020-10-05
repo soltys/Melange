@@ -1,4 +1,4 @@
-# Soltys Zettelkasten
+# Soltys Melange
 
 You can find here:
 

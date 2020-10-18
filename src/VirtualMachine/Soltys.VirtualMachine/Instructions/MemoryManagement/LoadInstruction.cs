@@ -17,7 +17,7 @@ namespace Soltys.VirtualMachine
 
         public static (IInstruction, int) Create(in ReadOnlySpan<byte> span)
         {
-            var loadType = OpcodeHelper.ToLoadType(span[0]);
+            var loadType = OpcodeHelper.ToLoadKind(span[0]);
             var bytesRead = 1; // for LoadKind
             switch (loadType)
             {

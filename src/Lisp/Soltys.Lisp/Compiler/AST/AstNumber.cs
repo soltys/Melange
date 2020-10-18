@@ -1,13 +1,13 @@
 namespace Soltys.Lisp.Compiler
 {
-    internal class AstNumber : IAstNode
+    internal abstract class AstNumber : IAstNode
     {
-        public AstNumber()
+        protected AstNumber()
         {
             
         }
 
         public void Accept(IAstVisitor visitor) => visitor.VisitNumber(this);
-        
+        public abstract IAstNode Clone();
     }
 }

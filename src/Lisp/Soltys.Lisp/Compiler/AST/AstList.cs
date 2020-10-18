@@ -12,7 +12,7 @@ namespace Soltys.Lisp.Compiler
             this.elements = new List<IAstNode>();
         }
 
-        public AstList(IEnumerable<IAstNode> listElements) : this()
+        public AstList(params IAstNode[] listElements) : this()
         {
             this.elements.AddRange(listElements);
         }
@@ -25,6 +25,7 @@ namespace Soltys.Lisp.Compiler
         public IAstNode this[int index] => this.elements[index];
 
         public void Accept(IAstVisitor visitor) => visitor.VisitList(this);
+        public IAstNode Clone() => new AstList(this.elements.ToArray());
 
         public override string ToString() => $"({ToStringElements()})";
 

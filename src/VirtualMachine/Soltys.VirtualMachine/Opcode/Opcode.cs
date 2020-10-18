@@ -7,6 +7,7 @@ namespace Soltys.VirtualMachine
         //Memory Management
         Load, 
         Store,
+        List,
 
         //Math operations
         Add,

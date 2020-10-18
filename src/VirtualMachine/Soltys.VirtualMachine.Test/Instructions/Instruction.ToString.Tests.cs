@@ -83,6 +83,14 @@ namespace Soltys.VirtualMachine.Test
         #region Opcode without operands
 
         [Fact]
+        public void ToString_ListNewInstruction() =>
+            AssertToString<ListNewInstruction>("list.new");
+
+        [Fact]
+        public void ToString_ListAddInstruction() =>
+            AssertToString<ListAddInstruction>("list.add");
+
+        [Fact]
         public void ToString_NopInstruction() =>
             AssertToString<NopInstruction>("nop");
 

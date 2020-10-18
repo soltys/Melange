@@ -114,6 +114,14 @@ namespace Soltys.VirtualMachine.Test
         #region Opcodes without operands
 
         [Fact]
+        public void GetBytes_ListNewInstruction() =>
+            AssertGetBytes<ListNewInstruction>(Opcode.List, ListOperationKind.New);
+
+        [Fact]
+        public void GetBytes_ListAddInstruction() =>
+            AssertGetBytes<ListAddInstruction>(Opcode.List, ListOperationKind.Add);
+
+        [Fact]
         public void GetBytes_AddInstruction() => AssertGetBytes<AddInstruction>(Opcode.Add);
 
         [Fact]
@@ -131,10 +139,10 @@ namespace Soltys.VirtualMachine.Test
         [Fact]
         public void GetBytes_ReturnInstruction() => AssertGetBytes<ReturnInstruction>(Opcode.Return);
 
-        private static void AssertGetBytes<TInstruction>(Opcode opcode) where TInstruction : IInstruction, new()
+        private static void AssertGetBytes<TInstruction>(Opcode opcode, params object[] args) where TInstruction : IInstruction, new()
         {
             var instruction = new TInstruction();
-            var expectedBytes = InstructionByteBuilder.Create().Opcode(opcode).AsSpan();
+            var expectedBytes = InstructionByteBuilder.Create().Opcode(opcode, args).AsSpan();
             Assert.True(expectedBytes.SequenceEqual(instruction.GetBytes()));
         }
 

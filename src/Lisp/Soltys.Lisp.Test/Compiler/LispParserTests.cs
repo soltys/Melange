@@ -13,7 +13,7 @@ namespace Soltys.Lisp.Test.Compiler
                 new AstIntNumber(2),
                 new AstIntNumber(3),
             });
-             
+
             AstAssert.Program(expectedAst, "(add 2 3)");
         }
 
@@ -27,7 +27,7 @@ namespace Soltys.Lisp.Test.Compiler
                     new AstSymbol("mul"),
                     new AstIntNumber(3),
                     new AstIntNumber(4),
-                }), 
+                }),
             });
 
             AstAssert.Program(expectedAst, "(add 2 (mul 3 4))");
@@ -68,8 +68,8 @@ namespace Soltys.Lisp.Test.Compiler
         {
             var expectedAst = new AstList(new IAstNode[] {
                 new AstSymbol("strcat"),
-                new AstString("foo"), 
-                new AstString("bar"), 
+                new AstString("foo"),
+                new AstString("bar"),
             });
             AstAssert.Program(expectedAst, "(strcat \"foo\" \"bar\")");
         }
@@ -79,10 +79,23 @@ namespace Soltys.Lisp.Test.Compiler
         {
             var expectedAst = new AstList(new IAstNode[] {
                 new AstSymbol("+"),
-                new AstDoubleNumber(0.1), 
-                new AstDoubleNumber(0.2), 
+                new AstDoubleNumber(0.1),
+                new AstDoubleNumber(0.2),
             });
             AstAssert.Program(expectedAst, "(+ 0.1 0.2)");
+        }
+
+        [Fact]
+        public void ParseProgram_WithQuote()
+        {
+            var expectedAst = new AstList(
+                    new AstSymbol("quote"), new AstList(
+                        new AstIntNumber(1),
+                        new AstIntNumber(2),
+                        new AstIntNumber(3)
+                    )
+                );
+            AstAssert.Program(expectedAst, "'(1 2 3)");
         }
     }
 }

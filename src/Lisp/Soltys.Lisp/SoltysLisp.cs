@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Soltys.Library.TextAnalysis;
 using Soltys.Lisp.Compiler;
+using Soltys.Lisp.CoreLib;
 using Soltys.VirtualMachine;
 
 namespace Soltys.Lisp
@@ -10,14 +11,14 @@ namespace Soltys.Lisp
     {
         private class VMFacade
         {
-            private VM vm;
+            private readonly VM vm;
 
             public VMFacade()
             {
                 this.vm = new VM();
             }
 
-            public void Initialize()
+            public void LoadCoreLibrary()
             {
                 var initInstructions = new IInstruction[] {
                     //Load itself into VM
@@ -50,35 +51,35 @@ namespace Soltys.Lisp
 
         public void Initialize()
         {
-            this.vmFacade.Initialize();
+            this.vmFacade.LoadCoreLibrary();
+            this.env.VisitLibrary(new CoreLibrary());
         }
 
         public object Do(string input)
         {
-            var ast = GetAst(input);
-
-            ast = this.env.Eval(ast);
-            var functions = CodeGeneration(ast);
-            return this.vmFacade.Run(functions) ?? "nil";
+            var astNodes = GetProgramAst(input);
+            object? lastValue = null;
+            foreach (var ast in astNodes)
+            {
+                var functions = CodeGeneration(ast);
+                lastValue = this.vmFacade.Run(functions);
+            }
+            return lastValue ?? "nil";
         }
 
-        private static IEnumerable<IAstNode> GetAst(string input)
+        private static IEnumerable<IAstNode> GetProgramAst(string input)
         {
             var lexer = new LispLexer(new TextSource(input));
             var parser = new LispParser(new TokenSource<LispToken, LispTokenKind>(lexer));
             return parser.ParseProgram();
         }
 
-        private IEnumerable<VMFunction> CodeGeneration(IEnumerable<IAstNode> ast)
+        private IEnumerable<VMFunction> CodeGeneration(IAstNode ast)
         {
-            var evalVisitor = new CodeGenVisitor();
-            foreach (var astNode in ast)
-            {
-                astNode.Accept(evalVisitor);
-            }
-
+            var modifiedAst = this.env.Eval(ast);
+            var evalVisitor = new CodeGenVisitor(this.env.Copy());
+            modifiedAst.Accept(evalVisitor);
             return evalVisitor.Functions;
-
         }
 
         public void Dispose()

@@ -9,16 +9,19 @@ namespace Soltys.VirtualMachine.Test
         public static IEnumerable<object[]> AstObjectsSource =>
             new List<object[]>
             {
-               new object []{new SubtractionInstruction(), nameof(IRuntimeVisitor.VisitSubtraction)},
-               new object []{new AddInstruction(), nameof(IRuntimeVisitor.VisitAdd)},
-               new object []{new MultiplicationInstruction(), nameof(IRuntimeVisitor.VisitMultiplication)},
-               new object []{new DivisionInstruction(), nameof(IRuntimeVisitor.VisitDivision)},
+               new object [] {new SubtractionInstruction(), nameof(IRuntimeVisitor.VisitSubtraction)},
+               new object [] {new AddInstruction(), nameof(IRuntimeVisitor.VisitAdd)},
+               new object [] {new MultiplicationInstruction(), nameof(IRuntimeVisitor.VisitMultiplication)},
+               new object [] {new DivisionInstruction(), nameof(IRuntimeVisitor.VisitDivision)},
 
-               new object []{new LoadLibraryInstruction("MyLib"), nameof(IRuntimeVisitor.VisitLoadLibrary)},
+               new object [] {new LoadLibraryInstruction("MyLib"), nameof(IRuntimeVisitor.VisitLoadLibrary)},
 
-               new object[]{new BranchInstruction(BranchKind.Jump, 42), nameof(IRuntimeVisitor.VisitBranch) },
-               new object[]{new BranchInstruction(BranchKind.IfTrue, 42), nameof(IRuntimeVisitor.VisitBranch) },
-               new object[]{new BranchInstruction(BranchKind.IfFalse, 42), nameof(IRuntimeVisitor.VisitBranch) },
+               new object[] {new BranchInstruction(BranchKind.Jump, 42), nameof(IRuntimeVisitor.VisitBranch) },
+               new object[] {new BranchInstruction(BranchKind.IfTrue, 42), nameof(IRuntimeVisitor.VisitBranch) },
+               new object[] {new BranchInstruction(BranchKind.IfFalse, 42), nameof(IRuntimeVisitor.VisitBranch) },
+
+               new object[] {new ListNewInstruction(), nameof(IRuntimeVisitor.VisitList)},
+               new object[] {new ListAddInstruction(), nameof(IRuntimeVisitor.VisitList)}
             };
 
         [Theory]

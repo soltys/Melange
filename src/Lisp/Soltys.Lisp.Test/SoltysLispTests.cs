@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Xunit;
 
 namespace Soltys.Lisp.Test
@@ -14,7 +15,6 @@ namespace Soltys.Lisp.Test
             var newResult = lisp.Do(@"()");
             Assert.Equal("nil", (string)newResult);
         }
-        
 
         [Fact]
         public void Do_Println_ResultIsNil()
@@ -25,6 +25,22 @@ namespace Soltys.Lisp.Test
             var result = lisp.Do(@"(println ""Hello, World!"")");
 
             Assert.Equal("nil", result);
+        }
+
+        [Theory]
+        [InlineData("'(1 2 3)")]
+        [InlineData("(quote (1 2 3))")]
+        public void Do_QuoteFunction_ResultIsListItself(string input)
+        {
+            using var lisp = new SoltysLisp();
+            lisp.Initialize();
+
+            var result = lisp.Do(input);
+
+            Assert.IsType<List<object>>(result);
+            var theList = (List<object>)result;
+            Assert.Equal(3, theList.Count);
+            Assert.Equal(new object[] { 1, 2, 3 }, theList);
         }
     }
 }

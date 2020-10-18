@@ -1,21 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Soltys.Lisp.Compiler;
 using Soltys.VirtualMachine;
 
-namespace Soltys.Lisp
+namespace Soltys.Lisp.Compiler
 {
     internal class CodeGenVisitor : IAstVisitor
     {
         private readonly List<IInstruction> instructions;
         private readonly Dictionary<string, VMFunction> userDefinedFunctions = new Dictionary<string, VMFunction>();
+        private IReadOnlyEnvData readOnlyEnvData;
+
         public IEnumerable<VMFunction> Functions => this.userDefinedFunctions.Values.Concat(new[] {
             new VMFunction("Main", this.instructions)
         });
-        public CodeGenVisitor()
+        public CodeGenVisitor(IReadOnlyEnvData readOnlyEnvData)
         {
             this.instructions = new List<IInstruction>();
+            this.readOnlyEnvData = readOnlyEnvData ?? throw new ArgumentNullException(nameof(readOnlyEnvData));
         }
 
         private void Visit(IAstNode node) => node.Accept(this);
@@ -55,10 +57,40 @@ namespace Soltys.Lisp
                     VisitRestOfList(ast);
                     AddInstr(new DivisionInstruction());
                     break;
+                case "quote":
+                    GenerateQuote(ast);
+                    break;
                 default:
                     VisitRestOfList(ast);
                     AddInstr(new CallInstruction(first.Name));
                     break;
+            }
+        }
+
+        private void GenerateQuote(AstList ast)
+        {
+            AddInstr(new ListNewInstruction());
+
+            if (ast.Length != 2)
+            {
+                throw new InvalidOperationException("Unexpected length for quote function");
+            }
+
+            var datum = ast[1];
+
+            switch (datum)
+            {
+                case AstList list:
+                    for (var i = 0; i < list.Length; i++)
+                    {
+                        Visit(list[i]);
+                        AddInstr(new ListAddInstruction());
+                    }
+                    break;
+                default:
+                    Visit(datum);
+                    break;
+
             }
         }
 
@@ -108,9 +140,9 @@ namespace Soltys.Lisp
         void IAstVisitor.VisitString(AstString ast) =>
             AddInstr(new LoadStringInstruction(ast.Value));
 
-        private static IEnumerable<IInstruction> Eval(IAstNode node, IInstruction atTheEnd)
+        private IEnumerable<IInstruction> Eval(IAstNode node, IInstruction atTheEnd)
         {
-            var evalVisitor = new CodeGenVisitor();
+            var evalVisitor = new CodeGenVisitor(this.readOnlyEnvData);
             node.Accept(evalVisitor);
             evalVisitor.instructions.Add(atTheEnd);
             return evalVisitor.instructions;

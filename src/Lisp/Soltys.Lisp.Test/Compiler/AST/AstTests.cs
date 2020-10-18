@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Reflection.Metadata;
+using System.Threading.Tasks.Sources;
 using Soltys.Lisp.Compiler;
 using Xunit;
 
@@ -27,6 +29,17 @@ namespace Soltys.Lisp.Test.Compiler
         }
 
         [Fact]
+        internal void AstSymbol_Clone_ClonesTheObject()
+        {
+            var ast = new AstSymbol("foobar");
+            var cloned = ast.Clone();
+
+            Assert.NotSame(ast, cloned);
+            Assert.Equal(ast, cloned);
+            Assert.Equal(ast.Name, ((AstSymbol)cloned).Name);
+        }
+
+        [Fact]
         internal void ToString_AstString_EqualToExpected() =>
             Assert.Equal("\"foobar\"", new AstString("foobar").ToString());
 
@@ -44,7 +57,7 @@ namespace Soltys.Lisp.Test.Compiler
 
         [Fact]
         internal void ToString_AstList_EqualToExpected() =>
-            Assert.Equal("(add 1 \"foobar\")", new AstList(new IAstNode[] { new AstSymbol("add"), new AstIntNumber(1), new AstString("foobar") }).ToString());
+            Assert.Equal("(add 1 \"foobar\")", new AstList(new AstSymbol("add"), new AstIntNumber(1), new AstString("foobar")).ToString());
 
         [Fact]
         internal void ToString_EmptyAstList_EqualToExpected() =>

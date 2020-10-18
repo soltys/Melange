@@ -52,6 +52,7 @@ namespace Soltys.VirtualMachine
                 //Memory management
                 Opcode.Store => StoreInstruction.Create(span),
                 Opcode.Load => LoadInstruction.Create(span),
+                Opcode.List => ListInstruction.Create(span),
 
                 //Math operation
                 Opcode.Add => AddInstruction.Create(span),

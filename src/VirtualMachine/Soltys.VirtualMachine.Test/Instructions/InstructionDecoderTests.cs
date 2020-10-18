@@ -161,10 +161,18 @@ namespace Soltys.VirtualMachine.Test
         public void Decode_ReturnInstruction_FromByteArray() =>
             AssertCreatedInstruction<ReturnInstruction>(Opcode.Return);
 
-        private static void AssertCreatedInstruction<TInstruction>(Opcode opcode) where TInstruction : IInstruction
+        [Fact]
+        public void Decode_ListNewInstruction_FromByteArray() =>
+            AssertCreatedInstruction<ListNewInstruction>(Opcode.List, ListOperationKind.New);
+
+        [Fact]
+        public void Decode_ListAddInstruction_FromByteArray() =>
+            AssertCreatedInstruction<ListAddInstruction>(Opcode.List, ListOperationKind.Add);
+
+        private static void AssertCreatedInstruction<TInstruction>(Opcode opcode, params object[] args) where TInstruction : IInstruction
         {
             var bytes = InstructionByteBuilder.Create()
-                .Opcode(opcode)
+                .Opcode(opcode, args)
                 .ToArray();
             AssertBytesDecodedAs<TInstruction>(bytes);
         }

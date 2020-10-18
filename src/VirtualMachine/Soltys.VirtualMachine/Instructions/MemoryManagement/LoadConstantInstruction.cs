@@ -27,7 +27,8 @@ namespace Soltys.VirtualMachine
         public override string ToString() => $"ldc.{ToConstantLetter(LoadKind)} {ToString(Value)}";
 
         private string ToString(object o) =>
-            o switch {
+            o switch 
+            {
                 double d => d.ToString(CultureInfo.InvariantCulture),
                 int i => i.ToString(CultureInfo.InvariantCulture),
                 _ => o.ToString()

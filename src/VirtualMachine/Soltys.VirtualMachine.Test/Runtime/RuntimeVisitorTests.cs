@@ -52,6 +52,41 @@ namespace Soltys.VirtualMachine.Test.Runtime
             Assert.Equal(-3, testVmContext.ValueStack.Peek());
         }
 
+        [Fact]
+        public void VisitListNewInstruction_CreatesNewListOnTopOfValueStack()
+        {
+            var testVmContext = new TestVmContext();
+            var sut = new RuntimeVisitor(testVmContext);
+
+            sut.VisitList(new ListNewInstruction());
+
+            Assert.Single(testVmContext.ValueStack);
+            var topValue = testVmContext.ValueStack.Pop();
+
+            Assert.IsType<List<object>>(topValue);
+            var theList = (List<object>)topValue;
+            Assert.Empty(theList);
+        }
+
+        [Fact]
+        public void VisitListAddInstruction_AddsObjectToListInValueStack()
+        {
+            var testVmContext = new TestVmContext();
+            testVmContext.ValueStack.Push(new List<object>());
+            testVmContext.ValueStack.Push(42);
+            var sut = new RuntimeVisitor(testVmContext);
+
+            sut.VisitList(new ListAddInstruction());
+
+            Assert.Single(testVmContext.ValueStack);
+            var topValue = testVmContext.ValueStack.Pop();
+
+            Assert.IsType<List<object>>(topValue);
+            var theList = (List<object>)topValue;
+            Assert.Single(theList);
+            Assert.Equal(42, theList[0]);
+        }
+
         public class TestVmContext : IVMContext
         {
             public Stack<object> ValueStack

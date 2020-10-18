@@ -7,6 +7,7 @@ namespace Soltys.Lisp.Compiler
 {
     internal class LispParser : ParserBase<LispToken, LispTokenKind>
     {
+
         public LispParser(ITokenSource<LispToken, LispTokenKind> ts) : base(ts)
         {
         }
@@ -15,18 +16,37 @@ namespace Soltys.Lisp.Compiler
 
         private IEnumerable<IAstNode> ParseExpressionList()
         {
-            var expressionList = new List<IAstNode>();
             IAstNode? expr;
             while ((expr = ParseList()) != null)
             {
-                expressionList.Add(expr);
+                yield return expr;
             }
 
-            return expressionList;
         }
 
         private IAstNode? ParseList()
         {
+            if (IsToken(LispTokenKind.Quote))
+            {
+                AdvanceToken(LispTokenKind.Quote);
+                var quotedNode = ParseList();
+                if (quotedNode is AstList quotedList)
+                {
+                    var resultList = new AstList();
+                    resultList.Add(new AstSymbol("quote"));
+                    resultList.Add(quotedList);
+                    // for (int i = 0; i < quotedList.Length; i++)
+                    // {
+                    //     resultList.Add(quotedList[i]);
+                    // }
+                    return resultList;
+                }
+                else
+                {
+                    throw new NotImplementedException("After quotation expected to have a list");
+                }
+            }
+
             if (!IsToken(LispTokenKind.LParen))
             {
                 return null;
@@ -86,3 +106,4 @@ namespace Soltys.Lisp.Compiler
         }
     }
 }
+

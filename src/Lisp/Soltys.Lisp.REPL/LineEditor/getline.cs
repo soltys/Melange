@@ -41,13 +41,13 @@
 // 
 //
 using System;
-using System.Text;
 using System.IO;
-using System.Threading;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading;
 
-namespace Mono.Terminal
+namespace Soltys.Lisp
 {
 
     /// <summary>
@@ -261,14 +261,14 @@ namespace Mono.Terminal
             public string Prefix;
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="T:Mono.Terminal.LineEditor.Completion"/> class.
+            /// Initializes a new instance of the <see cref="T:Soltys.Lisp.LineEditor.Completion"/> class.
             /// </summary>
             /// <param name="prefix">Common prefix for all results, an be null.</param>
             /// <param name="result">Array of possible completions.</param>
             public Completion(string prefix, string[] result)
             {
-                Prefix = prefix;
-                Result = result;
+                this.Prefix = prefix;
+                this.Result = result;
             }
         }
 
@@ -367,24 +367,24 @@ namespace Mono.Terminal
 
             public Handler(ConsoleKey key, KeyHandler h, bool resetCompletion = true)
             {
-                CKI = new ConsoleKeyInfo((char)0, key, false, false, false);
-                KeyHandler = h;
-                ResetCompletion = resetCompletion;
+                this.CKI = new ConsoleKeyInfo((char)0, key, false, false, false);
+                this.KeyHandler = h;
+                this.ResetCompletion = resetCompletion;
             }
 
             public Handler(char c, KeyHandler h, bool resetCompletion = true)
             {
-                KeyHandler = h;
+                this.KeyHandler = h;
                 // Use the "Zoom" as a flag that we only have a character.
-                CKI = new ConsoleKeyInfo(c, ConsoleKey.Zoom, false, false, false);
-                ResetCompletion = resetCompletion;
+                this.CKI = new ConsoleKeyInfo(c, ConsoleKey.Zoom, false, false, false);
+                this.ResetCompletion = resetCompletion;
             }
 
             public Handler(ConsoleKeyInfo cki, KeyHandler h, bool resetCompletion = true)
             {
-                CKI = cki;
-                KeyHandler = h;
-                ResetCompletion = resetCompletion;
+                this.CKI = cki;
+                this.KeyHandler = h;
+                this.ResetCompletion = resetCompletion;
             }
 
             public static Handler Control(char c, KeyHandler h, bool resetCompletion = true)
@@ -432,7 +432,7 @@ namespace Mono.Terminal
         /// <param name="histsize">Number of entries to store in the history file.</param>
         public LineEditor(string name, int histsize)
         {
-            handlers = new Handler[] {
+            LineEditor.handlers = new Handler[] {
                 new Handler (ConsoleKey.Home,       CmdHome),
                 new Handler (ConsoleKey.End,        CmdEnd),
                 new Handler (ConsoleKey.LeftArrow,  CmdLeft),
@@ -470,12 +470,12 @@ namespace Mono.Terminal
 				Handler.Control ('Q', delegate { HandleChar (Console.ReadKey (true).KeyChar); })
             };
 
-            rendered_text = new StringBuilder();
-            text = new StringBuilder();
+            this.rendered_text = new StringBuilder();
+            this.text = new StringBuilder();
 
-            history = new History(name, histsize);
+            this.history = new History(name, histsize);
 
-            isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+            this.isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
             GetUnixConsoleReset();
             //if (File.Exists ("log"))File.Delete ("log");
             //log = File.CreateText ("log"); 
@@ -491,7 +491,7 @@ namespace Mono.Terminal
             //
             // On Unix, we want to be able to reset the color for the pop-up completion
             //
-            if (isWindows)
+            if (this.isWindows)
                 return;
 
             // Sole purpose of this call is to initialize the Terminfo driver
@@ -506,8 +506,8 @@ namespace Mono.Terminal
                 var unix_reset_colors_str = (terminfo_driver?.GetType()?.GetField("origPair", BindingFlags.Instance | BindingFlags.NonPublic))?.GetValue(terminfo_driver) as string;
 
                 if (unix_reset_colors_str != null)
-                    unix_reset_colors = Encoding.UTF8.GetBytes((string)unix_reset_colors_str);
-                unix_raw_output = Console.OpenStandardOutput();
+                    LineEditor.unix_reset_colors = Encoding.UTF8.GetBytes((string)unix_reset_colors_str);
+                LineEditor.unix_raw_output = Console.OpenStandardOutput();
             }
             catch (Exception e)
             {
@@ -518,21 +518,21 @@ namespace Mono.Terminal
 
         void CmdDebug()
         {
-            history.Dump();
+            this.history.Dump();
             Console.WriteLine();
             Render();
         }
 
         void Render()
         {
-            Console.Write(shown_prompt);
-            Console.Write(rendered_text);
+            Console.Write(this.shown_prompt);
+            Console.Write(this.rendered_text);
 
-            int max = System.Math.Max(rendered_text.Length + shown_prompt.Length, max_rendered);
+            int max = System.Math.Max(this.rendered_text.Length + this.shown_prompt.Length, this.max_rendered);
 
-            for (int i = rendered_text.Length + shown_prompt.Length; i < max_rendered; i++)
+            for (int i = this.rendered_text.Length + this.shown_prompt.Length; i < this.max_rendered; i++)
                 Console.Write(' ');
-            max_rendered = shown_prompt.Length + rendered_text.Length;
+            this.max_rendered = this.shown_prompt.Length + this.rendered_text.Length;
 
             // Write one more to ensure that we always wrap around properly if we are at the
             // end of a line.
@@ -545,9 +545,9 @@ namespace Mono.Terminal
         {
             int lines = 1 + (screenpos / Console.WindowWidth);
 
-            home_row = Console.CursorTop - (lines - 1);
-            if (home_row < 0)
-                home_row = 0;
+            this.home_row = Console.CursorTop - (lines - 1);
+            if (this.home_row < 0)
+                this.home_row = 0;
         }
 
 
@@ -556,14 +556,14 @@ namespace Mono.Terminal
             int rpos = TextToRenderPos(pos);
             int i;
 
-            for (i = rpos; i < rendered_text.Length; i++)
-                Console.Write(rendered_text[i]);
+            for (i = rpos; i < this.rendered_text.Length; i++)
+                Console.Write(this.rendered_text[i]);
 
-            if ((shown_prompt.Length + rendered_text.Length) > max_rendered)
-                max_rendered = shown_prompt.Length + rendered_text.Length;
+            if ((this.shown_prompt.Length + this.rendered_text.Length) > this.max_rendered)
+                this.max_rendered = this.shown_prompt.Length + this.rendered_text.Length;
             else
             {
-                int max_extra = max_rendered - shown_prompt.Length;
+                int max_extra = this.max_rendered - this.shown_prompt.Length;
                 for (; i < max_extra; i++)
                     Console.Write(' ');
             }
@@ -571,23 +571,23 @@ namespace Mono.Terminal
 
         void ComputeRendered()
         {
-            rendered_text.Length = 0;
+            this.rendered_text.Length = 0;
 
-            for (int i = 0; i < text.Length; i++)
+            for (int i = 0; i < this.text.Length; i++)
             {
-                int c = (int)text[i];
+                int c = (int)this.text[i];
                 if (c < 26)
                 {
                     if (c == '\t')
-                        rendered_text.Append("    ");
+                        this.rendered_text.Append("    ");
                     else
                     {
-                        rendered_text.Append('^');
-                        rendered_text.Append((char)(c + (int)'A' - 1));
+                        this.rendered_text.Append('^');
+                        this.rendered_text.Append((char)(c + (int)'A' - 1));
                     }
                 }
                 else
-                    rendered_text.Append((char)c);
+                    this.rendered_text.Append((char)c);
             }
         }
 
@@ -599,7 +599,7 @@ namespace Mono.Terminal
             {
                 int c;
 
-                c = (int)text[i];
+                c = (int)this.text[i];
 
                 if (c < 26)
                 {
@@ -617,32 +617,32 @@ namespace Mono.Terminal
 
         int TextToScreenPos(int pos)
         {
-            return shown_prompt.Length + TextToRenderPos(pos);
+            return this.shown_prompt.Length + TextToRenderPos(pos);
         }
 
         string Prompt
         {
             get {
-                return prompt;
+                return this.prompt;
             }
             set {
-                prompt = value;
+                this.prompt = value;
             }
         }
 
         int LineCount
         {
             get {
-                return (shown_prompt.Length + rendered_text.Length) / Console.WindowWidth;
+                return (this.shown_prompt.Length + this.rendered_text.Length) / Console.WindowWidth;
             }
         }
 
         void ForceCursor(int newpos)
         {
-            cursor = newpos;
+            this.cursor = newpos;
 
-            int actual_pos = shown_prompt.Length + TextToRenderPos(cursor);
-            int row = home_row + (actual_pos / Console.WindowWidth);
+            int actual_pos = this.shown_prompt.Length + TextToRenderPos(this.cursor);
+            int row = this.home_row + (actual_pos / Console.WindowWidth);
             int col = actual_pos % Console.WindowWidth;
 
             if (row >= Console.BufferHeight)
@@ -655,7 +655,7 @@ namespace Mono.Terminal
 
         void UpdateCursor(int newpos)
         {
-            if (cursor == newpos)
+            if (this.cursor == newpos)
                 return;
 
             ForceCursor(newpos);
@@ -664,20 +664,20 @@ namespace Mono.Terminal
         void InsertChar(char c)
         {
             int prev_lines = LineCount;
-            text = text.Insert(cursor, c);
+            this.text = this.text.Insert(this.cursor, c);
             ComputeRendered();
             if (prev_lines != LineCount)
             {
 
-                Console.SetCursorPosition(0, home_row);
+                Console.SetCursorPosition(0, this.home_row);
                 Render();
-                ForceCursor(++cursor);
+                ForceCursor(++this.cursor);
             }
             else
             {
-                RenderFrom(cursor);
-                ForceCursor(++cursor);
-                UpdateHomeRow(TextToScreenPos(cursor));
+                RenderFrom(this.cursor);
+                ForceCursor(++this.cursor);
+                UpdateHomeRow(TextToScreenPos(this.cursor));
             }
         }
 
@@ -692,9 +692,9 @@ namespace Mono.Terminal
 
             Console.CursorLeft = saved_col;
             Console.CursorTop = saved_row;
-            if (unix_reset_colors != null)
+            if (LineEditor.unix_reset_colors != null)
             {
-                unix_raw_output.Write(unix_reset_colors, 0, unix_reset_colors.Length);
+                LineEditor.unix_raw_output.Write(LineEditor.unix_reset_colors, 0, LineEditor.unix_reset_colors.Length);
             }
             else
             {
@@ -712,40 +712,40 @@ namespace Mono.Terminal
 
             public CompletionState(int col, int row, int width, int height)
             {
-                Col = col;
-                Row = row;
-                Width = width;
-                Height = height;
+                this.Col = col;
+                this.Row = row;
+                this.Width = width;
+                this.Height = height;
 
-                if (Col < 0)
-                    throw new ArgumentException("Cannot be less than zero" + Col, "Col");
-                if (Row < 0)
+                if (this.Col < 0)
+                    throw new ArgumentException("Cannot be less than zero" + this.Col, "Col");
+                if (this.Row < 0)
                     throw new ArgumentException("Cannot be less than zero", "Row");
-                if (Width < 1)
+                if (this.Width < 1)
                     throw new ArgumentException("Cannot be less than one", "Width");
-                if (Height < 1)
+                if (this.Height < 1)
                     throw new ArgumentException("Cannot be less than one", "Height");
 
             }
 
             void DrawSelection()
             {
-                for (int r = 0; r < Height; r++)
+                for (int r = 0; r < this.Height; r++)
                 {
-                    int item_idx = top_item + r;
-                    bool selected = (item_idx == selected_item);
+                    int item_idx = this.top_item + r;
+                    bool selected = (item_idx == this.selected_item);
 
                     Console.ForegroundColor = selected ? ConsoleColor.Black : ConsoleColor.Gray;
                     Console.BackgroundColor = selected ? ConsoleColor.Cyan : ConsoleColor.Blue;
 
-                    var item = Prefix + Completions[item_idx];
-                    if (item.Length > Width)
-                        item = item.Substring(0, Width);
+                    var item = this.Prefix + this.Completions[item_idx];
+                    if (item.Length > this.Width)
+                        item = item.Substring(0, this.Width);
 
-                    Console.CursorLeft = Col;
-                    Console.CursorTop = Row + r;
+                    Console.CursorLeft = this.Col;
+                    Console.CursorTop = this.Row + r;
                     Console.Write(item);
-                    for (int space = item.Length; space <= Width; space++)
+                    for (int space = item.Length; space <= this.Width; space++)
                         Console.Write(" ");
                 }
             }
@@ -753,7 +753,7 @@ namespace Mono.Terminal
             public string Current
             {
                 get {
-                    return Completions[selected_item];
+                    return this.Completions[this.selected_item];
                 }
             }
 
@@ -764,33 +764,33 @@ namespace Mono.Terminal
 
             public void SelectNext()
             {
-                if (selected_item + 1 < Completions.Length)
+                if (this.selected_item + 1 < this.Completions.Length)
                 {
-                    selected_item++;
-                    if (selected_item - top_item >= Height)
-                        top_item++;
+                    this.selected_item++;
+                    if (this.selected_item - this.top_item >= this.Height)
+                        this.top_item++;
                     SaveExcursion(DrawSelection);
                 }
             }
 
             public void SelectPrevious()
             {
-                if (selected_item > 0)
+                if (this.selected_item > 0)
                 {
-                    selected_item--;
-                    if (selected_item < top_item)
-                        top_item = selected_item;
+                    this.selected_item--;
+                    if (this.selected_item < this.top_item)
+                        this.top_item = this.selected_item;
                     SaveExcursion(DrawSelection);
                 }
             }
 
             void Clear()
             {
-                for (int r = 0; r < Height; r++)
+                for (int r = 0; r < this.Height; r++)
                 {
-                    Console.CursorLeft = Col;
-                    Console.CursorTop = Row + r;
-                    for (int space = 0; space <= Width; space++)
+                    Console.CursorLeft = this.Col;
+                    Console.CursorTop = this.Row + r;
+                    for (int space = 0; space <= this.Width; space++)
                         Console.Write(" ");
                 }
             }
@@ -806,7 +806,7 @@ namespace Mono.Terminal
             // Ensure we have space, determine window size
             int window_height = System.Math.Min(completions.Length, Console.WindowHeight / 5);
             int target_line = Console.WindowHeight - window_height - 1;
-            if (!isWindows && Console.CursorTop > target_line)
+            if (!this.isWindows && Console.CursorTop > target_line)
             {
                 var delta = Console.CursorTop - target_line;
                 Console.CursorLeft = 0;
@@ -828,14 +828,14 @@ namespace Mono.Terminal
                 window_width = System.Math.Max(plen + s.Length, window_width);
             window_width = System.Math.Min(window_width, MaxWidth);
 
-            if (current_completion == null)
+            if (this.current_completion == null)
             {
                 int left = Console.CursorLeft - prefix.Length;
 
                 if (left + window_width + 1 >= Console.WindowWidth)
                     left = Console.WindowWidth - window_width - 1;
 
-                current_completion = new CompletionState(left, Console.CursorTop + 1, window_width, window_height)
+                this.current_completion = new CompletionState(left, Console.CursorTop + 1, window_width, window_height)
                 {
                     Prefix = prefix,
                     Completions = completions,
@@ -843,19 +843,19 @@ namespace Mono.Terminal
             }
             else
             {
-                current_completion.Prefix = prefix;
-                current_completion.Completions = completions;
+                this.current_completion.Prefix = prefix;
+                this.current_completion.Completions = completions;
             }
-            current_completion.Show();
+            this.current_completion.Show();
             Console.CursorLeft = 0;
         }
 
         void HideCompletions()
         {
-            if (current_completion == null)
+            if (this.current_completion == null)
                 return;
-            current_completion.Remove();
-            current_completion = null;
+            this.current_completion.Remove();
+            this.current_completion = null;
         }
 
         //
@@ -865,7 +865,7 @@ namespace Mono.Terminal
         //
         void Complete()
         {
-            Completion completion = AutoCompleteEvent(text.ToString(), cursor);
+            Completion completion = this.AutoCompleteEvent(this.text.ToString(), this.cursor);
             string[] completions = completion.Result;
             if (completions == null)
             {
@@ -919,7 +919,7 @@ namespace Mono.Terminal
                 }
                 ShowCompletions(prefix, completions);
                 Render();
-                ForceCursor(cursor);
+                ForceCursor(this.cursor);
             }
         }
 
@@ -930,10 +930,10 @@ namespace Mono.Terminal
         // 
         void UpdateCompletionWindow()
         {
-            if (current_completion != null)
+            if (this.current_completion != null)
                 throw new Exception("This method should only be called if the window has been hidden");
 
-            Completion completion = AutoCompleteEvent(text.ToString(), cursor);
+            Completion completion = this.AutoCompleteEvent(this.text.ToString(), this.cursor);
             string[] completions = completion.Result;
             if (completions == null)
                 return;
@@ -944,7 +944,7 @@ namespace Mono.Terminal
 
             ShowCompletions(completion.Prefix, completion.Result);
             Render();
-            ForceCursor(cursor);
+            ForceCursor(this.cursor);
         }
 
 
@@ -953,28 +953,28 @@ namespace Mono.Terminal
         //
         void CmdDone()
         {
-            if (current_completion != null)
+            if (this.current_completion != null)
             {
-                InsertTextAtCursor(current_completion.Current);
+                InsertTextAtCursor(this.current_completion.Current);
                 HideCompletions();
                 return;
             }
-            done = true;
+            this.done = true;
         }
 
         void CmdTabOrComplete()
         {
             bool complete = false;
 
-            if (AutoCompleteEvent != null)
+            if (this.AutoCompleteEvent != null)
             {
                 if (TabAtStartCompletes)
                     complete = true;
                 else
                 {
-                    for (int i = 0; i < cursor; i++)
+                    for (int i = 0; i < this.cursor; i++)
                     {
-                        if (!Char.IsWhiteSpace(text[i]))
+                        if (!Char.IsWhiteSpace(this.text[i]))
                         {
                             complete = true;
                             break;
@@ -998,20 +998,20 @@ namespace Mono.Terminal
 
         void CmdEnd()
         {
-            UpdateCursor(text.Length);
+            UpdateCursor(this.text.Length);
         }
 
         void CmdLeft()
         {
-            if (cursor == 0)
+            if (this.cursor == 0)
                 return;
 
-            UpdateCursor(cursor - 1);
+            UpdateCursor(this.cursor - 1);
         }
 
         void CmdBackwardWord()
         {
-            int p = WordBackward(cursor);
+            int p = WordBackward(this.cursor);
             if (p == -1)
                 return;
             UpdateCursor(p);
@@ -1019,7 +1019,7 @@ namespace Mono.Terminal
 
         void CmdForwardWord()
         {
-            int p = WordForward(cursor);
+            int p = WordForward(this.cursor);
             if (p == -1)
                 return;
             UpdateCursor(p);
@@ -1027,30 +1027,30 @@ namespace Mono.Terminal
 
         void CmdRight()
         {
-            if (cursor == text.Length)
+            if (this.cursor == this.text.Length)
                 return;
 
-            UpdateCursor(cursor + 1);
+            UpdateCursor(this.cursor + 1);
         }
 
         void RenderAfter(int p)
         {
             ForceCursor(p);
             RenderFrom(p);
-            ForceCursor(cursor);
+            ForceCursor(this.cursor);
         }
 
         void CmdBackspace()
         {
-            if (cursor == 0)
+            if (this.cursor == 0)
                 return;
 
-            bool completing = current_completion != null;
+            bool completing = this.current_completion != null;
             HideCompletions();
 
-            text.Remove(--cursor, 1);
+            this.text.Remove(--this.cursor, 1);
             ComputeRendered();
-            RenderAfter(cursor);
+            RenderAfter(this.cursor);
             if (completing)
                 UpdateCompletionWindow();
         }
@@ -1058,45 +1058,45 @@ namespace Mono.Terminal
         void CmdDeleteChar()
         {
             // If there is no input, this behaves like EOF
-            if (text.Length == 0)
+            if (this.text.Length == 0)
             {
-                done = true;
-                text = null;
+                this.done = true;
+                this.text = null;
                 Console.WriteLine();
                 return;
             }
 
-            if (cursor == text.Length)
+            if (this.cursor == this.text.Length)
                 return;
-            text.Remove(cursor, 1);
+            this.text.Remove(this.cursor, 1);
             ComputeRendered();
-            RenderAfter(cursor);
+            RenderAfter(this.cursor);
         }
 
         int WordForward(int p)
         {
-            if (p >= text.Length)
+            if (p >= this.text.Length)
                 return -1;
 
             int i = p;
-            if (Char.IsPunctuation(text[p]) || Char.IsSymbol(text[p]) || Char.IsWhiteSpace(text[p]))
+            if (Char.IsPunctuation(this.text[p]) || Char.IsSymbol(this.text[p]) || Char.IsWhiteSpace(this.text[p]))
             {
-                for (; i < text.Length; i++)
+                for (; i < this.text.Length; i++)
                 {
-                    if (Char.IsLetterOrDigit(text[i]))
+                    if (Char.IsLetterOrDigit(this.text[i]))
                         break;
                 }
-                for (; i < text.Length; i++)
+                for (; i < this.text.Length; i++)
                 {
-                    if (!Char.IsLetterOrDigit(text[i]))
+                    if (!Char.IsLetterOrDigit(this.text[i]))
                         break;
                 }
             }
             else
             {
-                for (; i < text.Length; i++)
+                for (; i < this.text.Length; i++)
                 {
-                    if (!Char.IsLetterOrDigit(text[i]))
+                    if (!Char.IsLetterOrDigit(this.text[i]))
                         break;
                 }
             }
@@ -1114,16 +1114,16 @@ namespace Mono.Terminal
             if (i == 0)
                 return 0;
 
-            if (Char.IsPunctuation(text[i]) || Char.IsSymbol(text[i]) || Char.IsWhiteSpace(text[i]))
+            if (Char.IsPunctuation(this.text[i]) || Char.IsSymbol(this.text[i]) || Char.IsWhiteSpace(this.text[i]))
             {
                 for (; i >= 0; i--)
                 {
-                    if (Char.IsLetterOrDigit(text[i]))
+                    if (Char.IsLetterOrDigit(this.text[i]))
                         break;
                 }
                 for (; i >= 0; i--)
                 {
-                    if (!Char.IsLetterOrDigit(text[i]))
+                    if (!Char.IsLetterOrDigit(this.text[i]))
                         break;
                 }
             }
@@ -1131,7 +1131,7 @@ namespace Mono.Terminal
             {
                 for (; i >= 0; i--)
                 {
-                    if (!Char.IsLetterOrDigit(text[i]))
+                    if (!Char.IsLetterOrDigit(this.text[i]))
                         break;
                 }
             }
@@ -1145,37 +1145,37 @@ namespace Mono.Terminal
 
         void CmdDeleteWord()
         {
-            int pos = WordForward(cursor);
+            int pos = WordForward(this.cursor);
 
             if (pos == -1)
                 return;
 
-            string k = text.ToString(cursor, pos - cursor);
+            string k = this.text.ToString(this.cursor, pos - this.cursor);
 
-            if (last_handler == CmdDeleteWord)
-                kill_buffer = kill_buffer + k;
+            if (this.last_handler == CmdDeleteWord)
+                this.kill_buffer = this.kill_buffer + k;
             else
-                kill_buffer = k;
+                this.kill_buffer = k;
 
-            text.Remove(cursor, pos - cursor);
+            this.text.Remove(this.cursor, pos - this.cursor);
             ComputeRendered();
-            RenderAfter(cursor);
+            RenderAfter(this.cursor);
         }
 
         void CmdDeleteBackword()
         {
-            int pos = WordBackward(cursor);
+            int pos = WordBackward(this.cursor);
             if (pos == -1)
                 return;
 
-            string k = text.ToString(pos, cursor - pos);
+            string k = this.text.ToString(pos, this.cursor - pos);
 
-            if (last_handler == CmdDeleteBackword)
-                kill_buffer = k + kill_buffer;
+            if (this.last_handler == CmdDeleteBackword)
+                this.kill_buffer = k + this.kill_buffer;
             else
-                kill_buffer = k;
+                this.kill_buffer = k;
 
-            text.Remove(pos, cursor - pos);
+            this.text.Remove(pos, this.cursor - pos);
             ComputeRendered();
             RenderAfter(pos);
         }
@@ -1185,76 +1185,76 @@ namespace Mono.Terminal
         //
         void HistoryUpdateLine()
         {
-            history.Update(text.ToString());
+            this.history.Update(this.text.ToString());
         }
 
         void CmdHistoryPrev()
         {
-            if (!history.PreviousAvailable())
+            if (!this.history.PreviousAvailable())
                 return;
 
             HistoryUpdateLine();
 
-            SetText(history.Previous());
+            SetText(this.history.Previous());
         }
 
         void CmdHistoryNext()
         {
-            if (!history.NextAvailable())
+            if (!this.history.NextAvailable())
                 return;
 
-            history.Update(text.ToString());
-            SetText(history.Next());
+            this.history.Update(this.text.ToString());
+            SetText(this.history.Next());
 
         }
 
         void CmdUp()
         {
-            if (current_completion == null)
+            if (this.current_completion == null)
                 CmdHistoryPrev();
             else
-                current_completion.SelectPrevious();
+                this.current_completion.SelectPrevious();
         }
 
         void CmdDown()
         {
-            if (current_completion == null)
+            if (this.current_completion == null)
                 CmdHistoryNext();
             else
-                current_completion.SelectNext();
+                this.current_completion.SelectNext();
         }
 
         void CmdKillToEOF()
         {
-            kill_buffer = text.ToString(cursor, text.Length - cursor);
-            text.Length = cursor;
+            this.kill_buffer = this.text.ToString(this.cursor, this.text.Length - this.cursor);
+            this.text.Length = this.cursor;
             ComputeRendered();
-            RenderAfter(cursor);
+            RenderAfter(this.cursor);
         }
 
         void CmdYank()
         {
-            InsertTextAtCursor(kill_buffer);
+            InsertTextAtCursor(this.kill_buffer);
         }
 
         void InsertTextAtCursor(string str)
         {
             int prev_lines = LineCount;
-            text.Insert(cursor, str);
+            this.text.Insert(this.cursor, str);
             ComputeRendered();
             if (prev_lines != LineCount)
             {
-                Console.SetCursorPosition(0, home_row);
+                Console.SetCursorPosition(0, this.home_row);
                 Render();
-                cursor += str.Length;
-                ForceCursor(cursor);
+                this.cursor += str.Length;
+                ForceCursor(this.cursor);
             }
             else
             {
-                RenderFrom(cursor);
-                cursor += str.Length;
-                ForceCursor(cursor);
-                UpdateHomeRow(TextToScreenPos(cursor));
+                RenderFrom(this.cursor);
+                this.cursor += str.Length;
+                ForceCursor(this.cursor);
+                UpdateHomeRow(TextToScreenPos(this.cursor));
             }
         }
 
@@ -1267,31 +1267,31 @@ namespace Mono.Terminal
         {
             int p;
 
-            if (cursor == text.Length)
+            if (this.cursor == this.text.Length)
             {
                 // The cursor is at the end of the string
 
-                p = text.ToString().LastIndexOf(search);
+                p = this.text.ToString().LastIndexOf(this.search);
                 if (p != -1)
                 {
-                    match_at = p;
-                    cursor = p;
-                    ForceCursor(cursor);
+                    this.match_at = p;
+                    this.cursor = p;
+                    ForceCursor(this.cursor);
                     return;
                 }
             }
             else
             {
                 // The cursor is somewhere in the middle of the string
-                int start = (cursor == match_at) ? cursor - 1 : cursor;
+                int start = (this.cursor == this.match_at) ? this.cursor - 1 : this.cursor;
                 if (start != -1)
                 {
-                    p = text.ToString().LastIndexOf(search, start);
+                    p = this.text.ToString().LastIndexOf(this.search, start);
                     if (p != -1)
                     {
-                        match_at = p;
-                        cursor = p;
-                        ForceCursor(cursor);
+                        this.match_at = p;
+                        this.cursor = p;
+                        ForceCursor(this.cursor);
                         return;
                     }
                 }
@@ -1299,10 +1299,10 @@ namespace Mono.Terminal
 
             // Need to search backwards in history
             HistoryUpdateLine();
-            string s = history.SearchBackward(search);
+            string s = this.history.SearchBackward(this.search);
             if (s != null)
             {
-                match_at = -1;
+                this.match_at = -1;
                 SetText(s);
                 ReverseSearch();
             }
@@ -1310,22 +1310,22 @@ namespace Mono.Terminal
 
         void CmdReverseSearch()
         {
-            if (searching == 0)
+            if (this.searching == 0)
             {
-                match_at = -1;
-                last_search = search;
-                searching = -1;
-                search = "";
+                this.match_at = -1;
+                this.last_search = this.search;
+                this.searching = -1;
+                this.search = "";
                 SetSearchPrompt("");
             }
             else
             {
-                if (search == "")
+                if (this.search == "")
                 {
-                    if (last_search != "" && last_search != null)
+                    if (this.last_search != "" && this.last_search != null)
                     {
-                        search = last_search;
-                        SetSearchPrompt(search);
+                        this.search = this.last_search;
+                        SetSearchPrompt(this.search);
 
                         ReverseSearch();
                     }
@@ -1337,16 +1337,16 @@ namespace Mono.Terminal
 
         void SearchAppend(char c)
         {
-            search = search + c;
-            SetSearchPrompt(search);
+            this.search = this.search + c;
+            SetSearchPrompt(this.search);
 
             //
             // If the new typed data still matches the current text, stay here
             //
-            if (cursor < text.Length)
+            if (this.cursor < this.text.Length)
             {
-                string r = text.ToString(cursor, text.Length - cursor);
-                if (r.StartsWith(search))
+                string r = this.text.ToString(this.cursor, this.text.Length - this.cursor);
+                if (r.StartsWith(this.search))
                     return;
             }
 
@@ -1356,9 +1356,9 @@ namespace Mono.Terminal
         void CmdRefresh()
         {
             Console.Clear();
-            max_rendered = 0;
+            this.max_rendered = 0;
             Render();
-            ForceCursor(cursor);
+            ForceCursor(this.cursor);
         }
 
         void InterruptEdit(object sender, ConsoleCancelEventArgs a)
@@ -1367,7 +1367,7 @@ namespace Mono.Terminal
             a.Cancel = true;
 
             // Interrupt the editor
-            edit_thread.Abort();
+            this.edit_thread.Abort();
         }
 
         //
@@ -1375,7 +1375,7 @@ namespace Mono.Terminal
         //
         bool HeuristicAutoComplete(bool wasCompleting, char insertedChar)
         {
-            if (HeuristicsMode == "csharp")
+            if (this.HeuristicsMode == "csharp")
             {
                 // csharp heuristics
                 if (wasCompleting)
@@ -1390,11 +1390,11 @@ namespace Mono.Terminal
                 if (insertedChar == '.')
                 {
                     // Avoid completing for numbers "1.2" for example
-                    if (cursor > 1 && Char.IsDigit(text[cursor - 2]))
+                    if (this.cursor > 1 && Char.IsDigit(this.text[this.cursor - 2]))
                     {
-                        for (int p = cursor - 3; p >= 0; p--)
+                        for (int p = this.cursor - 3; p >= 0; p--)
                         {
-                            char c = text[p];
+                            char c = this.text[p];
                             if (Char.IsDigit(c))
                                 continue;
                             if (c == '_')
@@ -1412,11 +1412,11 @@ namespace Mono.Terminal
 
         void HandleChar(char c)
         {
-            if (searching != 0)
+            if (this.searching != 0)
                 SearchAppend(c);
             else
             {
-                bool completing = current_completion != null;
+                bool completing = this.current_completion != null;
                 HideCompletions();
 
                 InsertChar(c);
@@ -1429,14 +1429,14 @@ namespace Mono.Terminal
         {
             ConsoleKeyInfo cki;
 
-            while (!done)
+            while (!this.done)
             {
                 ConsoleModifiers mod;
 
                 cki = Console.ReadKey(true);
                 if (cki.Key == ConsoleKey.Escape)
                 {
-                    if (current_completion != null)
+                    if (this.current_completion != null)
                     {
                         HideCompletions();
                         continue;
@@ -1453,7 +1453,7 @@ namespace Mono.Terminal
 
                 bool handled = false;
 
-                foreach (Handler handler in handlers)
+                foreach (Handler handler in LineEditor.handlers)
                 {
                     ConsoleKeyInfo t = handler.CKI;
 
@@ -1463,7 +1463,7 @@ namespace Mono.Terminal
                         if (handler.ResetCompletion)
                             HideCompletions();
                         handler.KeyHandler();
-                        last_handler = handler.KeyHandler;
+                        this.last_handler = handler.KeyHandler;
                         break;
                     }
                     else if (t.KeyChar == cki.KeyChar && t.Key == ConsoleKey.Zoom)
@@ -1473,18 +1473,18 @@ namespace Mono.Terminal
                             HideCompletions();
 
                         handler.KeyHandler();
-                        last_handler = handler.KeyHandler;
+                        this.last_handler = handler.KeyHandler;
                         break;
                     }
                 }
                 if (handled)
                 {
-                    if (searching != 0)
+                    if (this.searching != 0)
                     {
-                        if (last_handler != CmdReverseSearch)
+                        if (this.last_handler != CmdReverseSearch)
                         {
-                            searching = 0;
-                            SetPrompt(prompt);
+                            this.searching = 0;
+                            SetPrompt(this.prompt);
                         }
                     }
                     continue;
@@ -1499,25 +1499,25 @@ namespace Mono.Terminal
 
         void InitText(string initial)
         {
-            text = new StringBuilder(initial);
+            this.text = new StringBuilder(initial);
             ComputeRendered();
-            cursor = text.Length;
+            this.cursor = this.text.Length;
             Render();
-            ForceCursor(cursor);
+            ForceCursor(this.cursor);
         }
 
         void SetText(string newtext)
         {
-            Console.SetCursorPosition(0, home_row);
+            Console.SetCursorPosition(0, this.home_row);
             InitText(newtext);
         }
 
         void SetPrompt(string newprompt)
         {
-            shown_prompt = newprompt;
-            Console.SetCursorPosition(0, home_row);
+            this.shown_prompt = newprompt;
+            Console.SetCursorPosition(0, this.home_row);
             Render();
-            ForceCursor(cursor);
+            ForceCursor(this.cursor);
         }
 
         /// <summary>
@@ -1528,18 +1528,18 @@ namespace Mono.Terminal
         /// <param name="initial">Initial contents, can be null.</param>
         public string Edit(string prompt, string initial)
         {
-            edit_thread = Thread.CurrentThread;
-            searching = 0;
+            this.edit_thread = Thread.CurrentThread;
+            this.searching = 0;
             Console.CancelKeyPress += InterruptEdit;
 
-            done = false;
-            history.CursorToEnd();
-            max_rendered = 0;
+            this.done = false;
+            this.history.CursorToEnd();
+            this.max_rendered = 0;
 
             Prompt = prompt;
-            shown_prompt = prompt;
+            this.shown_prompt = prompt;
             InitText(initial);
-            history.Append(initial);
+            this.history.Append(initial);
 
             do
             {
@@ -1549,28 +1549,28 @@ namespace Mono.Terminal
                 }
                 catch (ThreadAbortException)
                 {
-                    searching = 0;
+                    this.searching = 0;
                     Thread.ResetAbort();
                     Console.WriteLine();
                     SetPrompt(prompt);
                     SetText("");
                 }
-            } while (!done);
+            } while (!this.done);
             Console.WriteLine();
 
             Console.CancelKeyPress -= InterruptEdit;
 
-            if (text == null)
+            if (this.text == null)
             {
-                history.Close();
+                this.history.Close();
                 return null;
             }
 
-            string result = text.ToString();
+            string result = this.text.ToString();
             if (result != "")
-                history.Accept(result);
+                this.history.Accept(result);
             else
-                history.RemoveLast();
+                this.history.RemoveLast();
 
             return result;
         }
@@ -1580,9 +1580,9 @@ namespace Mono.Terminal
         /// </summary>
         public void SaveHistory()
         {
-            if (history != null)
+            if (this.history != null)
             {
-                history.Close();
+                this.history.Close();
             }
         }
 
@@ -1627,15 +1627,15 @@ namespace Mono.Terminal
                         }
                     }
                     if (app != null)
-                        histfile = Path.Combine(dir, app) + ".history";
+                        this.histfile = Path.Combine(dir, app) + ".history";
                 }
 
-                history = new string[size];
-                head = tail = cursor = 0;
+                this.history = new string[size];
+                this.head = this.tail = this.cursor = 0;
 
-                if (File.Exists(histfile))
+                if (File.Exists(this.histfile))
                 {
-                    using (StreamReader sr = File.OpenText(histfile))
+                    using (StreamReader sr = File.OpenText(this.histfile))
                     {
                         string line;
 
@@ -1650,18 +1650,18 @@ namespace Mono.Terminal
 
             public void Close()
             {
-                if (histfile == null)
+                if (this.histfile == null)
                     return;
 
                 try
                 {
-                    using (StreamWriter sw = File.CreateText(histfile))
+                    using (StreamWriter sw = File.CreateText(this.histfile))
                     {
-                        int start = (count == history.Length) ? head : tail;
-                        for (int i = start; i < start + count; i++)
+                        int start = (this.count == this.history.Length) ? this.head : this.tail;
+                        for (int i = start; i < start + this.count; i++)
                         {
-                            int p = i % history.Length;
-                            sw.WriteLine(history[p]);
+                            int p = i % this.history.Length;
+                            sw.WriteLine(this.history[p]);
                         }
                     }
                 }
@@ -1677,12 +1677,12 @@ namespace Mono.Terminal
             public void Append(string s)
             {
                 //Console.WriteLine ("APPENDING {0} head={1} tail={2}", s, head, tail);
-                history[head] = s;
-                head = (head + 1) % history.Length;
-                if (head == tail)
-                    tail = (tail + 1 % history.Length);
-                if (count != history.Length)
-                    count++;
+                this.history[this.head] = s;
+                this.head = (this.head + 1) % this.history.Length;
+                if (this.head == this.tail)
+                    this.tail = (this.tail + 1 % this.history.Length);
+                if (this.count != this.history.Length)
+                    this.count++;
                 //Console.WriteLine ("DONE: head={1} tail={2}", s, head, tail);
             }
 
@@ -1693,35 +1693,35 @@ namespace Mono.Terminal
             //
             public void Update(string s)
             {
-                history[cursor] = s;
+                this.history[this.cursor] = s;
             }
 
             public void RemoveLast()
             {
-                head = head - 1;
-                if (head < 0)
-                    head = history.Length - 1;
+                this.head = this.head - 1;
+                if (this.head < 0)
+                    this.head = this.history.Length - 1;
             }
 
             public void Accept(string s)
             {
-                int t = head - 1;
+                int t = this.head - 1;
                 if (t < 0)
-                    t = history.Length - 1;
+                    t = this.history.Length - 1;
 
-                history[t] = s;
+                this.history[t] = s;
             }
 
             public bool PreviousAvailable()
             {
                 //Console.WriteLine ("h={0} t={1} cursor={2}", head, tail, cursor);
-                if (count == 0)
+                if (this.count == 0)
                     return false;
-                int next = cursor - 1;
+                int next = this.cursor - 1;
                 if (next < 0)
-                    next = count - 1;
+                    next = this.count - 1;
 
-                if (next == head)
+                if (next == this.head)
                     return false;
 
                 return true;
@@ -1729,10 +1729,10 @@ namespace Mono.Terminal
 
             public bool NextAvailable()
             {
-                if (count == 0)
+                if (this.count == 0)
                     return false;
-                int next = (cursor + 1) % history.Length;
-                if (next == head)
+                int next = (this.cursor + 1) % this.history.Length;
+                if (next == this.head)
                     return false;
                 return true;
             }
@@ -1747,11 +1747,11 @@ namespace Mono.Terminal
                 if (!PreviousAvailable())
                     return null;
 
-                cursor--;
-                if (cursor < 0)
-                    cursor = history.Length - 1;
+                this.cursor--;
+                if (this.cursor < 0)
+                    this.cursor = this.history.Length - 1;
 
-                return history[cursor];
+                return this.history[this.cursor];
             }
 
             public string Next()
@@ -1759,41 +1759,41 @@ namespace Mono.Terminal
                 if (!NextAvailable())
                     return null;
 
-                cursor = (cursor + 1) % history.Length;
-                return history[cursor];
+                this.cursor = (this.cursor + 1) % this.history.Length;
+                return this.history[this.cursor];
             }
 
             public void CursorToEnd()
             {
-                if (head == tail)
+                if (this.head == this.tail)
                     return;
 
-                cursor = head;
+                this.cursor = this.head;
             }
 
             public void Dump()
             {
-                Console.WriteLine("Head={0} Tail={1} Cursor={2} count={3}", head, tail, cursor, count);
-                for (int i = 0; i < history.Length; i++)
+                Console.WriteLine("Head={0} Tail={1} Cursor={2} count={3}", this.head, this.tail, this.cursor, this.count);
+                for (int i = 0; i < this.history.Length; i++)
                 {
-                    Console.WriteLine(" {0} {1}: {2}", i == cursor ? "==>" : "   ", i, history[i]);
+                    Console.WriteLine(" {0} {1}: {2}", i == this.cursor ? "==>" : "   ", i, this.history[i]);
                 }
                 //log.Flush ();
             }
 
             public string SearchBackward(string term)
             {
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < this.count; i++)
                 {
-                    int slot = cursor - i - 1;
+                    int slot = this.cursor - i - 1;
                     if (slot < 0)
-                        slot = history.Length + slot;
-                    if (slot >= history.Length)
+                        slot = this.history.Length + slot;
+                    if (slot >= this.history.Length)
                         slot = 0;
-                    if (history[slot] != null && history[slot].IndexOf(term) != -1)
+                    if (this.history[slot] != null && this.history[slot].IndexOf(term) != -1)
                     {
-                        cursor = slot;
-                        return history[slot];
+                        this.cursor = slot;
+                        return this.history[slot];
                     }
                 }
 

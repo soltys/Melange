@@ -7,6 +7,8 @@ namespace Soltys.VirtualMachine
         public static byte[] GetBytes(this Opcode opcode) => new[] { (byte)opcode };
         public static Opcode ToOpcode(ReadOnlySpan<byte> span) => (Opcode)span[0];
 
-        public static LoadKind ToLoadType(byte value) => (LoadKind)value;
+        public static LoadKind ToLoadKind(byte value) => (LoadKind)value;
+
+        public static ListOperationKind ToListOperationKind(byte value) => (ListOperationKind)value;
     }
 }

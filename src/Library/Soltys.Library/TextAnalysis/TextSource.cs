@@ -19,10 +19,11 @@ namespace Soltys.Library.TextAnalysis
 
         }
 
+        ///<summary> Returns true if read pointer reached end of text stream; otherwise false </summary>
         public bool IsEnded => this.readIndex >= this.textData.Length;
-        private char Previous => IsIndexOutOfBounds(this.readIndex - 1) ? '\0' : this.textData[this.readIndex - 1];
+        private char Previous => IsIndexOutOfBounds(this.readIndex - 1) ? default(char) : this.textData[this.readIndex - 1];
         public char Current => this.textData[this.readIndex];
-        public char Next => IsIndexOutOfBounds(this.readIndex + 1) ? '\0' : this.textData[this.readIndex + 1];
+        public char Next => IsIndexOutOfBounds(this.readIndex + 1) ? default(char) : this.textData[this.readIndex + 1];
         public Position GetPosition() => new Position(this.line, this.column);
         private bool IsIndexOutOfBounds(int value) => value < 0 || value >= this.textData.Length;
 

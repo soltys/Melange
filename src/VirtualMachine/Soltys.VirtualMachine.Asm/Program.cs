@@ -1,6 +1,6 @@
 using System;
 
-namespace Soltys.VirtualMachine.Asm
+namespace Soltys.VirtualMachine
 {
     internal class Program
     {

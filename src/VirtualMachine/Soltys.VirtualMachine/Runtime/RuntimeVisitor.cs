@@ -130,7 +130,27 @@ namespace Soltys.VirtualMachine
             this.context.ValueStack.Push(result);
         }
 
-        public void VisitNop(NopInstruction instruction) => throw new NotImplementedException();
+        public void VisitNop(NopInstruction instruction)
+        {
+        }
+
+        public void VisitList(ListInstruction listInstruction)
+        {
+            switch (listInstruction.Operation)
+            {
+                case ListOperationKind.New:
+                    this.context.ValueStack.Push(new List<object>());
+                    break;
+                case ListOperationKind.Add:
+                    var value = this.context.ValueStack.Pop();
+                    var theList = (List<object>)this.context.ValueStack.Pop();
+                    theList.Add(value);
+                    this.context.ValueStack.Push(theList);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
 
         public void VisitReturn(ReturnInstruction instruction)
         {

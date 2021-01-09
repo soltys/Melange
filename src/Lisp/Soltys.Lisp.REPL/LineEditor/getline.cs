@@ -1365,9 +1365,9 @@ namespace Soltys.Lisp
         {
             // Do not abort our program:
             a.Cancel = true;
-
+            
             // Interrupt the editor
-            this.edit_thread.Abort();
+            //this.edit_thread.Abort();
         }
 
         //

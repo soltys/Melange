@@ -1,0 +1,32 @@
+.pizza-dough-suggested{
+    color: #666;
+    font-size: 12px;
+    text-align: right;
+}
+
+.pizza-dough-calculator__table-header--to-left{
+    text-align: left;
+}
+
+.pizza-dough-calculator__table-header {
+    height: 50px;
+    border-bottom: 1px dotted #666;
+    margin-bottom: 12px;
+}
+
+.pizza-dough-calculator__input {
+    width: 85px;
+    margin-right: 5px;    
+    text-align: right;
+
+}
+
+select.pizza-dough-calculator__input {
+    width: 90px;
+
+}
+
+.pizza-dough-calculator__output{
+    font-weight: bold;
+    text-align: right;
+}

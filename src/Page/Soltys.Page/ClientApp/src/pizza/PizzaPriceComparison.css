@@ -1,0 +1,20 @@
+.pizza-price-comparison {
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.pizza-price-comparison th, .pizza-price-comparison td {
+    border: 1px dotted #333;
+    padding: 6px;
+    text-align: center;
+}
+
+
+.pizza-price-comparison input{
+    width: 50px;
+    text-align: right;
+}
+
+.pizza-price-comparison i{
+    color: #8b0000;
+}

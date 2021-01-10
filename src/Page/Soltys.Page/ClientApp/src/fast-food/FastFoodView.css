@@ -1,0 +1,15 @@
+table.fast-food-calculator {
+    border-collapse: collapse;
+}
+
+
+.fast-food-calculator th{
+    padding: 6px;
+  }
+  .fast-food-calculator td{
+    text-align:center;
+  }
+
+.fast-food-calculator tfoot{
+    border-top: 1px dotted #666;
+}

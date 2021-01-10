@@ -1,0 +1,17 @@
+.skill-container{
+    
+}
+
+.skill-list {   
+    display: flex;
+    flex-wrap: wrap;
+    margin:0;
+    padding: 0;
+}
+
+.skill {    
+    list-style: none;
+    margin:0;
+    padding: 0;
+    width: 20%;
+}

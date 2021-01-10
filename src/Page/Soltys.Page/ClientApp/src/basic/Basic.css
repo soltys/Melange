@@ -1,0 +1,69 @@
+.view {
+    padding: 24px;
+}
+
+.box-container {
+    display: flex;
+}
+
+.box {
+    margin-right: 24px;
+    margin-bottom: 12px;
+}
+
+.icon-button {
+    font-size: 125%;
+    position: relative;
+}
+
+div.icon-button {
+    display: contents;
+    cursor: pointer;
+}
+
+.icon-button i {
+    width: 25px;
+    height: 25px;
+    text-align: center;
+}
+
+.countdown {
+    display: flex;
+    align-items: center;
+}
+
+.countdown table{
+    margin: 0 12px;
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    .box-container {
+        flex-direction: column;
+    }
+    .box {
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 800px) {
+    .box-container {
+        flex-direction: column;
+    }
+    .box {
+        margin-right: 0;
+        margin-bottom: 0;
+    }
+}
+
+
+.recipe {
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    max-width: 500px;
+}
+
+.recipe li {
+    list-style: inside;
+    margin-bottom: 3px;
+}

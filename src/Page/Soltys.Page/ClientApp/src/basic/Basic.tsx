@@ -1,3 +1,4 @@
+/// <reference path="../index.d.ts" />
 import React, { useState, useEffect } from 'react';
 import './Basic.css'
 

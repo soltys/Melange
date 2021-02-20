@@ -34,19 +34,19 @@ namespace Soltys.Lisp.Compiler
                 }
                 else if (c == '(')
                 {
-                    yield return new LispToken(LispTokenKind.LParen, "(", this.textSource.GetPosition());
+                    yield return MakeToken(LispTokenKind.LParen, "(");
                 }
                 else if (c == ')')
                 {
-                    yield return new LispToken(LispTokenKind.RParen, ")", this.textSource.GetPosition());
+                    yield return MakeToken(LispTokenKind.RParen, ")");
                 }
                 else if (c == '\'')
                 {
-                    yield return new LispToken(LispTokenKind.Quote, "'", this.textSource.GetPosition());
+                    yield return MakeToken(LispTokenKind.Quote, "'");
                 }
                 else if (charsSymbols.Contains(c))
                 {
-                    yield return new LispToken(LispTokenKind.Symbol, c.ToString(), this.textSource.GetPosition());
+                    yield return MakeToken(LispTokenKind.Symbol, c.ToString());
                 }
                 else if (c == '-')
                 {
@@ -54,12 +54,12 @@ namespace Soltys.Lisp.Compiler
                     {
                         this.textSource.AdvanceChar(); // for the '-' symbol
                         var (numberString, offset) = LexerHelper.GetNumber(this.textSource.Slice());
-                        yield return new LispToken(LispTokenKind.Number, '-' + numberString, this.textSource.GetPosition());
+                        yield return MakeToken(LispTokenKind.Number, '-' + numberString);
                         this.textSource.AdvanceChar(offset);
                     }
                     else
                     {
-                        yield return new LispToken(LispTokenKind.Symbol, "-", this.textSource.GetPosition());
+                        yield return new LispToken(LispTokenKind.Symbol, "-");
 
                     }
                 }
@@ -68,19 +68,19 @@ namespace Soltys.Lisp.Compiler
                     if (char.IsLetter(c))
                     {
                         var match = Regex.Match(this.textSource.Slice().ToString(), @"[\w!_]+", RegexOptions.Compiled);
-                        yield return new LispToken(LispTokenKind.Symbol, match.Value, this.textSource.GetPosition());
+                        yield return MakeToken(LispTokenKind.Symbol, match.Value);
                         this.textSource.AdvanceChar(match.Length - 1);
                     }
                     else if (char.IsDigit(c))
                     {
                         var (numberString, offset) = LexerHelper.GetNumber(this.textSource.Slice());
-                        yield return new LispToken(LispTokenKind.Number, numberString, this.textSource.GetPosition());
+                        yield return MakeToken(LispTokenKind.Number, numberString);
                         this.textSource.AdvanceChar(offset);
                     }
                     else if (c == '\"')
                     {
                         var (str, offset) = LexerHelper.GetDoubleQuoteString(this.textSource.Slice());
-                        yield return new LispToken(LispTokenKind.String, str, this.textSource.GetPosition());
+                        yield return MakeToken(LispTokenKind.String, str);
                         this.textSource.AdvanceChar(offset);
                     }
                 }
@@ -88,6 +88,9 @@ namespace Soltys.Lisp.Compiler
                 this.textSource.AdvanceChar();
             }
         }
+
+        private LispToken MakeToken(LispTokenKind kind, string value) =>
+            new LispToken(kind, value, this.textSource.GetPosition());
 
         public LispToken Empty => LispToken.Empty;
     }

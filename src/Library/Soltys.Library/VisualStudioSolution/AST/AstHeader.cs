@@ -4,7 +4,7 @@ namespace Soltys.Library.VisualStudioSolution
 {
     public class AstHeader
     {
-        public AstHeader(Version fileFormat, Version iconVersion, Version latestVisualStudioAccess, Version minimumVisualStudio)
+        public AstHeader(string fileFormat, string iconVersion, string latestVisualStudioAccess, string minimumVisualStudio)
         {
             FileFormat = fileFormat;
             IconVersion = iconVersion;
@@ -15,7 +15,7 @@ namespace Soltys.Library.VisualStudioSolution
         /// <summary>
         /// Example: Microsoft Visual Studio Solution File, Format Version 12.00
         /// </summary>
-        public Version FileFormat
+        public string FileFormat
         {
             get;
             set;
@@ -24,7 +24,7 @@ namespace Soltys.Library.VisualStudioSolution
         /// <summary>
         /// Example: # Visual Studio Version 16
         /// </summary>
-        public Version IconVersion
+        public string IconVersion
         {
             get;
             set;
@@ -33,7 +33,7 @@ namespace Soltys.Library.VisualStudioSolution
         /// <summary>
         /// Example: VisualStudioVersion = 16.0.28701.123
         /// </summary>
-        public Version LatestVisualStudioAccess
+        public string LatestVisualStudioAccess
         {
             get;
             set;
@@ -42,7 +42,7 @@ namespace Soltys.Library.VisualStudioSolution
         /// <summary>
         /// Example: MinimumVisualStudioVersion = 10.0.40219.1
         /// </summary>
-        public Version MinimumVisualStudioVersion
+        public string MinimumVisualStudioVersion
         {
             get;
             set;

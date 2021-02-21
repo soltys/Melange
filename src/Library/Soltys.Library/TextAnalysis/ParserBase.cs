@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Soltys.Library.VisualStudioSolution;
 
 namespace Soltys.Library.TextAnalysis
 {
@@ -23,6 +24,22 @@ namespace Soltys.Library.TextAnalysis
             }
             this.ts.NextToken();
         }
+
+        protected void AdvanceTokenValueMatch(TTokenKind kind, string value)
+        {
+            if (!IsToken(kind))
+            {
+                throw new InvalidOperationException("Not expected token advancement");
+            }
+
+            if (this.ts.Current.Value != value)
+            {
+                throw new InvalidOperationException("Not expected token value for advancement");
+            }
+
+            this.ts.NextToken();
+        }
+
         protected bool IsToken(params TTokenKind[] tokens) => tokens.Any(x => x!.Equals(CurrentToken));
         protected bool IsNextToken(params TTokenKind[] tokens) => tokens.Any(x => x!.Equals(NextToken));
 

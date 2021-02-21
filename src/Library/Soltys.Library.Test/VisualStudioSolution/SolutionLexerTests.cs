@@ -18,13 +18,17 @@ namespace Soltys.Library.Test.VisualStudioSolution
         }
 
         [Theory]
-        //[InlineData("foo", SolutionTokenKind.Id)]
+        [InlineData("foo", SolutionTokenKind.Id)]
         [InlineData("|", SolutionTokenKind.Pipe)]
         [InlineData("#", SolutionTokenKind.Hash)]
         [InlineData(",", SolutionTokenKind.Comma)]
         [InlineData("=", SolutionTokenKind.Equal)]
         [InlineData("(", SolutionTokenKind.LParen)]
         [InlineData(")", SolutionTokenKind.RParen)]
+        [InlineData("12", SolutionTokenKind.Version)]
+        [InlineData("22.20", SolutionTokenKind.Version)]
+        [InlineData("32.21.550.2", SolutionTokenKind.Version)]
+        [InlineData("{C67CD1BA-F675-4559-B1FD-A886315A2D1B}", SolutionTokenKind.Guid)]
         
         internal void GetTokens_SingleTokenInputs(string input, SolutionTokenKind expectedTokenKind)
         {
@@ -33,6 +37,16 @@ namespace Soltys.Library.Test.VisualStudioSolution
 
             Assert.Equal(expectedTokenKind, token.TokenKind);
             Assert.Equal(input, token.Value);
+        }
+
+        [Fact]
+        internal void GetTokens_String_LexedCorrectly()
+        {
+            var lexer = new SolutionLexer(new TextSource("\"bar\""));
+            var token = lexer.GetTokens().Single();
+
+            Assert.Equal(SolutionTokenKind.String, token.TokenKind);
+            Assert.Equal("bar", token.Value);
         }
     }
 }

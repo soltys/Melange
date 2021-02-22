@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Soltys.Library.TextAnalysis;
 using Soltys.Library.VisualStudioSolution;
 using Xunit;
@@ -28,6 +25,7 @@ namespace Soltys.Library.Test.VisualStudioSolution
         [InlineData("12", SolutionTokenKind.Version)]
         [InlineData("22.20", SolutionTokenKind.Version)]
         [InlineData("32.21.550.2", SolutionTokenKind.Version)]
+        [InlineData("\n", SolutionTokenKind.NewLine)]
         [InlineData("{C67CD1BA-F675-4559-B1FD-A886315A2D1B}", SolutionTokenKind.Guid)]
         
         internal void GetTokens_SingleTokenInputs(string input, SolutionTokenKind expectedTokenKind)

@@ -19,6 +19,7 @@ namespace Soltys.Library.VisualStudioSolution
             var iconVersion = GetNextVersionTokenValue();
             var lastAccessVersion = GetNextVersionTokenValue();
             var minimumVisualStudioVersion = GetNextVersionTokenValue();
+            AdvanceToken(SolutionTokenKind.NewLine);
             return new AstHeader(fileVersion, iconVersion, lastAccessVersion, minimumVisualStudioVersion);
         }
 
@@ -57,8 +58,9 @@ namespace Soltys.Library.VisualStudioSolution
                 AdvanceToken(SolutionTokenKind.Comma);
                 var guid = this.ts.Current.Value;
                 AdvanceToken(SolutionTokenKind.String);
+                AdvanceToken(SolutionTokenKind.NewLine);
                 AdvanceTokenValueMatch(SolutionTokenKind.Id, "EndProject");
-
+                AdvanceToken(SolutionTokenKind.NewLine);
                 projects.Add(new AstProject(projectKind, name, path, guid));
             }
             return projects;
@@ -67,8 +69,10 @@ namespace Soltys.Library.VisualStudioSolution
         private AstGlobal ParseGlobal()
         {
             AdvanceTokenValueMatch(SolutionTokenKind.Id, "Global");
+            AdvanceToken(SolutionTokenKind.NewLine);
             var globalSections = ParseGlobalSections();
             AdvanceTokenValueMatch(SolutionTokenKind.Id, "EndGlobal");
+            AdvanceToken(SolutionTokenKind.NewLine);
             return new AstGlobal(globalSections);
         }
 
@@ -85,7 +89,7 @@ namespace Soltys.Library.VisualStudioSolution
                 AdvanceToken(SolutionTokenKind.Equal);
                 var action = this.ts.Current.Value;
                 AdvanceToken(SolutionTokenKind.Id);
-
+                AdvanceToken(SolutionTokenKind.NewLine);
                 sections.Add(new AstGlobalSection(sectionKind, action, ParseSectionEntries()));
             }
 
@@ -98,9 +102,17 @@ namespace Soltys.Library.VisualStudioSolution
 
             while (!IsToken(SolutionTokenKind.Id) || this.ts.Current.Value != "EndGlobalSection")
             {
-                this.ts.NextToken();
+                var tokens = new List<SolutionToken>();
+                while (!IsToken(SolutionTokenKind.NewLine))
+                {
+                    tokens.Add(this.ts.Current);
+                    this.ts.NextToken();
+                }
+                entries.Add(new SectionEntry(tokens));
+                AdvanceToken(SolutionTokenKind.NewLine);
             }
             AdvanceTokenValueMatch(SolutionTokenKind.Id, "EndGlobalSection");
+            AdvanceToken(SolutionTokenKind.NewLine);
             return entries;
         }
     }

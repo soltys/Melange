@@ -40,10 +40,14 @@ namespace Soltys.Library.VisualStudioSolution
         /// </summary>
         Pipe,
         /// <summary>
-        /// Example:10.0.40219.1
-        /// Example:12
-        /// Example:22.20
+        /// Example: 10.0.40219.1
+        /// Example: 12
+        /// Example: 22.20
         /// </summary>
         Version,
+        /// <summary>
+        /// Example: \n
+        /// </summary>
+        NewLine
     }
 }

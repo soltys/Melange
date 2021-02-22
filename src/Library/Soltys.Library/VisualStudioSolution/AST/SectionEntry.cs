@@ -1,13 +1,15 @@
+using System.Collections.Generic;
+
 namespace Soltys.Library.VisualStudioSolution
 {
     public class SectionEntry
     {
-        public SectionEntry(string line)
+        public SectionEntry(IEnumerable<SolutionToken> tokens)
         {
-            Line = line;
+            Tokens = tokens;
         }
 
-        public string Line
+        public IEnumerable<SolutionToken> Tokens
         {
             get;
             set;

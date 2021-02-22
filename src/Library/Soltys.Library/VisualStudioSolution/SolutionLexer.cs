@@ -32,6 +32,10 @@ namespace Soltys.Library.VisualStudioSolution
                 {
                     yield return MakeToken(SolutionTokenKind.Pipe, "|");
                 }
+                else if (c == '\n')
+                {
+                    yield return MakeToken(SolutionTokenKind.NewLine, "\n");
+                }
                 else if (c == ',')
                 {
                     yield return MakeToken(SolutionTokenKind.Comma, ",");

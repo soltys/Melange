@@ -34,5 +34,7 @@ namespace Soltys.Library.VisualStudioSolution
             get;
             set;
         }
+
+        public override string ToString() => Kind;
     }
 }

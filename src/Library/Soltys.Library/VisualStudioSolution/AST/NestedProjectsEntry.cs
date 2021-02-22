@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 
 namespace Soltys.Library.VisualStudioSolution
 {
     public class NestedProjectsEntry : SectionEntry
     {
-        public NestedProjectsEntry(string line) : base(line)
+        public NestedProjectsEntry(IEnumerable<SolutionToken> tokens) : base(tokens)
         {
             
         }

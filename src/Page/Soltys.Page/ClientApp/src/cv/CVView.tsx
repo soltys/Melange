@@ -26,7 +26,7 @@ const CVView = () => {
                 </Section>
 
                 <Section header="Doświadczenie zawodowe">
-                    <Job title="DGS Bussiness Services" workingYears="2015.12 - obecnie">
+                    <Job title="Demant" workingYears="2015.12 - obecnie">
                         <Project name="Software Solutions">
                             <p>Rozwój i utrzymanie oprogramowania umożwiającego dopasowanie aparatu słuchowego dla klienta. Aplikacja na system operacyjny Windows wykorzystująca <strong>MEF</strong> w celu tworzania wielu edycji oprogramowania w jednym wydaniu</p>
                             <p>Integracja z urządzeniami służącymi do wykonywania Real Ear Measurment (w skrócie REM).</p>

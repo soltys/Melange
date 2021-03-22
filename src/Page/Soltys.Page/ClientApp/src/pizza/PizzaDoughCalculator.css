@@ -30,3 +30,33 @@ select.pizza-dough-calculator__input {
     font-weight: bold;
     text-align: right;
 }
+
+
+.pizza-dough-save {
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.pizza-dough-save button{
+    width: 100%;
+}
+
+.pizza-dough-save label, .pizza-dough-save input{
+    margin-right: 6px;
+}
+
+.pizza-dough-save th, .pizza-dough-save td {
+    border: 1px dotted #333;
+    padding: 6px;
+    text-align: center;
+}
+
+
+.pizza-dough-save input{
+    width: 300px;
+    text-align: left;
+}
+
+.pizza-dough-save i{
+    color: #8b0000;
+}

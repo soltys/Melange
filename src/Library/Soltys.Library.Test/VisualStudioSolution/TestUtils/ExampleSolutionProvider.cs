@@ -16,6 +16,12 @@ namespace Soltys.Library.Test.VisualStudioSolution.TestUtils
         public static string MsdnSample => 
             GetFileContentAsString("MsdnSolution.sln");
 
+        /// <summary>
+        /// My own solution from 25-02-2021
+        /// </summary>
+        public static string SoltysMelange =>
+            GetFileContentAsString("SoltysMelange.sln");
+
         private static string GetFileContentAsString(string resourceName)
         {
             var resourceStream =

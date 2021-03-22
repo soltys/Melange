@@ -30,6 +30,18 @@ namespace Soltys.Library.Test.VisualStudioSolution
             Assert.Equal("{8CDD8387-B905-44A8-B5D5-07BB50E05BEA}", project.Guid);
         }
 
+        [Fact]
+        public void ParseOwnSolution_GetsHeader()
+        {
+            var ast = ParserFactory(ExampleSolutionProvider.SoltysMelange).ParseSolution();
+            Assert.Equal("12.00", ast.Header.FileFormat);
+            Assert.Equal("16", ast.Header.IconVersion);
+            Assert.Equal("16.0.30011.22", ast.Header.LatestVisualStudioAccess);
+            Assert.Equal("10.0.40219.1", ast.Header.MinimumVisualStudioVersion);
+        }
+
+      
+
         private static SolutionParser ParserFactory(string input) =>
             new SolutionParser(
                 new TokenSource<SolutionToken, SolutionTokenKind>(

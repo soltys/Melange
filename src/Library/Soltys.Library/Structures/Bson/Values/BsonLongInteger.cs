@@ -11,7 +11,7 @@ namespace Soltys.Library.Bson
 
         public BsonLongInteger(long value)
         {
-            this.Value = value;
+            Value = value;
         }
 
         public override ReadOnlySpan<byte> GetBytes() => BitConverter.GetBytes(Value);

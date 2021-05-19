@@ -4,7 +4,7 @@ namespace Soltys.Library.Bson.BQuery
     {
         public AstValueAccess(string elementName)
         {
-            this.ElementName = elementName;
+            ElementName = elementName;
         }
         public string ElementName
         {

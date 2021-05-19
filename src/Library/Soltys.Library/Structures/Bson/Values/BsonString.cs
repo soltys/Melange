@@ -20,7 +20,7 @@ namespace Soltys.Library.Bson
         public override string ToString() => $"\"{Value}\"";
         internal override ElementType Type => ElementType.String;
 
-        public static bool operator ==(BsonString lhs, BsonString rhs) => lhs?.Equals((object)rhs) ?? object.ReferenceEquals(rhs, null);
+        public static bool operator ==(BsonString lhs, BsonString rhs) => lhs?.Equals((object)rhs) ?? ReferenceEquals(rhs, null);
         public static bool operator !=(BsonString lhs, BsonString rhs) => !(lhs == rhs);
         
         protected bool Equals(BsonString other) => Value == other.Value;
@@ -37,7 +37,7 @@ namespace Soltys.Library.Bson
                 return true;
             }
 
-            if (obj.GetType() != this.GetType())
+            if (obj.GetType() != GetType())
             {
                 return false;
             }

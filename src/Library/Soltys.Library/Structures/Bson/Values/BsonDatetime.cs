@@ -24,7 +24,7 @@ namespace Soltys.Library.Bson
         public override string ToString() => $"Date({this.unixEpochMs})";
 
         public static bool operator ==(BsonDatetime lhs, BsonDatetime rhs) =>
-            lhs?.Equals((object)rhs) ?? object.ReferenceEquals(rhs, null);
+            lhs?.Equals((object)rhs) ?? ReferenceEquals(rhs, null);
 
         public static bool operator !=(BsonDatetime lhs, BsonDatetime rhs) => !(lhs == rhs);
 
@@ -42,7 +42,7 @@ namespace Soltys.Library.Bson
                 return true;
             }
 
-            if (obj.GetType() != this.GetType())
+            if (obj.GetType() != GetType())
             {
                 return false;
             }

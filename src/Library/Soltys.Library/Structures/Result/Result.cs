@@ -30,7 +30,7 @@ namespace Soltys.Library
         public IEnumerable<Error> Errors => this.reasons.OfType<Error>();
         public IEnumerable<Success> Successes => this.reasons.OfType<Success>();
 
-        public bool IsFailure => reasons.Any(x => x is Error);
+        public bool IsFailure => this.reasons.Any(x => x is Error);
         public bool IsSuccess => !IsFailure;
     }
 }

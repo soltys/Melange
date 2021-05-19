@@ -16,17 +16,14 @@ namespace Soltys.VirtualMachine
             get;
         }
 
-        public Stack<CallEntry> CallStack
-        {
-            get;
-        }
+        private readonly Stack<CallEntry> callstack;
 
         public VMContext()
         {
             this.functions = new HashSet<VMFunction>();
             this.vmLibraries = new List<IVMLibrary>();
             ValueStack = new Stack<object>();
-            CallStack = new Stack<CallEntry>();
+            this.callstack = new Stack<CallEntry>();
         }
 
         public void Load(IEnumerable<VMFunction> vmFunctions)
@@ -35,13 +32,13 @@ namespace Soltys.VirtualMachine
             this.functions.UnionWith(vmFunctions);
         }
 
-        private int IP => this.CallStack.Peek().InstructionPointer;
+        private int IP => this.callstack.Peek().InstructionPointer;
         public IInstruction? GetCurrentInstruction() => this.currentFunction?.Instructions?[IP];
         public bool IsHalted() => IP < this.currentFunction?.Instructions?.Length;
 
         public void AdvanceInstructionPointer()
         {
-            this.CallStack.Peek().InstructionPointer++;
+            this.callstack.Peek().InstructionPointer++;
         }
 
         public void AddVMLibrary(IVMLibrary library) => this.vmLibraries.Add(library);
@@ -69,20 +66,20 @@ namespace Soltys.VirtualMachine
 
         public void Return()
         {
-            this.CallStack.Pop();
-            this.currentFunction = this.functions.FirstOrDefault(x => x.Name == this.CallStack.Peek().MethodName);
+            this.callstack.Pop();
+            this.currentFunction = this.functions.FirstOrDefault(x => x.Name == this.callstack.Peek().MethodName);
         }
 
         public void ChangeMethod(CallEntry callEntry)
         {
-            this.CallStack.Push(callEntry);
+            this.callstack.Push(callEntry);
             this.currentFunction = this.functions.First(x => x.Name == callEntry.MethodName);
         }
 
         public void Clear()
         {
-            this.CallStack.Clear();
-            this.ValueStack.Clear();
+            this.callstack.Clear();
+            ValueStack.Clear();
             this.functions.Remove(new VMFunction("Main"));
         }
     }

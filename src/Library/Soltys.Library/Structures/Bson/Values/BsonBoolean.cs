@@ -18,7 +18,7 @@ namespace Soltys.Library.Bson
         public override ReadOnlySpan<byte> GetBytes() => BitConverter.GetBytes(Value);
         public override string ToString() => Value.ToString().ToLowerInvariant();
 
-        public static bool operator ==(BsonBoolean lhs, BsonBoolean rhs) => lhs?.Equals((object)rhs) ?? object.ReferenceEquals(rhs, null);
+        public static bool operator ==(BsonBoolean lhs, BsonBoolean rhs) => lhs?.Equals((object)rhs) ?? ReferenceEquals(rhs, null);
         public static bool operator !=(BsonBoolean lhs, BsonBoolean rhs) => !(lhs == rhs);
 
         protected bool Equals(BsonBoolean other) => Value == other.Value;
@@ -35,7 +35,7 @@ namespace Soltys.Library.Bson
                 return true;
             }
 
-            if (obj.GetType() != this.GetType())
+            if (obj.GetType() != GetType())
             {
                 return false;
             }

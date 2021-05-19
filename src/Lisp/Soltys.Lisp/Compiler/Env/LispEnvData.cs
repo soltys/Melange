@@ -8,7 +8,7 @@ namespace Soltys.Lisp.Compiler
         {
             get;
         } = new Dictionary<AstSymbol, IAstNode>();
-        IReadOnlyDictionary<AstSymbol, IAstNode> IReadOnlyEnvData.Defines => this.Defines;
+        IReadOnlyDictionary<AstSymbol, IAstNode> IReadOnlyEnvData.Defines => Defines;
 
         private List<string> coreFunctionNames = new List<string>();
         IReadOnlyCollection<string> IReadOnlyEnvData.CoreFunctionNames => this.coreFunctionNames;

@@ -1,5 +1,6 @@
 import { ExternalOnly } from './basic/Basic';
 import CVView from './cv/CVView';
+import CVViewEn from './cv/CVView_en';
 import HomeView from './home/HomeView';
 import CoffeeView from './coffee/CoffeeView';
 import CoffeeMemeView from './coffee/CoffeeMemeView';
@@ -51,6 +52,9 @@ const App = () => {
                             <li>
                                 <Link to="/cv">CV</Link>
                             </li>
+                            <li>
+                                <Link to="/cv_en">CV (EN)</Link>
+                            </li>
                         </ExternalOnly>
                     </ul>
                     <hr />
@@ -60,6 +64,9 @@ const App = () => {
                         </Route>
                         <Route path="/cv">
                             <CVView />
+                        </Route>
+                        <Route path="/cv_en">
+                            <CVViewEn />
                         </Route>
                         <Route path="/coffee">
                             <CoffeeView />

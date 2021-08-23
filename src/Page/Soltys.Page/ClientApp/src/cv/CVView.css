@@ -38,6 +38,12 @@
 }
 
 @media print {
+    @page{
+        size: A4;
+    }
+    .cv-page{
+        margin-bottom:0;
+    }
     .cv-print-notice{
         display: none;
     }

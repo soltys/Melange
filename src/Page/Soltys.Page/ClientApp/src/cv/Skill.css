@@ -5,6 +5,7 @@
 .skill-list {   
     display: flex;
     flex-wrap: wrap;
+    flex-flow: space-between;
     margin:0;
     padding: 0;
 }
@@ -13,5 +14,5 @@
     list-style: none;
     margin:0;
     padding: 0;
-    width: 20%;
+    width: 33%;
 }

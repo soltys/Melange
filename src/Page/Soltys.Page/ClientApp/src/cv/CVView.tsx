@@ -6,12 +6,14 @@ import Section from './Section'
 import Picture from './Picture';
 
 const CVView = () => {
-    return (        
+    return (
         <div className="cv-view">
             <div className="cv-print-notice">
                 <div className="cv-print-notice--message">
-                    Strona specjalnie przygotowana pod wydruk
-                    lub do eksportu PDFa przez przeglądarkę :)
+                    <p>Strona specjalnie przygotowana pod wydruk
+                        lub do eksportu PDFa przez przeglądarkę :)
+                    </p>
+                    <p>Proszę wybrać format A4</p>
                 </div>
             </div>
 
@@ -27,6 +29,10 @@ const CVView = () => {
 
                 <Section header="Doświadczenie zawodowe">
                     <Job title="Demant" workingYears="2015.12 - obecnie">
+                        <Project name="Software Solutions - DevOps">
+                            <p>Utrzymanie procesu integracyjnego aplikacji. Rozwój i wspieranie procesu zbierania informacji o użytych bibliotekach.</p>
+                            <p>echnologie z którymi pracowałem: <strong>PowerShell</strong>, Azure DevOps.</p>
+                        </Project>
                         <Project name="Software Solutions">
                             <p>Rozwój i utrzymanie oprogramowania umożwiającego dopasowanie aparatu słuchowego dla klienta. Aplikacja na system operacyjny Windows wykorzystująca <strong>MEF</strong> w celu tworzania wielu edycji oprogramowania w jednym wydaniu</p>
                             <p>Integracja z urządzeniami służącymi do wykonywania Real Ear Measurment (w skrócie REM).</p>
@@ -41,11 +47,14 @@ const CVView = () => {
                         </Project>
                         <Project name="METROpoint">
                             <p>Projekt i rozwój oprogramownia na platformę Windows 8, umożliwającą na dostęp do danych z platformy SharePoint. Aplikacja
-            zdobyła <strong>nagrodę</strong> na European SharePoint Conference w 2013r.</p>
+                                zdobyła <strong>nagrodę</strong> na European SharePoint Conference w 2013r.</p>
                             <p>Technologie z którymi pracowałem: Windows Runtime, <strong>Reactive Extensions</strong>, SQLite.</p>
                         </Project>
                     </Job>
                 </Section>
+            </CVPage>
+
+            <CVPage>
 
                 <Section header="Umiejętności">
                     <SkillList>
@@ -63,9 +72,7 @@ const CVView = () => {
                         <Skill name="Linux" />
                     </SkillList>
                 </Section>
-            </CVPage>
 
-            <CVPage>
                 <Section header="Edukacja">
                     <Education
                         schoolName="Zachodniopomorski Uniwerstytet Technologiczny w Szczecinie"

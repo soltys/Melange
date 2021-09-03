@@ -36,10 +36,8 @@ namespace Soltys.VirtualMachine
         public IInstruction? GetCurrentInstruction() => this.currentFunction?.Instructions?[IP];
         public bool IsHalted() => IP < this.currentFunction?.Instructions?.Length;
 
-        public void AdvanceInstructionPointer()
-        {
-            this.callstack.Peek().InstructionPointer++;
-        }
+        public void AdvanceInstructionPointer() =>
+            this.callstack.Peek().AdvanceInstructionPointer();
 
         public void AddVMLibrary(IVMLibrary library) => this.vmLibraries.Add(library);
         public IVMExternalFunction FindExternalFunction(string methodName)
@@ -59,12 +57,13 @@ namespace Soltys.VirtualMachine
             {
                 return false;
             }
-
+            // it set to -1 because it after completing 'call' instruction pointer will be increased to 0 - first
+            // instruction of changed method. 
             ChangeMethod(new CallEntry(methodName, -1));
             return true;
         }
 
-        public void Return()
+        public void ReturnFromMethod()
         {
             this.callstack.Pop();
             this.currentFunction = this.functions.FirstOrDefault(x => x.Name == this.callstack.Peek().MethodName);

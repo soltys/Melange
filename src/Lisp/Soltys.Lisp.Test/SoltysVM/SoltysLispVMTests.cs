@@ -3,12 +3,12 @@ using Xunit;
 
 namespace Soltys.Lisp.Test
 {
-    public partial class SoltysLispTests
+    public partial class SoltysLispVMTests
     {
         [Fact]
         public void Do_DoNotHoldLastValueBetweenCalls()
         {
-            using var lisp = new SoltysLisp();
+            using var lisp = new SoltysLispVM();
 
             var result = lisp.Do(@"(+ 10 1)");
             Assert.Equal(11, (int)result);
@@ -19,7 +19,7 @@ namespace Soltys.Lisp.Test
         [Fact]
         public void Do_Println_ResultIsNil()
         {
-            using var lisp = new SoltysLisp();
+            using var lisp = new SoltysLispVM();
             lisp.Initialize();
 
             var result = lisp.Do(@"(println ""Hello, World!"")");
@@ -32,7 +32,7 @@ namespace Soltys.Lisp.Test
         [InlineData("(quote (1 2 3))")]
         public void Do_QuoteFunction_ResultIsListItself(string input)
         {
-            using var lisp = new SoltysLisp();
+            using var lisp = new SoltysLispVM();
             lisp.Initialize();
 
             var result = lisp.Do(input);

@@ -58,7 +58,5 @@ namespace Soltys.Library.TextAnalysis
 
             return (builder.ToString(), i - 1);
         }
-
-
     }
 }

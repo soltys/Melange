@@ -35,10 +35,6 @@ namespace Soltys.Lisp.Compiler
                     var resultList = new AstList();
                     resultList.Add(new AstSymbol("quote"));
                     resultList.Add(quotedList);
-                    // for (int i = 0; i < quotedList.Length; i++)
-                    // {
-                    //     resultList.Add(quotedList[i]);
-                    // }
                     return resultList;
                 }
                 else

@@ -6,10 +6,6 @@ namespace Soltys.Library.TextAnalysis
         {
             get;
         }
-        TToken PeekNextToken
-        {
-            get;
-        }
         void NextToken();
     }
 }

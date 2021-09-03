@@ -13,19 +13,16 @@ namespace Soltys.Library.TextAnalysis
         }
 
         protected TTokenKind CurrentToken => this.ts.Current.TokenKind;
-        protected TTokenKind NextToken => this.ts.PeekNextToken.TokenKind;
 
         protected void AdvanceToken(params TTokenKind[] tokens)
         {
-            if (tokens != null && !IsToken(tokens))
+            if (!IsToken(tokens))
             {
                 throw new InvalidOperationException("Not expected token advancement");
             }
             this.ts.NextToken();
         }
         protected bool IsToken(params TTokenKind[] tokens) => tokens.Any(x => x!.Equals(CurrentToken));
-        protected bool IsNextToken(params TTokenKind[] tokens) => tokens.Any(x => x!.Equals(NextToken));
-
         protected void AdvanceIfToken(params TTokenKind[] tokens)
         {
             if (IsToken(tokens))

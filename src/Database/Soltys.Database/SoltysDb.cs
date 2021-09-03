@@ -40,7 +40,7 @@ namespace Soltys
 
             if (this.data.IsNew())
             {
-                this.data.Write(new HeaderPage());
+                this.data.WriteToDb(new HeaderPage());
             }
 
             KV = new KeyValueStore(this.data);

@@ -7,7 +7,7 @@ using Soltys.VirtualMachine;
 
 namespace Soltys.Lisp
 {
-    public class SoltysLisp : IDisposable
+    public class SoltysLispVM : IDisposable
     {
         private class VMFacade
         {
@@ -42,8 +42,7 @@ namespace Soltys.Lisp
         private readonly LispEnv env;
         private readonly VMFacade vmFacade;
 
-
-        public SoltysLisp()
+        public SoltysLispVM()
         {
             this.env = new LispEnv();
             this.vmFacade = new VMFacade();

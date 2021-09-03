@@ -13,6 +13,6 @@ namespace Soltys.VirtualMachine
         void AddVMLibrary(IVMLibrary library);
         IVMExternalFunction FindExternalFunction(string methodName);
         bool TryChangeFunction(string methodName);
-        void Return();
+        void ReturnFromMethod();
     }
 }

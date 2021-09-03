@@ -2,12 +2,12 @@ using Xunit;
 
 namespace Soltys.Lisp.Test
 {
-    public partial class SoltysLispTests
+    public partial class SoltysLispVMTests
     {
         [Fact]
         public void Do_DefineFunctionWithConstantValue_ReturnConstantValue()
         {
-            using var lisp = new SoltysLisp();
+            using var lisp = new SoltysLispVM();
             lisp.Initialize();
             var result = lisp.Do(
                 @"(def! x 42)
@@ -20,7 +20,7 @@ namespace Soltys.Lisp.Test
         [Fact]
         public void TwoDo_DefineFunctionWithConstantValue_ReturnConstantValue()
         {
-            using var lisp = new SoltysLisp();
+            using var lisp = new SoltysLispVM();
             lisp.Initialize();
             var result = lisp.Do(@"(def! x 42)");
             result = lisp.Do(@"(+ 8 x)");
@@ -32,7 +32,7 @@ namespace Soltys.Lisp.Test
         [Fact]
         public void Do_DefineFunctionWithMathOperation_ReturnMathResult()
         {
-            using var lisp = new SoltysLisp();
+            using var lisp = new SoltysLispVM();
             lisp.Initialize();
             var result = lisp.Do(
                 @"(def! x (* 4 10))
@@ -45,7 +45,7 @@ namespace Soltys.Lisp.Test
         [Fact]
         public void Do_MultipleFunctionsCall()
         {
-            using var lisp = new SoltysLisp();
+            using var lisp = new SoltysLispVM();
             lisp.Initialize();
             var result = lisp.Do(
                 @"(def! x (* 4 10))
@@ -58,7 +58,7 @@ namespace Soltys.Lisp.Test
         [Fact]
         public void Do_RedefineMethod()
         {
-            using var lisp = new SoltysLisp();
+            using var lisp = new SoltysLispVM();
             lisp.Initialize();
             var result = lisp.Do(
                 @"(def! x (* 5 5))
@@ -72,7 +72,7 @@ namespace Soltys.Lisp.Test
         [Fact]
         public void TwoDo_RedefineMethod()
         {
-            using var lisp = new SoltysLisp();
+            using var lisp = new SoltysLispVM();
             lisp.Initialize();
             var result = lisp.Do(
                 @"(def! x (* 5 5))

@@ -11,12 +11,14 @@ namespace Soltys.VirtualMachine
         public int InstructionPointer
         {
             get;
-            set;
+            private set;
         }
 
         public string MethodName
         {
             get;
         }
+
+        public void AdvanceInstructionPointer() => InstructionPointer++;
     }
 }

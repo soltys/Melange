@@ -22,7 +22,7 @@ namespace Soltys.Database
         /// <summary>
         /// Write writes page and returns page id
         /// </summary>
-        public int Write(Page page)
+        public int WriteToDb(Page page)
         {
             if (page.PageId == -1)
             {
@@ -34,7 +34,7 @@ namespace Soltys.Database
             return page.PageId;
         }
         
-        public Page Read(int pageOffset)
+        public Page ReadFromDb(int pageOffset)
         {
             var offset = Page.PageSize * pageOffset;
             this.dataStream.Position = offset;
@@ -62,7 +62,7 @@ namespace Soltys.Database
             var pageAmount = this.dataStream.Length / Page.PageSize;
             for (int i = 0; i < pageAmount; i++)
             {
-                yield return Read(i);
+                yield return ReadFromDb(i);
             }
         }
 
@@ -97,7 +97,7 @@ namespace Soltys.Database
 
                 if (currentDataPage.DataBlock.NextPageId > 0)
                 {
-                    currentDataPage = Read(currentDataPage.DataBlock.NextPageId);
+                    currentDataPage = ReadFromDb(currentDataPage.DataBlock.NextPageId);
                 }
                 else
                 {
@@ -119,7 +119,7 @@ namespace Soltys.Database
                 int copyLength = Math.Min(bytesToBeWritten, currentPage.DataBlock.Data.Length);
                 newBytes.AsSpan().Slice(startIndex, copyLength).CopyTo(currentPage.DataBlock.Data);
 
-                Write(currentPage);
+                WriteToDb(currentPage);
 
                 bytesToBeWritten -= currentPage.DataBlock.Data.Length;
 
@@ -127,15 +127,18 @@ namespace Soltys.Database
                 {
                     if (currentPage.DataBlock.NextPageId > 0)
                     {
-                        currentPage = Read(currentPage.DataBlock.NextPageId);
+                        //read next page as we need to write to it chuck of data.
+                        currentPage = ReadFromDb(currentPage.DataBlock.NextPageId);
                     }
                     else
                     {
+                        // Create new page 
                         var newKvPage = new Page(pageKind);
-                        Write(newKvPage);
+                        WriteToDb(newKvPage);
 
+                        // update current page to point to new page 
                         currentPage.DataBlock.NextPageId = newKvPage.PageId;
-                        Write(currentPage);
+                        WriteToDb(currentPage);
 
                         currentPage = newKvPage;
                     }

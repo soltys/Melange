@@ -14,7 +14,7 @@ namespace Soltys.Lisp
         public void Run()
         {
             PrintWelcome();
-            using var slisp = new SoltysLisp();
+            using var slisp = new SoltysLispVM();
             slisp.Initialize();
             while (true)
             {

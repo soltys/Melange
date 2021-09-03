@@ -28,7 +28,7 @@ namespace Soltys.Database
                 store.Add(key, value);
             });
 
-            this.DatabaseData.Write(kvPage);
+            this.DatabaseData.WriteToDb(kvPage);
         }
 
         public void Add(string key, string value) => Add(key, new BsonString(value));
@@ -103,7 +103,7 @@ namespace Soltys.Database
 
         private Page FindOrCreateKeyValuePage(string collectionName)
         {
-            var headerPage = this.DatabaseData.Read(0);
+            var headerPage = this.DatabaseData.ReadFromDb(0);
             var pageId = 0;
             GetWriteStore(headerPage, (store) =>
             {
@@ -111,7 +111,7 @@ namespace Soltys.Database
                 if (!store.ContainsKey(locationKey))
                 {
                     var newPage = new Page(PageKind.KeyValue);
-                    this.DatabaseData.Write(newPage);
+                    this.DatabaseData.WriteToDb(newPage);
 
                     store[locationKey] = new BsonInteger(newPage.PageId);
                     pageId = newPage.PageId;
@@ -130,7 +130,7 @@ namespace Soltys.Database
                 }
             });
 
-            return this.DatabaseData.Read(pageId);
+            return this.DatabaseData.ReadFromDb(pageId);
         }
     }
 }

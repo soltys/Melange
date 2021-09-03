@@ -154,7 +154,7 @@ namespace Soltys.VirtualMachine
 
         public void VisitReturn(ReturnInstruction instruction)
         {
-            this.context.Return();
+            this.context.ReturnFromMethod();
         }
 
         public void VisitStore(StoreInstruction instruction) => throw new NotImplementedException();

@@ -103,18 +103,19 @@ namespace Soltys.VirtualMachine.Test.Runtime
                 switch (methodName)
                 {
                     case RuntimeVisitorTests.CorrectOrderVMFunction:
-                    default:
                         return new VMExternalFunction(new Action<int, int, int>((i1, i2, i3) =>
                         {
                             Assert.Equal(1, i1);
                             Assert.Equal(2, i2);
                             Assert.Equal(3, i3);
                         }));
+                    default:
+                        throw new InvalidOperationException($"Unknown method name {methodName}");
                 }
             }
 
             public bool TryChangeFunction(string methodName) => false;
-            public void Return()
+            public void ReturnFromMethod()
             {
             }
         }

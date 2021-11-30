@@ -34,6 +34,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_solution config", "_solution config", "{9D1C68F4-B8A6-44BF-8A2A-ACD8A7BD05CC}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		src\Common.props = src\Common.props
+		src\Directory.Build.props = src\Directory.Build.props
+		global.json = global.json
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -62,10 +65,23 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.VirtualMachine.Contracts", "src\VirtualMachine\Soltys.VirtualMachine.Contracts\Soltys.VirtualMachine.Contracts.csproj", "{581A76CB-BD19-4EDF-9575-C942213776AA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "page", "page", "{B9125298-25EF-4333-87B2-23051CB6F270}"
+	ProjectSection(SolutionItems) = preProject
+		src\Page\Directory.Build.props = src\Page\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.Page", "src\Page\Soltys.Page\Soltys.Page.csproj", "{A1929EFF-05BA-4A02-B5C4-A44A4012367E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.Page.Test", "src\Page\Soltys.Page.Test\Soltys.Page.Test.csproj", "{D71C71A4-46FE-4DEC-8647-8772A8CB05B5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "forest", "forest", "{DE9998D6-295E-4B66-B794-60CC1D6BA9B6}"
+	ProjectSection(SolutionItems) = preProject
+		src\Forest\Directory.Build.props = src\Forest\Directory.Build.props
+		src\Forest\README.md = src\Forest\README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.Forest", "src\Forest\Soltys.Forest\Soltys.Forest.csproj", "{77468C1E-A671-48DB-A267-9BAC3B7585F2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.Forest.Test", "src\Forest\Soltys.Forest.Test\Soltys.Forest.Test.csproj", "{E20FCF41-7A32-4CD5-B572-157DC62BACED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -133,6 +149,14 @@ Global
 		{D71C71A4-46FE-4DEC-8647-8772A8CB05B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D71C71A4-46FE-4DEC-8647-8772A8CB05B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D71C71A4-46FE-4DEC-8647-8772A8CB05B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77468C1E-A671-48DB-A267-9BAC3B7585F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77468C1E-A671-48DB-A267-9BAC3B7585F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77468C1E-A671-48DB-A267-9BAC3B7585F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77468C1E-A671-48DB-A267-9BAC3B7585F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E20FCF41-7A32-4CD5-B572-157DC62BACED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E20FCF41-7A32-4CD5-B572-157DC62BACED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E20FCF41-7A32-4CD5-B572-157DC62BACED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E20FCF41-7A32-4CD5-B572-157DC62BACED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -156,6 +180,8 @@ Global
 		{581A76CB-BD19-4EDF-9575-C942213776AA} = {1F097198-F333-41B9-914D-3740881F908D}
 		{A1929EFF-05BA-4A02-B5C4-A44A4012367E} = {B9125298-25EF-4333-87B2-23051CB6F270}
 		{D71C71A4-46FE-4DEC-8647-8772A8CB05B5} = {B9125298-25EF-4333-87B2-23051CB6F270}
+		{77468C1E-A671-48DB-A267-9BAC3B7585F2} = {DE9998D6-295E-4B66-B794-60CC1D6BA9B6}
+		{E20FCF41-7A32-4CD5-B572-157DC62BACED} = {DE9998D6-295E-4B66-B794-60CC1D6BA9B6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {59A0D75B-082D-4AFA-803F-F88334EE0A65}

@@ -1,0 +1,3 @@
+<Project>
+    <Import Condition=" '$(CommonImported)' == '' " Project="$(SolutionDir)\src\Common.props"/>
+</Project>

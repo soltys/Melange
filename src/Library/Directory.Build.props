@@ -1,0 +1,6 @@
+<Project>
+    <PropertyGroup>
+        <ProjectCategory>Library</ProjectCategory>
+    </PropertyGroup>
+    <Import Condition=" '$(CommonImported)' == '' " Project="$(SolutionDir)\src\Common.props"/>
+</Project>

@@ -1,0 +1,6 @@
+<Project>
+    <PropertyGroup>
+        <ProjectCategory>Lisp</ProjectCategory>
+    </PropertyGroup>
+    <Import Condition=" '$(CommonImported)' == '' " Project="$(SolutionDir)\src\Common.props"/>
+</Project>

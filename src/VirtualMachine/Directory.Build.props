@@ -1,0 +1,6 @@
+<Project>
+    <PropertyGroup>
+        <ProjectCategory>VirtualMachine</ProjectCategory>
+    </PropertyGroup>
+    <Import Condition=" '$(CommonImported)' == '' " Project="$(SolutionDir)\src\Common.props"/>
+</Project>

@@ -2,5 +2,5 @@
     <PropertyGroup>
         <ProjectCategory>VirtualMachine</ProjectCategory>
     </PropertyGroup>
-    <Import Condition=" '$(CommonImported)' == '' " Project="$(SolutionDir)\src\Common.props"/>
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 </Project>

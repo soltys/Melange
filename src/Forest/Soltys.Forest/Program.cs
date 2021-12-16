@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Soltys.Forest.Db;
 using Soltys.Forest.Repository;
@@ -12,10 +10,8 @@ namespace Soltys.Forest
     {
         public static void Main(string[] args)
         {
-            TinyIoC.TinyIoCContainer container = new();
+            TinyIoCContainer container = new();
             container.Register<IDbRepository, DbRepository>().AsSingleton();
-            
-
 
             var repo = container.Resolve<IDbRepository>();
             using var db = new ForestContext();

@@ -5,6 +5,7 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "db", "db", "{6C7CFF15-A3EF-410A-ACEF-B0793D3006A7}"
 	ProjectSection(SolutionItems) = preProject
+		src\Database\Directory.Build.props = src\Database\Directory.Build.props
 		src\Database\README.md = src\Database\README.md
 	EndProjectSection
 EndProject
@@ -18,6 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "example", "example", "{EB80
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "vm", "vm", "{1F097198-F333-41B9-914D-3740881F908D}"
 	ProjectSection(SolutionItems) = preProject
+		src\VirtualMachine\Directory.Build.props = src\VirtualMachine\Directory.Build.props
 		src\VirtualMachine\README.md = src\VirtualMachine\README.md
 	EndProjectSection
 EndProject
@@ -42,6 +44,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_solution config", "_soluti
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{DF60E4DC-A138-4436-9D02-AA02B89BF836}"
 	ProjectSection(SolutionItems) = preProject
+		src\Library\Directory.Build.props = src\Library\Directory.Build.props
 		src\Library\README.md = src\Library\README.md
 	EndProjectSection
 EndProject
@@ -51,6 +54,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.Library.Test", "src\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lisp", "lisp", "{201DE1F5-46D9-4016-902B-A73FB10C533F}"
 	ProjectSection(SolutionItems) = preProject
+		src\Lisp\Directory.Build.props = src\Lisp\Directory.Build.props
 		src\Lisp\README.md = src\Lisp\README.md
 	EndProjectSection
 EndProject

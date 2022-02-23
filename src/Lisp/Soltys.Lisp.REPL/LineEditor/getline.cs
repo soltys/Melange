@@ -1550,7 +1550,6 @@ namespace Soltys.Lisp
                 catch (ThreadAbortException)
                 {
                     this.searching = 0;
-                    Thread.ResetAbort();
                     Console.WriteLine();
                     SetPrompt(prompt);
                     SetText("");

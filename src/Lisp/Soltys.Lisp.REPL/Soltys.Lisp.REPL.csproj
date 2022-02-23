@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>repl</AssemblyName>
     <RootNamespace>Soltys.Lisp</RootNamespace>
     <Nullable>enable</Nullable>

@@ -1,6 +1,0 @@
-<Project>
-    <PropertyGroup>
-        <ProjectCategory>Page</ProjectCategory>
-    </PropertyGroup>
-    <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
-</Project>

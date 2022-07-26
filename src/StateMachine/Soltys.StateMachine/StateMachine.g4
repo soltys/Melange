@@ -1,15 +1,16 @@
 grammar StateMachine;
 
 stateMachine
-    : attribute* state_def+ EOF
+    : state_def+ EOF   
     ;
 
 attribute
-    : NAME NAME EOS
+    : IDEN IDEN EOS
     ;
 state_def
-    : STATE_ NAME L_BRACES state_entry* R_BRACES
-    | PROCESS_ NAME L_BRACES state_entry* state_def* R_BRACES
+    : STATE_ IDEN  L_BRACES EOS state_entry* R_BRACES EOS
+    | PROCESS_ IDEN L_BRACES EOS state_entry* state_def* R_BRACES EOS
+    | META L_BRACES EOS attribute+ R_BRACES EOS   
     ;
 state_entry
     : transition event? EOS
@@ -17,12 +18,12 @@ state_entry
     ;
 
 transition
-    : AUTO_TRANSITION BANG? NAME
-    | MANUAL_TRANSITION BANG? NAME
+    : AUTO_TRANSITION BANG? IDEN
+    | MANUAL_TRANSITION BANG? IDEN
     ;
 
 event
-    : '@' NAME
+    : '@' IDEN
     ;
 
 visitEvent
@@ -31,16 +32,15 @@ visitEvent
     ;
 
 
-NAME: [a-zA-Z_][a-zA-Z_0-9]*
-    ;
 
-
+    
 action_list
-   : L_BRACKET NAME (',' NAME)* R_BRACKET
+   : L_BRACKET IDEN (',' IDEN)* R_BRACKET
    ;
 
 STATE_: 'state';
 PROCESS_: 'process';
+META: 'meta';
 
 AUTO_TRANSITION: '->';
 MANUAL_TRANSITION: '=>';
@@ -56,5 +56,16 @@ R_PAREN: ')' ;
 L_BRACES: '{';
 R_BRACES: '}';
 
-EOS: ([\r\n]+); 
-WS: [ \t]+  -> channel(HIDDEN);
+
+IDEN: [a-zA-Z_][a-zA-Z_0-9]*;
+
+EOS: ([\r\n]+);
+
+WS: [ \t\u000C]+ -> skip;
+
+
+
+
+LINE_COMMENT : '//' ~[\r\n]*      -> channel(HIDDEN);
+
+INVALID_CHAR: .;

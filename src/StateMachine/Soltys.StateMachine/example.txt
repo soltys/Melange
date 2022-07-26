@@ -1,0 +1,49 @@
+meta {
+    name CashMachine
+}
+
+state Off {
+    -> SelfTest
+}
+
+state SelfTest {
+    onEnter [ PerformSelfTest ]
+    -> OutOfService @ CashMachineFailed
+    -> Idle    
+}
+
+state Idle {
+    -> ServingCustomer @ CardInserted
+    => Maintenance
+    => Off
+}
+
+process ServingCustomer {
+    onEnter [ ReadCard ] -> CustomerAuthentication
+    onExit [ EjectCard ] -> Idle
+    -> OutOfService @ CashMachineFailed
+
+    state CustomerAuthentication {
+        => SelectingTransaction
+        => !Exit
+    }
+
+    state SelectingTransaction {
+        => Transaction
+        => !Exit
+    }
+
+    state Transaction {
+        -> !Exit
+    }
+}
+
+state Maintenance {
+    -> OutOfService @ CashMachineFailed
+    => SelfTest
+}
+
+state OutOfService {
+    => Off // Turn off button is pressed
+    => Maintenance @ IssuesResolved
+}

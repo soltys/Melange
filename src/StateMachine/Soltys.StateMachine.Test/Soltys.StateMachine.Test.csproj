@@ -21,4 +21,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Soltys.StateMachine\Soltys.StateMachine.csproj" />
+  </ItemGroup>
+
 </Project>

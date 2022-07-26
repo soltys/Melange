@@ -8,13 +8,13 @@ attribute
     : IDEN IDEN EOS
     ;
 state_def
-    : STATE_ IDEN  L_BRACES EOS state_entry* R_BRACES EOS
-    | PROCESS_ IDEN L_BRACES EOS state_entry* state_def* R_BRACES EOS
-    | META L_BRACES EOS attribute+ R_BRACES EOS   
+    : STATE_ IDEN  L_BRACES EOS state_entry* R_BRACES EOS #StateDefinition
+    | PROCESS_ IDEN L_BRACES EOS state_entry* state_def* R_BRACES EOS #ProcessDefinition
+    | META L_BRACES EOS attribute+ R_BRACES EOS   #MetaDefinition
     ;
 state_entry
-    : transition event? EOS
-    | visitEvent EOS
+    : transition trigger? EOS
+    | event EOS
     ;
 
 transition
@@ -22,11 +22,11 @@ transition
     | MANUAL_TRANSITION BANG? IDEN
     ;
 
-event
+trigger
     : '@' IDEN
     ;
 
-visitEvent
+event
     : 'onEnter' action_list? transition?
     | 'onExit' action_list? transition?
     ;

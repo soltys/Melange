@@ -9,6 +9,8 @@ public class UnitTest1
         var stateMachine = compiler.Run();
 
         Assert.Equal("CashMachine", stateMachine.Name);
-        Assert.Equal(6, stateMachine.States.Count);
+        Assert.Equal(5, stateMachine.States.Count);
+        Assert.Equal(1, stateMachine.Processes.Count);
+        Assert.Equal(3, stateMachine.Processes[0].States.Count);
     }
 }

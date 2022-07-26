@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30011.22
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32602.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "db", "db", "{6C7CFF15-A3EF-410A-ACEF-B0793D3006A7}"
 	ProjectSection(SolutionItems) = preProject
@@ -78,6 +78,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.Forest", "src\Forest
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.Forest.Test", "src\Forest\Soltys.Forest.Test\Soltys.Forest.Test.csproj", "{E20FCF41-7A32-4CD5-B572-157DC62BACED}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "state_machine", "state_machine", "{60DF582E-4376-48F7-8951-031B28DD4670}"
+	ProjectSection(SolutionItems) = preProject
+		src\StateMachine\Directory.Build.props = src\StateMachine\Directory.Build.props
+		src\StateMachine\README.md = src\StateMachine\README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.StateMachine", "src\StateMachine\Soltys.StateMachine\Soltys.StateMachine.csproj", "{71E1A3F5-B4F0-4226-9D7D-61587F0B8588}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.StateMachine.Test", "src\StateMachine\Soltys.StateMachine.Test\Soltys.StateMachine.Test.csproj", "{9F1B9279-77DA-4450-B6A4-82B666077EC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -144,6 +154,14 @@ Global
 		{E20FCF41-7A32-4CD5-B572-157DC62BACED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E20FCF41-7A32-4CD5-B572-157DC62BACED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E20FCF41-7A32-4CD5-B572-157DC62BACED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71E1A3F5-B4F0-4226-9D7D-61587F0B8588}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71E1A3F5-B4F0-4226-9D7D-61587F0B8588}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71E1A3F5-B4F0-4226-9D7D-61587F0B8588}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71E1A3F5-B4F0-4226-9D7D-61587F0B8588}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F1B9279-77DA-4450-B6A4-82B666077EC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F1B9279-77DA-4450-B6A4-82B666077EC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F1B9279-77DA-4450-B6A4-82B666077EC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F1B9279-77DA-4450-B6A4-82B666077EC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -167,6 +185,8 @@ Global
 		{581A76CB-BD19-4EDF-9575-C942213776AA} = {1F097198-F333-41B9-914D-3740881F908D}
 		{77468C1E-A671-48DB-A267-9BAC3B7585F2} = {DE9998D6-295E-4B66-B794-60CC1D6BA9B6}
 		{E20FCF41-7A32-4CD5-B572-157DC62BACED} = {DE9998D6-295E-4B66-B794-60CC1D6BA9B6}
+		{71E1A3F5-B4F0-4226-9D7D-61587F0B8588} = {60DF582E-4376-48F7-8951-031B28DD4670}
+		{9F1B9279-77DA-4450-B6A4-82B666077EC5} = {60DF582E-4376-48F7-8951-031B28DD4670}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {59A0D75B-082D-4AFA-803F-F88334EE0A65}

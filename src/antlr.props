@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-		<Antlr4UseCSharpGenerator>True</Antlr4UseCSharpGenerator>
+		<Antlr4UseCSharpGenerator>True</Antlr4UseCSharpGenerator>		
     </PropertyGroup>
 	
 	<ItemGroup>

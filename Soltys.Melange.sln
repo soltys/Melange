@@ -36,6 +36,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_solution config", "_solution config", "{9D1C68F4-B8A6-44BF-8A2A-ACD8A7BD05CC}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		src\antlr.props = src\antlr.props
 		src\Common.props = src\Common.props
 		src\Directory.Build.props = src\Directory.Build.props
 		global.json = global.json

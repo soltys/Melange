@@ -5,16 +5,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Antlr4AbstractGrammar Include="StateMachine.g4">
-            <Generator>MSBuild:Compile</Generator>
-            <CustomToolNamespace>Soltys.StateMachine</CustomToolNamespace>
-            <Listener>False</Listener>
-            <Visitor>True</Visitor>
-        </Antlr4AbstractGrammar>
-    </ItemGroup>
-
-
-    <ItemGroup>
         <None Update="example.txt">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>

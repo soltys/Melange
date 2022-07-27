@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>    
+  <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Soltys.StateMachine\Soltys.StateMachine.csproj" />
+    <ProjectReference Include="..\Soltys.JsonFishOil\Soltys.JsonFishOil.csproj" />
   </ItemGroup>
 
 </Project>

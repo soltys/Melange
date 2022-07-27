@@ -1,20 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <ItemGroup>
+        <Antlr4AbstractGrammar Include="StateMachine.g4">
+            <Generator>MSBuild:Compile</Generator>
+            <CustomToolNamespace>Soltys.StateMachine</CustomToolNamespace>
+            <Listener>False</Listener>
+            <Visitor>True</Visitor>
+        </Antlr4AbstractGrammar>
+    </ItemGroup>
 
-  <ItemGroup>
 
-    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.10.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="example.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
+    <ItemGroup>
+        <None Update="example.txt">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 </Project>

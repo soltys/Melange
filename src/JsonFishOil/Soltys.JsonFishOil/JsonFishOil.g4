@@ -1,17 +1,43 @@
 grammar JsonFishOil;
 
 fishOil
-    : access ('.' access)* EOF   
+    : accessChain 
+    | objMake
     ;
 
-access : NAME
-       | NAME '[' NUMBER ']'
-       ;
+objMake
+    : '{' propertyExpr (',' propertyExpr)* '}'
+    ;
+propertyExpr
+    : NAME ':' propertyValue
+    ;
 
+propertyValue
+    : STRING
+    | NUMBER
+    | accessChain
+    | objMake
+    ;
+
+accessChain
+    : access accessChain?
+    ;
+
+access : '.'  NAME '[' NUMBER ']'
+       | '.'  NAME
+       | '.' '[' NUMBER ']'
+       | '.' 
+       ;
 
 WS
     : [ \t\u000C\r\n]+ -> skip
     ;
+
+
+NUMBER
+   : '-'? Integer ('.' [0-9] +)? EXP?
+   ;
+
 
 NAME
     : [a-zA-Z_][a-zA-Z_0-9]*
@@ -37,17 +63,16 @@ fragment SAFECODEPOINT
    ;
 
    
-NUMBER
-   : '-'? INT ('.' [0-9] +)? EXP?
-   ;
 
 
-fragment INT
+
+
+fragment Integer
    : '0' | [1-9] [0-9]*
    ;
 
 // no leading zeros
 
 fragment EXP
-   : [Ee] [+\-]? INT
+   : [Ee] [+\-]? Integer
    ;

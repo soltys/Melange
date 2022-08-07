@@ -1,0 +1,21 @@
+{
+    "data": {
+        "people": [
+            {
+                "name": "Carl",
+                "age": 20,
+                "occupation": "Rower"
+            },
+            {
+                "name": "John",
+                "age": 30,
+                "occupation": "Mountaineer"
+            },
+            {
+                "name": "Paul",
+                "age": 40,
+                "occupation": "Confectioner"
+            }
+        ] 
+    }
+}

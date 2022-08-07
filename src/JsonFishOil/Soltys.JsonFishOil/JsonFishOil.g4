@@ -9,10 +9,10 @@ objMake
     : '{' propertyExpr (',' propertyExpr)* '}'
     ;
 propertyExpr
-    : NAME ':' propertyValue
+    : NAME ':' jsonValue
     ;
 
-propertyValue
+jsonValue
     : STRING
     | NUMBER
     | accessChain

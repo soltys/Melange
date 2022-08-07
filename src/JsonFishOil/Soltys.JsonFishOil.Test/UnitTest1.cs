@@ -6,6 +6,6 @@ public class UnitTest1
     public void Test1()
     {
         Engine engine = new Engine();
-        var func = Engine.CompileToFunc();
+        var func = Engine.ExectuteFunc();
     }
 }

@@ -1,5 +1,7 @@
+using System.Text;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Soltys.JsonFishOil;
@@ -20,6 +22,19 @@ public class Engine
         var tree = parser.fishOil();
         var visitor = new JsonFishOilVisitor();
         return visitor.Visit(tree);
+    }
+
+    public static string ExectuteFunc()
+    {
+        var jsonFunc = CompileToFunc();
+        var fishOilOutput = jsonFunc.Execute(FishOilContext.Create(File.ReadAllText("data.json")));
+        return FormatJson(fishOilOutput);
+    }
+
+    private static string FormatJson(string json)
+    {
+        dynamic parsedJson = JsonConvert.DeserializeObject(json);
+        return JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
     }
 }
 
@@ -60,11 +75,11 @@ public class JsonFishOilVisitor : JsonFishOilBaseVisitor<JsonFunc>
     {
         var makePropertyFunc = new MakePropertyFunc();
         makePropertyFunc.PropertyName = context.NAME().GetText();
-        makePropertyFunc.ValueFunc = Visit(context.propertyValue());
+        makePropertyFunc.ValueFunc = Visit(context.jsonValue());
         return makePropertyFunc;
     }
 
-    public override JsonFunc VisitPropertyValue([NotNull] JsonFishOilParser.PropertyValueContext context)
+    public override JsonFunc VisitJsonValue([NotNull] JsonFishOilParser.JsonValueContext context)
     {
         if (context.NUMBER() != null)
         {
@@ -115,14 +130,25 @@ public class JsonFishOilVisitor : JsonFishOilBaseVisitor<JsonFunc>
 
 public class FishOilContext
 {
-    JToken JsonRoot
+    public JToken Current
     {
-        get;set;
+        get; set;
+    }
+
+    public static FishOilContext Create(string jsonData)
+    {
+        return new FishOilContext { Current = JToken.Parse(jsonData) };
+    }
+
+    public static FishOilContext Create(JToken jToken)
+    {
+        return new FishOilContext { Current = jToken };
     }
 }
 
-public class JsonFunc
+public abstract class JsonFunc
 {
+    public abstract string Execute(FishOilContext context);
 }
 
 public class AccessFunc : JsonFunc
@@ -141,6 +167,58 @@ public class AccessFunc : JsonFunc
     {
         get; set;
     }
+
+    public override string Execute(FishOilContext context)
+    {
+
+        if (ElementName == null)
+        {
+            // case where input is '.'
+            return context.Current.ToString();
+        }
+
+        if (context.Current[ElementName] == null)
+        {
+            throw new InvalidOperationException($"{ElementName} does not exist");
+        }
+
+        JToken newCurrentToken;
+
+        if (ArrayIndex.HasValue)
+        {
+            if (context.Current[ElementName].Type != JTokenType.Array)
+            {
+                throw new InvalidOperationException($"{ElementName} is not a array");
+            }
+
+            newCurrentToken = context.Current[ElementName];
+            newCurrentToken = newCurrentToken.ElementAt(ArrayIndex.Value);
+        }
+        else
+        {
+            newCurrentToken = context.Current[ElementName];
+        }
+
+        if (SubAccess != null)
+        {
+            return SubAccess.Execute(FishOilContext.Create(newCurrentToken));
+        }
+        else
+        {
+
+            StringBuilder sb = new StringBuilder();
+            StringWriter sw = new StringWriter(sb);
+
+            using (JsonWriter writer = new JsonTextWriter(sw))
+            {
+                writer.Formatting = Formatting.Indented;
+
+                newCurrentToken.WriteTo(writer);
+            }
+
+            return sb.ToString();
+        }
+    }
 }
 
 public class MakeObjectFunc : JsonFunc
@@ -149,6 +227,17 @@ public class MakeObjectFunc : JsonFunc
     {
         get;
     } = new List<MakePropertyFunc>();
+
+    public override string Execute(FishOilContext context)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        sb.AppendLine("{");
+        sb.Append(string.Join(",", PropertyFuncs.Select(x => x.Execute(context))));
+        sb.AppendLine("}");
+
+        return sb.ToString();
+    }
 }
 
 public class MakePropertyFunc : JsonFunc
@@ -162,6 +251,11 @@ public class MakePropertyFunc : JsonFunc
     {
         get; set;
     }
+
+    public override string Execute(FishOilContext context)
+    {
+        return $"\"{PropertyName}\": {ValueFunc.Execute(context)}";
+    }
 }
 
 public class ConstValueFunc : JsonFunc
@@ -169,5 +263,10 @@ public class ConstValueFunc : JsonFunc
     public string Value
     {
         get; set;
+    }
+
+    public override string Execute(FishOilContext context)
+    {
+        return Value;
     }
 }

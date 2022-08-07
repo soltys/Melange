@@ -1,5 +1,10 @@
 {
     "data": {
+        "company": "CrossFit",
+        "value": 1000000,
+        "boss": {
+            "name": "Kryst"
+        },
         "people": [
             {
                 "name": "Carl",
@@ -16,6 +21,6 @@
                 "age": 40,
                 "occupation": "Confectioner"
             }
-        ] 
+        ]
     }
 }

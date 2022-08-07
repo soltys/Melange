@@ -126,6 +126,18 @@ public class JsonFishOilVisitor : JsonFishOilBaseVisitor<JsonFunc>
 
         return access;
     }
+
+    public override JsonFunc VisitArrMake([NotNull] JsonFishOilParser.ArrMakeContext context)
+    {
+        var makeArrayFunc = new MakeArrayFunc();
+
+        foreach (var jsonValue in context.jsonValue())
+        {
+            makeArrayFunc.ValueFuncs.Add(Visit(jsonValue));
+        }
+
+        return makeArrayFunc;
+    }
 }
 
 public class FishOilContext
@@ -235,6 +247,25 @@ public class MakeObjectFunc : JsonFunc
         sb.AppendLine("{");
         sb.Append(string.Join(",", PropertyFuncs.Select(x => x.Execute(context))));
         sb.AppendLine("}");
+
+        return sb.ToString();
+    }
+}
+
+public class MakeArrayFunc : JsonFunc
+{
+    public List<JsonFunc> ValueFuncs
+    {
+        get;
+    } = new List<JsonFunc>();
+
+    public override string Execute(FishOilContext context)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        sb.AppendLine("[");
+        sb.Append(string.Join(",", ValueFuncs.Select(x => x.Execute(context))));
+        sb.AppendLine("]");
 
         return sb.ToString();
     }

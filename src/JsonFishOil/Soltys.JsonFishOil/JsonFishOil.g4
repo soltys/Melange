@@ -1,19 +1,14 @@
 grammar JsonFishOil;
 
 fishOil
-    : accessChain 
-    | objMake
-    | arrMake
+    : objMake    
+    | accessChain 
     ;
 
 objMake
     : '{' propertyExpr (',' propertyExpr)* '}'
     ;
 
-arrMake
-    : '[' ']'
-    | '[' jsonValue (',' jsonValue)* ']'
-    ;
 propertyExpr
     : NAME ':' jsonValue
     ;
@@ -23,7 +18,6 @@ jsonValue
     | NUMBER
     | accessChain
     | objMake
-    | arrMake
     ;
 
 accessChain

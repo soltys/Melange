@@ -73,15 +73,15 @@ public class JsonFishOilVisitor : JsonFishOilBaseVisitor<JsonFunc>
         return access;
     }
 
-    //public override JsonFunc VisitArrMake([NotNull] JsonFishOilParser.ArrMakeContext context)
-    //{
-    //    var makeArrayFunc = new MakeArrayFunc();
+    public override JsonFunc VisitArrMake([NotNull] JsonFishOilParser.ArrMakeContext context)
+    {
+        var makeArrayFunc = new MakeArrayFunc();
 
-    //    foreach (var jsonValue in context.jsonValue())
-    //    {
-    //        makeArrayFunc.ValueFuncs.Add(Visit(jsonValue));
-    //    }
+        foreach (var jsonValue in context.jsonValue())
+        {
+            makeArrayFunc.ValueFuncs.Add(Visit(jsonValue));
+        }
 
-    //    return makeArrayFunc;
-    //}
+        return makeArrayFunc;
+    }
 }

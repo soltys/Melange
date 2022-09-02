@@ -2,7 +2,11 @@ grammar JsonFishOil;
 
 fishOil
     : objMake    
-    | accessChain 
+    | arrMake
+    | accessChain    
+    ;
+arrMake
+    : '[' jsonValue (',' jsonValue)* ']'
     ;
 
 objMake
@@ -18,6 +22,7 @@ jsonValue
     | NUMBER
     | accessChain
     | objMake
+    | arrMake
     ;
 
 accessChain

@@ -13,7 +13,7 @@
       <None Update="make_obj.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="make_array.txt">
+      <None Update="make_arr.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

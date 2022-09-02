@@ -6,7 +6,7 @@ public class Engine
 {
     public static JsonFunc CompileToFunc()
     {
-        var input = File.ReadAllText("make_obj.txt");
+        var input = File.ReadAllText("make_arr.txt");
         AntlrInputStream inputStream = new AntlrInputStream(input);
         var lexer = new JsonFishOilLexer(inputStream);
         var tokens = new CommonTokenStream(lexer);

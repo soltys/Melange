@@ -4,9 +4,8 @@ using Newtonsoft.Json;
 namespace Soltys.JsonFishOil;
 public class Engine
 {
-    public static JsonFunc CompileToFunc()
+    public static string RunFishOil(string input, string json)
     {
-        var input = File.ReadAllText("make_arr.txt");
         AntlrInputStream inputStream = new AntlrInputStream(input);
         var lexer = new JsonFishOilLexer(inputStream);
         var tokens = new CommonTokenStream(lexer);
@@ -14,13 +13,8 @@ public class Engine
 
         var tree = parser.fishOil();
         var visitor = new JsonFishOilVisitor();
-        return visitor.Visit(tree);
-    }
-
-    public static string ExectuteFunc()
-    {
-        var jsonFunc = CompileToFunc();
-        var fishOilOutput = jsonFunc.Execute(FishOilContext.Create(File.ReadAllText("data.json")));
+        var jsonFunc =  visitor.Visit(tree);
+        var fishOilOutput = jsonFunc.Execute(FishOilContext.Create(json));
         return FormatJson(fishOilOutput);
     }
 

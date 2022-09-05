@@ -6,6 +6,9 @@ public class UnitTest1
     public void Test1()
     {
         Engine engine = new Engine();
-        var func = Engine.ExectuteFunc();
+
+        var query = "{ mySuperName: .data.people[2].name, age: 42, constValue: \"zsbit\", subObj: { secret: 420 } }";
+        var json = File.ReadAllText("data.json");
+        var func = Engine.RunFishOil(query, json);
     }
 }

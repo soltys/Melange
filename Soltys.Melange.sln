@@ -99,6 +99,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.JsonFishOil", "src\J
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.JsonFishOil.Test", "src\JsonFishOil\Soltys.JsonFishOil.Test\Soltys.JsonFishOil.Test.csproj", "{5BAABCBA-8357-47D3-8A69-DF822722072E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soltys.JsonFishOil.App", "Soltys.JsonFishOil.App\Soltys.JsonFishOil.App.csproj", "{968E0D4D-A363-4D83-A3A5-AFC1A60C8DC8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -181,6 +183,10 @@ Global
 		{5BAABCBA-8357-47D3-8A69-DF822722072E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BAABCBA-8357-47D3-8A69-DF822722072E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BAABCBA-8357-47D3-8A69-DF822722072E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{968E0D4D-A363-4D83-A3A5-AFC1A60C8DC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{968E0D4D-A363-4D83-A3A5-AFC1A60C8DC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{968E0D4D-A363-4D83-A3A5-AFC1A60C8DC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{968E0D4D-A363-4D83-A3A5-AFC1A60C8DC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -208,6 +214,7 @@ Global
 		{9F1B9279-77DA-4450-B6A4-82B666077EC5} = {60DF582E-4376-48F7-8951-031B28DD4670}
 		{AB2A8A25-CB0D-4F39-800A-E85235D845AC} = {5548E006-EF4F-41DB-A03A-4C8E60833B8F}
 		{5BAABCBA-8357-47D3-8A69-DF822722072E} = {5548E006-EF4F-41DB-A03A-4C8E60833B8F}
+		{968E0D4D-A363-4D83-A3A5-AFC1A60C8DC8} = {5548E006-EF4F-41DB-A03A-4C8E60833B8F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {59A0D75B-082D-4AFA-803F-F88334EE0A65}

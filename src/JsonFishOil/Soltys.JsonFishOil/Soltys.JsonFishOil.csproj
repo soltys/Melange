@@ -6,16 +6,5 @@
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
-    <ItemGroup>
-      <None Update="data.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="make_obj.txt">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="make_arr.txt">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
 
 </Project>

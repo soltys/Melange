@@ -6,7 +6,7 @@ public class Engine
 {
     public static string RunFishOil(string input, string json)
     {
-        AntlrInputStream inputStream = new AntlrInputStream(input);
+        var inputStream = new AntlrInputStream(input);
         var lexer = new JsonFishOilLexer(inputStream);
         var tokens = new CommonTokenStream(lexer);
         var parser = new JsonFishOilParser(tokens);

@@ -99,7 +99,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.JsonFishOil", "src\J
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soltys.JsonFishOil.Test", "src\JsonFishOil\Soltys.JsonFishOil.Test\Soltys.JsonFishOil.Test.csproj", "{5BAABCBA-8357-47D3-8A69-DF822722072E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soltys.JsonFishOil.App", "Soltys.JsonFishOil.App\Soltys.JsonFishOil.App.csproj", "{968E0D4D-A363-4D83-A3A5-AFC1A60C8DC8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soltys.JsonFishOil.App", "src\JsonFishOil\Soltys.JsonFishOil.App\Soltys.JsonFishOil.App.csproj", "{968E0D4D-A363-4D83-A3A5-AFC1A60C8DC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

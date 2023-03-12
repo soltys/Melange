@@ -1,17 +1,14 @@
-using System;
+namespace Soltys.Database;
 
-namespace Soltys.Database
+internal class DbKeyNotFoundException :Exception
 {
-    internal class DbKeyNotFoundException :Exception
+    public string KeyNotFound
     {
-        public string KeyNotFound
-        {
-            get;
-        }
+        get;
+    }
 
-        public DbKeyNotFoundException(string keyNotFound) :base($"Key {keyNotFound} is not found")
-        {
-            KeyNotFound = keyNotFound;
-        }
+    public DbKeyNotFoundException(string keyNotFound) :base($"Key {keyNotFound} is not found")
+    {
+        KeyNotFound = keyNotFound;
     }
 }

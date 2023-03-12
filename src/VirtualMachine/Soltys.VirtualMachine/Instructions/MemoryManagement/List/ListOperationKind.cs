@@ -1,8 +1,7 @@
-namespace Soltys.VirtualMachine
+namespace Soltys.VirtualMachine;
+
+public enum ListOperationKind : byte
 {
-    public enum ListOperationKind : byte
-    {
-        New,
-        Add
-    }
+    New,
+    Add
 }

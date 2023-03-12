@@ -1,11 +1,10 @@
-namespace Soltys.Library.TextAnalysis
+namespace Soltys.Library.TextAnalysis;
+
+public interface ITokenSource<out TToken, TTokenKind> where TToken: IToken<TTokenKind>
 {
-    public interface ITokenSource<out TToken, TTokenKind> where TToken: IToken<TTokenKind>
+    TToken Current
     {
-        TToken Current
-        {
-            get;
-        }
-        void NextToken();
+        get;
     }
+    void NextToken();
 }

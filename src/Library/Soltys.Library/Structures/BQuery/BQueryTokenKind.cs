@@ -1,13 +1,12 @@
-namespace Soltys.Library.Bson.BQuery
+namespace Soltys.Library.BQuery;
+
+internal enum BQueryTokenKind
 {
-    internal enum BQueryTokenKind
-    {
-        Undefined,
-        Id,
-        Number,
-        RBracket,
-        LBracket,
-        Dot,
-        String
-    }
+    Undefined,
+    Id,
+    Number,
+    RBracket,
+    LBracket,
+    Dot,
+    String
 }

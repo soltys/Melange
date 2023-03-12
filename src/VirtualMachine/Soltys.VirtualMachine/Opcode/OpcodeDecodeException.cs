@@ -1,8 +1,5 @@
-using System;
+namespace Soltys.VirtualMachine;
 
-namespace Soltys.VirtualMachine
+public class OpcodeDecodeException : Exception
 {
-    public class OpcodeDecodeException : Exception
-    {
-    }
 }

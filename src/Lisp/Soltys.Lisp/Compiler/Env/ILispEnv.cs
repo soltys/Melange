@@ -1,10 +1,9 @@
-namespace Soltys.Lisp.Compiler
+namespace Soltys.Lisp.Compiler;
+
+internal interface ILispEnv
 {
-    internal interface ILispEnv
+    IReadOnlyEnvData Data
     {
-        IReadOnlyEnvData Data
-        {
-            get;
-        }
+        get;
     }
 }

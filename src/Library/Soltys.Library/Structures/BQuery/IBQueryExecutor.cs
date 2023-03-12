@@ -1,7 +1,8 @@
-namespace Soltys.Library.Bson.BQuery
+using Soltys.Library.Bson;
+
+namespace Soltys.Library.BQuery;
+
+internal interface IBQueryExecutor
 {
-    internal interface IBQueryExecutor
-    {
-        BsonValue ExecuteValueQuery(BsonDocument document, AstValueAccess query);
-    }
+    BsonValue ExecuteValueQuery(BsonDocument document, AstValueAccess query);
 }

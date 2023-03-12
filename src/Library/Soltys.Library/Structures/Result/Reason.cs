@@ -1,11 +1,10 @@
-namespace Soltys.Library
+namespace Soltys.Library;
+
+public class Reason
 {
-    public class Reason
+    public string Message { get; protected set; }
+    public Reason()
     {
-        public string Message { get; protected set; }
-        public Reason()
-        {
-            Message = string.Empty;
-        }
+        Message = string.Empty;
     }
 }

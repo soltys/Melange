@@ -1,184 +1,181 @@
-using System;
-using System.Collections.Generic;
 using Soltys.VirtualMachine.Contracts;
 
-namespace Soltys.VirtualMachine
+namespace Soltys.VirtualMachine;
+
+internal class RuntimeVisitor : IRuntimeVisitor
 {
-    internal class RuntimeVisitor : IRuntimeVisitor
+    private readonly IVMContext context;
+
+    public RuntimeVisitor(IVMContext context)
     {
-        private readonly IVMContext context;
+        this.context = context;
+    }
 
-        public RuntimeVisitor(IVMContext context)
+    public void VisitAdd(AddInstruction instruction)
+    {
+        var rhs = this.context.ValueStack.Pop();
+        var lhs = this.context.ValueStack.Pop();
+        object result;
+        if (rhs is int)
         {
-            this.context = context;
+            result = (int)lhs + (int)rhs;
+        }
+        else if (rhs is double)
+        {
+            result = (double)lhs + (double)rhs;
+        }
+        else
+        {
+            throw new InvalidOperationException();
         }
 
-        public void VisitAdd(AddInstruction instruction)
-        {
-            var rhs = this.context.ValueStack.Pop();
-            var lhs = this.context.ValueStack.Pop();
-            object result;
-            if (rhs is int)
-            {
-                result = (int)lhs + (int)rhs;
-            }
-            else if (rhs is double)
-            {
-                result = (double)lhs + (double)rhs;
-            }
-            else
-            {
-                throw new InvalidOperationException();
-            }
+        this.context.ValueStack.Push(result);
+    }
 
-            this.context.ValueStack.Push(result);
+    public void VisitBranch(BranchInstruction instruction) => throw new NotImplementedException();
+
+    public void VisitCall(CallInstruction instruction)
+    {
+        var functionFound = this.context.TryChangeFunction(instruction.MethodName);
+        if (functionFound)
+        {
+            return;
         }
 
-        public void VisitBranch(BranchInstruction instruction) => throw new NotImplementedException();
+        var vmFunc = this.context.FindExternalFunction(instruction.MethodName);
+        CallExternalFunction(vmFunc);
 
-        public void VisitCall(CallInstruction instruction)
+        void CallExternalFunction(IVMExternalFunction vmFunc)
         {
-            var functionFound = this.context.TryChangeFunction(instruction.MethodName);
-            if (functionFound)
+            var parameters = new List<object>();
+
+            for (int i = 0; i < vmFunc.ArgumentCount; i++)
             {
-                return;
+                parameters.Add(this.context.ValueStack.Pop());
             }
 
-            var vmFunc = this.context.FindExternalFunction(instruction.MethodName);
-            CallExternalFunction(vmFunc);
+            parameters.Reverse();
 
-            void CallExternalFunction(IVMExternalFunction vmFunc)
+            var result = vmFunc.Execute(parameters.ToArray());
+
+            if (result != null)
             {
-                var parameters = new List<object>();
-
-                for (int i = 0; i < vmFunc.ArgumentCount; i++)
-                {
-                    parameters.Add(this.context.ValueStack.Pop());
-                }
-
-                parameters.Reverse();
-
-                var result = vmFunc.Execute(parameters.ToArray());
-
-                if (result != null)
-                {
-                    this.context.ValueStack.Push(result);
-                }
+                this.context.ValueStack.Push(result);
             }
         }
+    }
 
-        public void VisitCompare(CompareInstruction instruction) => throw new NotImplementedException();
+    public void VisitCompare(CompareInstruction instruction) => throw new NotImplementedException();
 
-        public void VisitDivision(DivisionInstruction instruction)
+    public void VisitDivision(DivisionInstruction instruction)
+    {
+        var rhs = this.context.ValueStack.Pop();
+        var lhs = this.context.ValueStack.Pop();
+
+        object result;
+        if (rhs is int)
         {
-            var rhs = this.context.ValueStack.Pop();
-            var lhs = this.context.ValueStack.Pop();
-
-            object result;
-            if (rhs is int)
-            {
-                result = (int)lhs / (int)rhs;
-            }
-            else if (rhs is double)
-            {
-                result = (double)lhs / (double)rhs;
-            }
-            else
-            {
-                throw new InvalidOperationException();
-            }
-
-            this.context.ValueStack.Push(result);
+            result = (int)lhs / (int)rhs;
+        }
+        else if (rhs is double)
+        {
+            result = (double)lhs / (double)rhs;
+        }
+        else
+        {
+            throw new InvalidOperationException();
         }
 
-        public void VisitLoadConstant(LoadConstantInstruction instruction)
+        this.context.ValueStack.Push(result);
+    }
+
+    public void VisitLoadConstant(LoadConstantInstruction instruction)
+    {
+        this.context.ValueStack.Push(instruction.Value);
+    }
+
+    public void VisitLoadPlace(LoadPlaceInstruction instruction) => throw new NotImplementedException();
+
+    public void VisitLoadString(LoadStringInstruction instruction)
+    {
+        this.context.ValueStack.Push(instruction.Value);
+    }
+    public void VisitLoadLibrary(LoadLibraryInstruction instruction)
+    {
+        var vmLibrary = LibraryLoader.LoadLibrary(instruction.LibraryName);
+        this.context.AddVMLibrary(vmLibrary);
+    }
+
+    public void VisitMultiplication(MultiplicationInstruction instruction)
+    {
+        var rhs = this.context.ValueStack.Pop();
+        var lhs = this.context.ValueStack.Pop();
+
+        object result;
+        if (rhs is int)
         {
-            this.context.ValueStack.Push(instruction.Value);
+            result = (int)lhs * (int)rhs;
+        }
+        else if (rhs is double)
+        {
+            result = (double)lhs * (double)rhs;
+        }
+        else
+        {
+            throw new InvalidOperationException();
         }
 
-        public void VisitLoadPlace(LoadPlaceInstruction instruction) => throw new NotImplementedException();
+        this.context.ValueStack.Push(result);
+    }
 
-        public void VisitLoadString(LoadStringInstruction instruction)
+    public void VisitNop(NopInstruction instruction)
+    {
+    }
+
+    public void VisitList(ListInstruction listInstruction)
+    {
+        switch (listInstruction.Operation)
         {
-            this.context.ValueStack.Push(instruction.Value);
+            case ListOperationKind.New:
+                this.context.ValueStack.Push(new List<object>());
+                break;
+            case ListOperationKind.Add:
+                var value = this.context.ValueStack.Pop();
+                var theList = (List<object>)this.context.ValueStack.Pop();
+                theList.Add(value);
+                this.context.ValueStack.Push(theList);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
-        public void VisitLoadLibrary(LoadLibraryInstruction instruction)
+    }
+
+    public void VisitReturn(ReturnInstruction instruction)
+    {
+        this.context.ReturnFromMethod();
+    }
+
+    public void VisitStore(StoreInstruction instruction) => throw new NotImplementedException();
+
+    public void VisitSubtraction(SubtractionInstruction instruction)
+    {
+        var rhs = this.context.ValueStack.Pop();
+        var lhs = this.context.ValueStack.Pop();
+
+        object result;
+        if (rhs is int)
         {
-            var vmLibrary = LibraryLoader.LoadLibrary(instruction.LibraryName);
-            this.context.AddVMLibrary(vmLibrary);
+            result = (int)lhs - (int)rhs;
         }
-
-        public void VisitMultiplication(MultiplicationInstruction instruction)
+        else if (rhs is double)
         {
-            var rhs = this.context.ValueStack.Pop();
-            var lhs = this.context.ValueStack.Pop();
-
-            object result;
-            if (rhs is int)
-            {
-                result = (int)lhs * (int)rhs;
-            }
-            else if (rhs is double)
-            {
-                result = (double)lhs * (double)rhs;
-            }
-            else
-            {
-                throw new InvalidOperationException();
-            }
-
-            this.context.ValueStack.Push(result);
+            result = (double)lhs - (double)rhs;
         }
-
-        public void VisitNop(NopInstruction instruction)
+        else
         {
-        }
-
-        public void VisitList(ListInstruction listInstruction)
-        {
-            switch (listInstruction.Operation)
-            {
-                case ListOperationKind.New:
-                    this.context.ValueStack.Push(new List<object>());
-                    break;
-                case ListOperationKind.Add:
-                    var value = this.context.ValueStack.Pop();
-                    var theList = (List<object>)this.context.ValueStack.Pop();
-                    theList.Add(value);
-                    this.context.ValueStack.Push(theList);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            throw new InvalidOperationException();
         }
 
-        public void VisitReturn(ReturnInstruction instruction)
-        {
-            this.context.ReturnFromMethod();
-        }
-
-        public void VisitStore(StoreInstruction instruction) => throw new NotImplementedException();
-
-        public void VisitSubtraction(SubtractionInstruction instruction)
-        {
-            var rhs = this.context.ValueStack.Pop();
-            var lhs = this.context.ValueStack.Pop();
-
-            object result;
-            if (rhs is int)
-            {
-                result = (int)lhs - (int)rhs;
-            }
-            else if (rhs is double)
-            {
-                result = (double)lhs - (double)rhs;
-            }
-            else
-            {
-                throw new InvalidOperationException();
-            }
-
-            this.context.ValueStack.Push(result);
-        }
+        this.context.ValueStack.Push(result);
     }
 }

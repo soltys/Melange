@@ -1,7 +1,6 @@
-namespace Soltys.VirtualMachine
+namespace Soltys.VirtualMachine;
+
+public interface IRuntimeVisitorFactory
 {
-    public interface IRuntimeVisitorFactory
-    {
-        IRuntimeVisitor Create(IVMContext context);
-    }
+    IRuntimeVisitor Create(IVMContext context);
 }

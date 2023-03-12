@@ -1,12 +1,9 @@
-using System.Collections.Generic;
+namespace Soltys.VirtualMachine.Contracts;
 
-namespace Soltys.VirtualMachine.Contracts
+public interface IVMLibrary
 {
-    public interface IVMLibrary
+    IReadOnlyDictionary<string, IVMExternalFunction> Functions
     {
-        IReadOnlyDictionary<string, IVMExternalFunction> Functions
-        {
-            get;
-        }
+        get;
     }
 }

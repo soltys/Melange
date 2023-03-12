@@ -1,12 +1,11 @@
-namespace Soltys.VirtualMachine.Contracts
-{
-    public interface IVMExternalFunction
-    {
-        int ArgumentCount
-        {
-            get;
-        }
+namespace Soltys.VirtualMachine.Contracts;
 
-        object Execute(params object[] args);
+public interface IVMExternalFunction
+{
+    int ArgumentCount
+    {
+        get;
     }
+
+    object Execute(params object[] args);
 }

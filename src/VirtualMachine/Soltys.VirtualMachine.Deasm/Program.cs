@@ -1,12 +1,9 @@
-using System;
+namespace Soltys.VirtualMachine.Deasm;
 
-namespace Soltys.VirtualMachine.Deasm
+internal class Program
 {
-    internal class Program
+    private static void Main(string[] args)
     {
-        private static void Main(string[] args)
-        {
-            Console.WriteLine("Hello World!");
-        }
+        Console.WriteLine("Hello World!");
     }
 }

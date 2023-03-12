@@ -1,10 +1,7 @@
-using System;
+namespace Soltys.Library.TextAnalysis;
 
-namespace Soltys.Library.TextAnalysis
+[AttributeUsage(AttributeTargets.Field)]
+public class KeywordAttribute : Attribute
 {
-    [AttributeUsage(AttributeTargets.Field)]
-    public class KeywordAttribute : Attribute
-    {
 
-    }
 }

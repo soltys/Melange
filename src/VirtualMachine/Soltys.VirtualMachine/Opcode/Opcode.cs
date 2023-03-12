@@ -1,30 +1,29 @@
-namespace Soltys.VirtualMachine
+namespace Soltys.VirtualMachine;
+
+public enum Opcode : byte
 {
-    public enum Opcode : byte
-    {
-        Undefined,
+    Undefined,
 
-        //Memory Management
-        Load, 
-        Store,
-        List,
+    //Memory Management
+    Load, 
+    Store,
+    List,
 
-        //Math operations
-        Add,
-        Subtraction,
-        Multiplication,
-        Division,
+    //Math operations
+    Add,
+    Subtraction,
+    Multiplication,
+    Division,
 
-        //Boolean compare
-        Compare, //Compare [CompareKind: Enum]
+    //Boolean compare
+    Compare, //Compare [CompareKind: Enum]
 
-        //Branching
-        Return,
-        Call, //Call [MethodName: String]
-        Branch, //Branch [BranchKind: Enum] [Target: Int]
+    //Branching
+    Return,
+    Call, //Call [MethodName: String]
+    Branch, //Branch [BranchKind: Enum] [Target: Int]
 
-        //Special
-        Nop,
-        Custom
-    }
+    //Special
+    Nop,
+    Custom
 }

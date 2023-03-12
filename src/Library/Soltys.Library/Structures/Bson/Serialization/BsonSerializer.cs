@@ -1,15 +1,12 @@
-using System;
+namespace Soltys.Library.Bson;
 
-namespace Soltys.Library.Bson
+public static class BsonSerializer
 {
-    public static class BsonSerializer
+    public static BsonDocument Deserialize(ReadOnlySpan<byte> span)
     {
-        public static BsonDocument Deserialize(ReadOnlySpan<byte> span)
-        {
-            var (doc, _) = BsonDecoder.DecodeBsonDocument(span);
-            return doc;
-        }
-
-        public static byte[] Serialize(BsonDocument bsonDocument) => bsonDocument.GetBytes().ToArray();
+        var (doc, _) = BsonDecoder.DecodeBsonDocument(span);
+        return doc;
     }
+
+    public static byte[] Serialize(BsonDocument bsonDocument) => bsonDocument.GetBytes().ToArray();
 }

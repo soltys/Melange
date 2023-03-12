@@ -1,16 +1,12 @@
-using System.Collections.Generic;
-using System.IO;
+namespace Soltys.VirtualMachine;
 
-namespace Soltys.VirtualMachine
+internal class Assembler 
 {
-    internal class Assembler 
+    public void Assemble(Stream outputStream, IEnumerable<IInstruction> instructions)
     {
-        public void Assemble(Stream outputStream, IEnumerable<IInstruction> instructions)
+        foreach (var instruction in instructions)
         {
-            foreach (var instruction in instructions)
-            {
-                outputStream.Write(instruction.GetBytes());
-            }
+            outputStream.Write(instruction.GetBytes());
         }
     }
 }

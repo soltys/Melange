@@ -1,10 +1,9 @@
-namespace Soltys.Library
+namespace Soltys.Library;
+
+public class Error : Reason
 {
-    public class Error : Reason
+    public Error(string message)
     {
-        public Error(string message)
-        {
-            Message = message;
-        }
+        Message = message;
     }
 }

@@ -1,8 +1,7 @@
-namespace Soltys.Database
+namespace Soltys.Database;
+
+internal abstract class AstNode
 {
-    internal abstract class AstNode
-    {
-        public string Value { get; set; }
-        public override string ToString() => $"{Value}";
-    }
+    public string Value { get; set; }
+    public override string ToString() => $"{Value}";
 }

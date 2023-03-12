@@ -1,14 +1,13 @@
 using Xunit;
 
-namespace Soltys.Database.Test
+namespace Soltys.Database.Test;
+
+public class HeaderPageTests
 {
-    public class HeaderPageTests
+    [Fact]
+    public void HeaderMetadata_HasConstantString()
     {
-        [Fact]
-        public void HeaderMetadata_HasConstantString()
-        {
-            var sut = new HeaderMetadata(new byte[512], 0);
-            Assert.Equal("SOLTYSDB",sut.DatabaseName);
-        }
+        var sut = new HeaderMetadata(new byte[512], 0);
+        Assert.Equal("SOLTYSDB",sut.DatabaseName);
     }
 }

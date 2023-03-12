@@ -1,10 +1,9 @@
-namespace Soltys.VirtualMachine
-{
-    public class ListAddInstruction : ListInstruction
-    {
-        public override ListOperationKind Operation
-            => ListOperationKind.Add;
+namespace Soltys.VirtualMachine;
 
-        public override string ToString() => "list.add";
-    }
+public class ListAddInstruction : ListInstruction
+{
+    public override ListOperationKind Operation
+        => ListOperationKind.Add;
+
+    public override string ToString() => "list.add";
 }

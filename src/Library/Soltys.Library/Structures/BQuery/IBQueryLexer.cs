@@ -1,9 +1,6 @@
-using System.Collections.Generic;
+namespace Soltys.Library.BQuery;
 
-namespace Soltys.Library.Bson.BQuery
+internal interface IBQueryLexer
 {
-    internal interface IBQueryLexer
-    {
-        IEnumerable<BQueryToken> GetTokens();
-    }
+    IEnumerable<BQueryToken> GetTokens();
 }

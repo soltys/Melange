@@ -1,8 +1,7 @@
-namespace Soltys.Lisp.Compiler
+namespace Soltys.Lisp.Compiler;
+
+internal interface IAstNode
 {
-    internal interface IAstNode
-    {
-        void Accept(IAstVisitor visitor);
-        IAstNode Clone();
-    }
+    void Accept(IAstVisitor visitor);
+    IAstNode Clone();
 }

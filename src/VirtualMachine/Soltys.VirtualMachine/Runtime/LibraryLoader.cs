@@ -1,18 +1,15 @@
-using System;
-using System.Linq;
 using System.Reflection;
 using Soltys.VirtualMachine.Contracts;
 
-namespace Soltys.VirtualMachine
+namespace Soltys.VirtualMachine;
+
+internal class LibraryLoader
 {
-    internal class LibraryLoader
+    public static IVMLibrary LoadLibrary(string name)
     {
-        public static IVMLibrary LoadLibrary(string name)
-        {
-            var assembly = Assembly.Load(new AssemblyName(name));
-            var vmLibraryType = assembly.GetTypes().Single(t => t.IsPublic && typeof(IVMLibrary).IsAssignableFrom(t));
-            var vmLibrary = (IVMLibrary)Activator.CreateInstance(vmLibraryType);
-            return vmLibrary;
-        }
+        var assembly = Assembly.Load(new AssemblyName(name));
+        var vmLibraryType = assembly.GetTypes().Single(t => t.IsPublic && typeof(IVMLibrary).IsAssignableFrom(t));
+        var vmLibrary = (IVMLibrary)Activator.CreateInstance(vmLibraryType);
+        return vmLibrary;
     }
 }

@@ -1,25 +1,24 @@
 using Xunit;
 
-namespace Soltys.Database.Test.Cmd
+namespace Soltys.Database.Test.Cmd;
+
+public partial class ParserTests
 {
-    public partial class ParserTests
+    [Fact]
+    public void ParseStatement_Insert()
     {
-        [Fact]
-        public void ParseStatement_Insert()
+        var expectedAst = new AstInsertStatement()
         {
-            var expectedAst = new AstInsertStatement()
+            Location = new AstLocation() { Value = "soltysdb_kv" },
+            Values = new AstValue(new[]
             {
-                Location = new AstLocation() { Value = "soltysdb_kv" },
-                Values = new AstValue(new[]
-                {
-                    new AstExpression() {Value = "aaa"},
-                    new AstExpression() {Value = "bbb"}
-                })
-            };
+                new AstExpression() {Value = "aaa"},
+                new AstExpression() {Value = "bbb"}
+            })
+        };
 
-            AstAssert.Statement(expectedAst, "INSERT INTO soltysdb_kv VALUES (aaa,bbb)");
-        }
-
-
+        AstAssert.Statement(expectedAst, "INSERT INTO soltysdb_kv VALUES (aaa,bbb)");
     }
+
+
 }

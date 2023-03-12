@@ -1,54 +1,51 @@
-using System;
-using System.IO;
 using Soltys.Database;
 
 // ReSharper disable once CheckNamespace
-namespace Soltys
+namespace Soltys;
+
+public class SoltysDb : IDisposable
 {
-    public class SoltysDb : IDisposable
+    private DatabaseData data;
+    public string FileName { get; }
+
+    private const string InMemoryDatabaseId = ":memory:";
+    public bool IsInMemoryDatabase => FileName == SoltysDb.InMemoryDatabaseId;
+
+    public IKeyValueStore KV { get; set; }
+
+    public SoltysDb()
     {
-        private DatabaseData data;
-        public string FileName { get; }
+        FileName = SoltysDb.InMemoryDatabaseId;
+        Initialize();
+    }
 
-        private const string InMemoryDatabaseId = ":memory:";
-        public bool IsInMemoryDatabase => FileName == SoltysDb.InMemoryDatabaseId;
+    public SoltysDb(string fileName)
+    {
+        FileName = fileName;
+        Initialize();
+    }
 
-        public IKeyValueStore KV { get; set; }
-
-        public SoltysDb()
+    private void Initialize()
+    {
+        if (IsInMemoryDatabase)
         {
-            FileName = SoltysDb.InMemoryDatabaseId;
-            Initialize();
+            this.data = new DatabaseData(new MemoryStream());
+        }
+        else
+        {
+            this.data = new DatabaseData(new FileStream(FileName, FileMode.OpenOrCreate));
         }
 
-        public SoltysDb(string fileName)
+        if (this.data.IsNew())
         {
-            FileName = fileName;
-            Initialize();
+            this.data.WriteToDb(new HeaderPage());
         }
 
-        private void Initialize()
-        {
-            if (IsInMemoryDatabase)
-            {
-                this.data = new DatabaseData(new MemoryStream());
-            }
-            else
-            {
-                this.data = new DatabaseData(new FileStream(FileName, FileMode.OpenOrCreate));
-            }
-
-            if (this.data.IsNew())
-            {
-                this.data.WriteToDb(new HeaderPage());
-            }
-
-            KV = new KeyValueStore(this.data);
-        }
+        KV = new KeyValueStore(this.data);
+    }
      
-        public void Dispose()
-        {
-            this.data?.Dispose();
-        }
+    public void Dispose()
+    {
+        this.data?.Dispose();
     }
 }

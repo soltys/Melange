@@ -1,48 +1,47 @@
 #nullable enable
-using System.Linq;
+using Soltys.Library.Bson;
 
-namespace Soltys.Library.Bson.BQuery
+namespace Soltys.Library.BQuery;
+
+internal class BQueryExecutor : IBQueryExecutor
 {
-    internal class BQueryExecutor : IBQueryExecutor
+    public BsonValue ExecuteValueQuery(BsonDocument document, AstValueAccess query)
     {
-        public BsonValue ExecuteValueQuery(BsonDocument document, AstValueAccess query)
+        AstValueAccess? currentQuery = query;
+        Element currentElement = default;
+
+        while (currentQuery != null)
         {
-            AstValueAccess? currentQuery = query;
-            Element currentElement = default;
-
-            while (currentQuery != null)
+            if (currentQuery is AstArrayAccess aa)
             {
-                if (currentQuery is AstArrayAccess aa)
+                currentElement = document.Elements.First(x => x.Name == aa.ElementName);
+
+                if (currentElement.Value is BsonArray bsonArray)
                 {
-                    currentElement = document.Elements.First(x => x.Name == aa.ElementName);
+                    var arrayValue = bsonArray[aa.ArrayIndex];
 
-                    if (currentElement.Value is BsonArray bsonArray)
-                    {
-                        var arrayValue = bsonArray[aa.ArrayIndex];
-
-                        //we are repacking this value into element for rest code to work
-                        currentElement = new Element(aa.ArrayIndex.ToString(), arrayValue);
-                    }
-
-                    if (currentElement.Value is BsonDocument newDocument)
-                    {
-                        document = newDocument;
-                    }
-                    currentQuery = currentQuery.SubAccess;
-                }
-                else if (currentQuery is { } va)
-                {
-                    currentElement = document.Elements.First(x => x.Name == va.ElementName);
-                    if (currentElement.Value is BsonDocument newDocument)
-                    {
-                        document = newDocument;
-                    }
-                    currentQuery = currentQuery.SubAccess;
+                    //we are repacking this value into element for rest code to work
+                    currentElement = new Element(aa.ArrayIndex.ToString(), arrayValue);
                 }
 
+                if (currentElement.Value is BsonDocument newDocument)
+                {
+                    document = newDocument;
+                }
+                currentQuery = currentQuery.SubAccess;
+            }
+            else if (currentQuery is { } va)
+            {
+                currentElement = document.Elements.First(x => x.Name == va.ElementName);
+                if (currentElement.Value is BsonDocument newDocument)
+                {
+                    document = newDocument;
+                }
+                currentQuery = currentQuery.SubAccess;
             }
 
-            return currentElement.Value;
         }
+
+        return currentElement.Value;
     }
 }

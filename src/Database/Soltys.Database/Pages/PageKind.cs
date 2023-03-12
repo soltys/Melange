@@ -1,10 +1,9 @@
-namespace Soltys.Database
+namespace Soltys.Database;
+
+public enum PageKind : byte
 {
-    public enum PageKind : byte
-    {
-        Undefined = 0,
-        Header,
-        DataPage,
-        KeyValue
-    }
+    Undefined = 0,
+    Header,
+    DataPage,
+    KeyValue
 }

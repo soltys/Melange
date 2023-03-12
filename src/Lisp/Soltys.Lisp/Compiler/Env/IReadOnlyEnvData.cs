@@ -1,17 +1,14 @@
-using System.Collections.Generic;
+namespace Soltys.Lisp.Compiler;
 
-namespace Soltys.Lisp.Compiler
+internal interface IReadOnlyEnvData
 {
-    internal interface IReadOnlyEnvData
+    IReadOnlyDictionary<AstSymbol, IAstNode> Defines
     {
-        IReadOnlyDictionary<AstSymbol, IAstNode> Defines
-        {
-            get;
-        }
+        get;
+    }
 
-        IReadOnlyCollection<string> CoreFunctionNames
-        {
-            get;
-        }
+    IReadOnlyCollection<string> CoreFunctionNames
+    {
+        get;
     }
 }

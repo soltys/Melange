@@ -1,8 +1,7 @@
-namespace Soltys.Library.TextAnalysis
+namespace Soltys.Library.TextAnalysis;
+
+public enum Associativity
 {
-    public enum Associativity
-    {
-        Left,
-        Right
-    }
+    Left,
+    Right
 }

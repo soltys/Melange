@@ -1,42 +1,39 @@
-using System;
+namespace Soltys.Lisp;
 
-namespace Soltys.Lisp
+internal class Repl
 {
-    internal class Repl
+    private readonly LineEditor lineEdit;
+
+    public Repl()
     {
-        private readonly LineEditor lineEdit;
+        this.lineEdit = new LineEditor("slisp");
+    }
 
-        public Repl()
+    public void Run()
+    {
+        PrintWelcome();
+        using var slisp = new SoltysLispVM();
+        slisp.Initialize();
+        while (true)
         {
-            this.lineEdit = new LineEditor("slisp");
-        }
-
-        public void Run()
-        {
-            PrintWelcome();
-            using var slisp = new SoltysLispVM();
-            slisp.Initialize();
-            while (true)
+            var input = this.lineEdit.Edit("slisp> ", "");
+            if (input.Trim() == "!exit")
             {
-                var input = this.lineEdit.Edit("slisp> ", "");
-                if (input.Trim() == "!exit")
-                {
-                    break;
-                }
-
-                var result = slisp.Do(input);
-                Console.Write($"<-- {result}");
-                Console.WriteLine();
+                break;
             }
-        }
 
-        private void PrintWelcome()
-        {
-            Console.WriteLine("+================================+");
-            Console.WriteLine("| Welcome to Soltys.Lisp (slisp) |");
-            Console.WriteLine("+================================+");
-            Console.WriteLine("To exit enter !exit");
+            var result = slisp.Do(input);
+            Console.Write($"<-- {result}");
             Console.WriteLine();
         }
+    }
+
+    private void PrintWelcome()
+    {
+        Console.WriteLine("+================================+");
+        Console.WriteLine("| Welcome to Soltys.Lisp (slisp) |");
+        Console.WriteLine("+================================+");
+        Console.WriteLine("To exit enter !exit");
+        Console.WriteLine();
     }
 }

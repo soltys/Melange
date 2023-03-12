@@ -1,9 +1,8 @@
-namespace Soltys.VirtualMachine
+namespace Soltys.VirtualMachine;
+
+public enum CompareKind
 {
-    public enum CompareKind
-    {
-        Equals,
-        GreaterThan,
-        LessThan,
-    }
+    Equals,
+    GreaterThan,
+    LessThan,
 }

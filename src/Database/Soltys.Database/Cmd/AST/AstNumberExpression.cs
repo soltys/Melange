@@ -1,7 +1,6 @@
-namespace Soltys.Database
+namespace Soltys.Database;
+
+internal class AstNumberExpression : AstExpression, IAstNode
 {
-    internal class AstNumberExpression : AstExpression, IAstNode
-    {
-        public void Accept(IAstVisitor visitor) => visitor.VisitNumberExpression(this);
-    }
+    public void Accept(IAstVisitor visitor) => visitor.VisitNumberExpression(this);
 }

@@ -1,6 +1,5 @@
-namespace Soltys.Forest.Repository
+namespace Soltys.Forest.Repository;
+
+class DbRepository : IDbRepository
 {
-    class DbRepository : IDbRepository
-    {
-    }
 }

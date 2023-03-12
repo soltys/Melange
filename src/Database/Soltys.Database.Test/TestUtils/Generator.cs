@@ -1,16 +1,12 @@
-using System;
-using System.Collections.Generic;
+namespace Soltys.Database.Test.TestUtils;
 
-namespace Soltys.Database.Test.TestUtils
+internal class Generator
 {
-    internal class Generator
+    public static IEnumerable<KeyValuePair<string, string>> GenerateKeyValuesPairs(int count)
     {
-        public static IEnumerable<KeyValuePair<string, string>> GenerateKeyValuesPairs(int count)
+        for (int i = 0; i < count; i++)
         {
-            for (int i = 0; i < count; i++)
-            {
-                yield return new KeyValuePair<string, string>(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
-            }
+            yield return new KeyValuePair<string, string>(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
         }
     }
 }

@@ -1,9 +1,8 @@
-namespace Soltys.VirtualMachine
+namespace Soltys.VirtualMachine;
+
+public enum BranchKind : byte
 {
-    public enum BranchKind : byte
-    {
-        Jump,
-        IfTrue,
-        IfFalse,
-    }
+    Jump,
+    IfTrue,
+    IfFalse,
 }

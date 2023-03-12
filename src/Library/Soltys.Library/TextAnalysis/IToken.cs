@@ -1,14 +1,13 @@
-namespace Soltys.Library.TextAnalysis
+namespace Soltys.Library.TextAnalysis;
+
+public interface IToken<out TTokenKind>
 {
-    public interface IToken<out TTokenKind>
+    public TTokenKind TokenKind
     {
-        public TTokenKind TokenKind
-        {
-            get;
-        }
-        public string Value
-        {
-            get;
-        }
+        get;
+    }
+    public string Value
+    {
+        get;
     }
 }

@@ -1,7 +1,6 @@
-namespace Soltys.Library.Bson.BQuery
+namespace Soltys.Library.BQuery;
+
+internal interface IBQueryParser
 {
-    internal interface IBQueryParser
-    {
-        AstValueAccess ParseValueQuery();
-    }
+    AstValueAccess ParseValueQuery();
 }

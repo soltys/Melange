@@ -1,48 +1,45 @@
-using System;
+namespace Soltys.Library.Bson;
 
-namespace Soltys.Library.Bson
+public class BsonInteger : BsonValue
 {
-    public class BsonInteger : BsonValue
+    public override int GetHashCode() => Value;
+
+    public int Value
     {
-        public override int GetHashCode() => Value;
+        get;
+    }
 
-        public int Value
+    public BsonInteger(int value)
+    {
+        Value = value;
+    }
+
+    public override ReadOnlySpan<byte> GetBytes() => BitConverter.GetBytes(Value);
+    internal override ElementType Type => ElementType.Integer32;
+    public override string ToString() => Value.ToString();
+
+    public static bool operator ==(BsonInteger lhs, BsonInteger rhs) => lhs?.Equals((object)rhs) ?? ReferenceEquals(rhs, null);
+    public static bool operator !=(BsonInteger lhs, BsonInteger rhs) => !(lhs == rhs);
+
+    protected bool Equals(BsonInteger other) => Value == other.Value;
+
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(null, obj))
         {
-            get;
+            return false;
         }
 
-        public BsonInteger(int value)
+        if (ReferenceEquals(this, obj))
         {
-            Value = value;
+            return true;
         }
 
-        public override ReadOnlySpan<byte> GetBytes() => BitConverter.GetBytes(Value);
-        internal override ElementType Type => ElementType.Integer32;
-        public override string ToString() => Value.ToString();
-
-        public static bool operator ==(BsonInteger lhs, BsonInteger rhs) => lhs?.Equals((object)rhs) ?? ReferenceEquals(rhs, null);
-        public static bool operator !=(BsonInteger lhs, BsonInteger rhs) => !(lhs == rhs);
-
-        protected bool Equals(BsonInteger other) => Value == other.Value;
-
-        public override bool Equals(object obj)
+        if (obj.GetType() != GetType())
         {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            if (obj.GetType() != GetType())
-            {
-                return false;
-            }
-
-            return Equals((BsonInteger)obj);
+            return false;
         }
+
+        return Equals((BsonInteger)obj);
     }
 }

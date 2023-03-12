@@ -1,6 +1,5 @@
-namespace Soltys.Forest.Repository
+namespace Soltys.Forest.Repository;
+
+internal interface IDbRepository
 {
-    internal interface IDbRepository
-    {
-    }
 }

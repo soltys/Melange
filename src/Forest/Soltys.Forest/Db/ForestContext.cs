@@ -1,44 +1,42 @@
-using System;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
-namespace Soltys.Forest.Db
+namespace Soltys.Forest.Db;
+
+internal class ForestContext : DbContext
 {
-    internal class ForestContext : DbContext
+    private readonly string connectionString;
+
+    public ForestContext()
     {
-        private readonly string connectionString;
+        SqliteConnectionStringBuilder sb =
+            new()
+            {
+                DataSource = "forest.db",
+                Mode = SqliteOpenMode.ReadWriteCreate
+            };
 
-        public ForestContext()
-        {
-            SqliteConnectionStringBuilder sb =
-                new()
-                {
-                    DataSource = "forest.db",
-                    Mode = SqliteOpenMode.ReadWriteCreate
-                };
+        this.connectionString = sb.ToString();
+    }
 
-            this.connectionString = sb.ToString();
-        }
+    public ForestContext(string connectionString)
+    {
+        this.connectionString = connectionString;
+    }
+    public DbSet<DbKeyValue>? KeyValues
+    {
+        get;
+        set;
+    }
 
-        public ForestContext(string connectionString)
-        {
-            this.connectionString = connectionString;
-        }
-        public DbSet<DbKeyValue>? KeyValues
-        {
-            get;
-            set;
-        }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
+        optionsBuilder
+            .UseSqlite(this.connectionString)
+            .LogTo(Console.WriteLine);
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
-            optionsBuilder
-                .UseSqlite(this.connectionString)
-                .LogTo(Console.WriteLine);
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ForestContext).Assembly);
-        }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ForestContext).Assembly);
     }
 }

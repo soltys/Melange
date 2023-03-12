@@ -1,10 +1,7 @@
-using System;
+namespace Soltys.VirtualMachine;
 
-namespace Soltys.VirtualMachine
+public interface IInstruction
 {
-    public interface IInstruction
-    {
-        void Accept(IRuntimeVisitor visitor);
-        ReadOnlySpan<byte> GetBytes();
-    }
+    void Accept(IRuntimeVisitor visitor);
+    ReadOnlySpan<byte> GetBytes();
 }

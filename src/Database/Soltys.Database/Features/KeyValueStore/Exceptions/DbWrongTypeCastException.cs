@@ -1,23 +1,20 @@
-using System;
+namespace Soltys.Database;
 
-namespace Soltys.Database
+internal class DbWrongTypeCastException : Exception
 {
-    internal class DbWrongTypeCastException : Exception
+    public string Key
     {
-        public string Key
-        {
-            get;
-        }
+        get;
+    }
 
-        public Type KeyType
-        {
-            get;
-        }
+    public Type KeyType
+    {
+        get;
+    }
 
-        public DbWrongTypeCastException(string key, Type keyType) : base($"Key {key} was wrongly casted, {key} is type of {keyType}")
-        {
-            Key = key;
-            KeyType = keyType;
-        }
+    public DbWrongTypeCastException(string key, Type keyType) : base($"Key {key} was wrongly casted, {key} is type of {keyType}")
+    {
+        Key = key;
+        KeyType = keyType;
     }
 }

@@ -1,13 +1,10 @@
-using System.Collections.Generic;
+namespace Soltys.Library.TextAnalysis;
 
-namespace Soltys.Library.TextAnalysis
+public interface ILexer<out TToken>
 {
-    public interface ILexer<out TToken>
+    IEnumerable<TToken> GetTokens();
+    TToken Empty
     {
-        IEnumerable<TToken> GetTokens();
-        TToken Empty
-        {
-            get;
-        }
+        get;
     }
 }

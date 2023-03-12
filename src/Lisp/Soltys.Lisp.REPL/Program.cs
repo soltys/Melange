@@ -1,8 +1,7 @@
-namespace Soltys.Lisp
+namespace Soltys.Lisp;
+
+internal class Program
 {
-    internal class Program
-    {
-        private static void Main(string[] args)
-            => new Repl().Run();
-    }
+    private static void Main(string[] args)
+        => new Repl().Run();
 }

@@ -1,6 +1,5 @@
-namespace Soltys.VirtualMachine
+namespace Soltys.VirtualMachine;
+
+internal class LoadTypeDecodeException : OpcodeDecodeException
 {
-    internal class LoadTypeDecodeException : OpcodeDecodeException
-    {
-    }
 }

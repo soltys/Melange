@@ -1,89 +1,85 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Text;
 
-namespace Soltys.VirtualMachine
+namespace Soltys.VirtualMachine;
+
+internal static class InstructionDecoder
 {
-    internal static class InstructionDecoder
+    public static List<IInstruction> DecodeStream(Stream source)
     {
-        public static List<IInstruction> DecodeStream(Stream source)
+        var instructions = new List<IInstruction>();
+
+        var bytes = ReadBytes(source);
+
+        int readIndex = 0;
+
+        while (readIndex < bytes.Length)
         {
-            var instructions = new List<IInstruction>();
+            var (instruction, bytesRead) = Decode(bytes.Slice(readIndex));
+            readIndex += bytesRead;
 
-            var bytes = ReadBytes(source);
-
-            int readIndex = 0;
-
-            while (readIndex < bytes.Length)
-            {
-                var (instruction, bytesRead) = Decode(bytes.Slice(readIndex));
-                readIndex += bytesRead;
-
-                instructions.Add(instruction);
-            }
-
-            return instructions;
+            instructions.Add(instruction);
         }
 
-        private static Span<byte> ReadBytes(Stream source)
+        return instructions;
+    }
+
+    private static Span<byte> ReadBytes(Stream source)
+    {
+        using var memoryStream = new MemoryStream();
+        source.CopyTo(memoryStream);
+        return memoryStream.ToArray().AsSpan();
+    }
+
+    public static (IInstruction, int) Decode(ReadOnlySpan<byte> span)
+    {
+        if (span.Length < sizeof(Opcode))
         {
-            using var memoryStream = new MemoryStream();
-            source.CopyTo(memoryStream);
-            return memoryStream.ToArray().AsSpan();
+            throw new ArgumentException("Memory size is to small for required SerializeOpcode to exist");
         }
 
-        public static (IInstruction, int) Decode(ReadOnlySpan<byte> span)
+        var opcode = OpcodeHelper.ToOpcode(span.Slice(0, sizeof(Opcode)));
+
+        var (instruction, bytesRead) = OpcodeToInstruction(span.Slice(sizeof(Opcode)), opcode);
+        return (instruction, bytesRead + sizeof(Opcode));
+    }
+
+    private static (IInstruction, int) OpcodeToInstruction(ReadOnlySpan<byte> span, Opcode opcode) =>
+        opcode switch
         {
-            if (span.Length < sizeof(Opcode))
-            {
-                throw new ArgumentException("Memory size is to small for required SerializeOpcode to exist");
-            }
+            //Memory management
+            Opcode.Store => StoreInstruction.Create(span),
+            Opcode.Load => LoadInstruction.Create(span),
+            Opcode.List => ListInstruction.Create(span),
 
-            var opcode = OpcodeHelper.ToOpcode(span.Slice(0, sizeof(Opcode)));
+            //Math operation
+            Opcode.Add => AddInstruction.Create(span),
+            Opcode.Subtraction => SubtractionInstruction.Create(span),
+            Opcode.Multiplication => MultiplicationInstruction.Create(span),
+            Opcode.Division => DivisionInstruction.Create(span),
 
-            var (instruction, bytesRead) = OpcodeToInstruction(span.Slice(sizeof(Opcode)), opcode);
-            return (instruction, bytesRead + sizeof(Opcode));
-        }
+            //Boolean compare
+            Opcode.Compare => CompareInstruction.Create(span),
 
-        private static (IInstruction, int) OpcodeToInstruction(ReadOnlySpan<byte> span, Opcode opcode) =>
-            opcode switch
-            {
-                //Memory management
-                Opcode.Store => StoreInstruction.Create(span),
-                Opcode.Load => LoadInstruction.Create(span),
-                Opcode.List => ListInstruction.Create(span),
+            //Branching
+            Opcode.Call => CallInstruction.Create(span),
+            Opcode.Return => ReturnInstruction.Create(span),
+            Opcode.Branch => BranchInstruction.Create(span),
 
-                //Math operation
-                Opcode.Add => AddInstruction.Create(span),
-                Opcode.Subtraction => SubtractionInstruction.Create(span),
-                Opcode.Multiplication => MultiplicationInstruction.Create(span),
-                Opcode.Division => DivisionInstruction.Create(span),
+            //Special
+            Opcode.Nop => NopInstruction.Create(span),
+            Opcode.Custom => throw new OpcodeDecodeException(),
 
-                //Boolean compare
-                Opcode.Compare => CompareInstruction.Create(span),
+            Opcode.Undefined => throw new OpcodeDecodeException(),
+            _ => throw new OpcodeDecodeException()
+        };
 
-                //Branching
-                Opcode.Call => CallInstruction.Create(span),
-                Opcode.Return => ReturnInstruction.Create(span),
-                Opcode.Branch => BranchInstruction.Create(span),
+    public static (string, int) DecodeString(ReadOnlySpan<byte> span)
+    {
+        var lengthBytesRead = sizeof(int);
+        var stringLength = BitConverter.ToInt32(span);
+        var stringItself = Encoding.UTF8.GetString(span.Slice(lengthBytesRead, stringLength));
 
-                //Special
-                Opcode.Nop => NopInstruction.Create(span),
-                Opcode.Custom => throw new OpcodeDecodeException(),
-
-                Opcode.Undefined => throw new OpcodeDecodeException(),
-                _ => throw new OpcodeDecodeException()
-            };
-
-        public static (string, int) DecodeString(ReadOnlySpan<byte> span)
-        {
-            var lengthBytesRead = sizeof(int);
-            var stringLength = BitConverter.ToInt32(span);
-            var stringItself = Encoding.UTF8.GetString(span.Slice(lengthBytesRead, stringLength));
-
-            var totalBytesRead = lengthBytesRead + stringItself.Length;
-            return (stringItself, totalBytesRead);
-        }
+        var totalBytesRead = lengthBytesRead + stringItself.Length;
+        return (stringItself, totalBytesRead);
     }
 }

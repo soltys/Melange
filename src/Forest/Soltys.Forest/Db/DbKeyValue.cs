@@ -1,19 +1,16 @@
-using System;
+namespace Soltys.Forest.Db;
 
-namespace Soltys.Forest.Db
+public class DbKeyValue
 {
-    public class DbKeyValue
+    public Guid Key
     {
-        public Guid Key
-        {
-            get;
-            set;
-        }
+        get;
+        set;
+    }
 
-        public string? Value
-        {
-            get;
-            set;
-        }
+    public string? Value
+    {
+        get;
+        set;
     }
 }

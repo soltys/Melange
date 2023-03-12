@@ -1,10 +1,9 @@
-namespace Soltys.Library
+namespace Soltys.Library;
+
+public class Success : Reason
 {
-    public class Success : Reason
+    public Success(string message)
     {
-        public Success(string message)
-        {
-            Message = message;
-        }
+        Message = message;
     }
 }

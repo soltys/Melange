@@ -1,10 +1,9 @@
-namespace Soltys.VirtualMachine
+namespace Soltys.VirtualMachine;
+
+public enum StoreKind : byte
 {
-    public enum StoreKind : byte
-    {
-        Local,
-        Argument,
-        Field,
-        StaticField
-    }
+    Local,
+    Argument,
+    Field,
+    StaticField
 }

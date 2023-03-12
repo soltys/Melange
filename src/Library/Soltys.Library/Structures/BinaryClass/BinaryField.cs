@@ -1,51 +1,48 @@
-using System;
+namespace Soltys.Library;
 
-namespace Soltys.Library
+public abstract class BinaryField
 {
-    public abstract class BinaryField
+    protected Memory<byte> FieldSpan;
+    private readonly byte[] memoryHandler;
+
+    protected BinaryField(byte[] memory, int offset, int fieldLength)
     {
-        protected Memory<byte> FieldSpan;
-        private readonly byte[] memoryHandler;
-
-        protected BinaryField(byte[] memory, int offset, int fieldLength)
+        if (offset >= memory.Length)
         {
-            if (offset >= memory.Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(offset));
-            }
-
-            Offset = offset;
-            FieldLength = fieldLength;
-            this.memoryHandler = memory;
-            this.FieldSpan = new Memory<byte>(this.memoryHandler, Offset, fieldLength);
+            throw new ArgumentOutOfRangeException(nameof(offset));
         }
-        public int FieldLength { get; }
 
-        public int Offset { get; private set; }
+        Offset = offset;
+        FieldLength = fieldLength;
+        this.memoryHandler = memory;
+        this.FieldSpan = new Memory<byte>(this.memoryHandler, Offset, fieldLength);
+    }
+    public int FieldLength { get; }
 
-        public int FieldEnd => Offset + FieldLength;
+    public int Offset { get; private set; }
 
-        public BinaryField? Next { get; set; }
+    public int FieldEnd => Offset + FieldLength;
 
-        public void Move(int newOffset)
+    public BinaryField? Next { get; set; }
+
+    public void Move(int newOffset)
+    {
+        if (newOffset >= this.memoryHandler.Length)
         {
-            if (newOffset >= this.memoryHandler.Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(newOffset));
-            }
-
-            if (Next != null)
-            {
-                var newFieldEnd = newOffset + FieldLength;
-                Next.Move(newFieldEnd);
-            }
-
-            var newSpan = new Memory<byte>(this.memoryHandler, newOffset, FieldLength);
-
-            this.FieldSpan.CopyTo(newSpan);
-
-            Offset = newOffset;
-            this.FieldSpan = newSpan;
+            throw new ArgumentOutOfRangeException(nameof(newOffset));
         }
+
+        if (Next != null)
+        {
+            var newFieldEnd = newOffset + FieldLength;
+            Next.Move(newFieldEnd);
+        }
+
+        var newSpan = new Memory<byte>(this.memoryHandler, newOffset, FieldLength);
+
+        this.FieldSpan.CopyTo(newSpan);
+
+        Offset = newOffset;
+        this.FieldSpan = newSpan;
     }
 }

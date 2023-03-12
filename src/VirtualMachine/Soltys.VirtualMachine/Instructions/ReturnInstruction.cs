@@ -1,13 +1,10 @@
-using System;
+namespace Soltys.VirtualMachine;
 
-namespace Soltys.VirtualMachine
+public class ReturnInstruction : IInstruction
 {
-    public class ReturnInstruction : IInstruction
-    {
-        public static (ReturnInstruction, int) Create(ReadOnlySpan<byte> span) => (new ReturnInstruction(), 0);
-        public void Accept(IRuntimeVisitor visitor) => visitor.VisitReturn(this);
+    public static (ReturnInstruction, int) Create(ReadOnlySpan<byte> span) => (new ReturnInstruction(), 0);
+    public void Accept(IRuntimeVisitor visitor) => visitor.VisitReturn(this);
 
-        public ReadOnlySpan<byte> GetBytes() => Opcode.Return.GetBytes();
-        public override string ToString() => "ret";
-    }
+    public ReadOnlySpan<byte> GetBytes() => Opcode.Return.GetBytes();
+    public override string ToString() => "ret";
 }

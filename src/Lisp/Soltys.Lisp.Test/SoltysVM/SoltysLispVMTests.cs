@@ -1,46 +1,44 @@
-using System.Collections.Generic;
 using Xunit;
 
-namespace Soltys.Lisp.Test
+namespace Soltys.Lisp.Test.SoltysVM;
+
+public partial class SoltysLispVMTests
 {
-    public partial class SoltysLispVMTests
+    [Fact]
+    public void Do_DoNotHoldLastValueBetweenCalls()
     {
-        [Fact]
-        public void Do_DoNotHoldLastValueBetweenCalls()
-        {
-            using var lisp = new SoltysLispVM();
+        using var lisp = new SoltysLispVM();
 
-            var result = lisp.Do(@"(+ 10 1)");
-            Assert.Equal(11, (int)result);
-            var newResult = lisp.Do(@"()");
-            Assert.Equal("nil", (string)newResult);
-        }
+        var result = lisp.Do(@"(+ 10 1)");
+        Assert.Equal(11, (int)result);
+        var newResult = lisp.Do(@"()");
+        Assert.Equal("nil", (string)newResult);
+    }
 
-        [Fact]
-        public void Do_Println_ResultIsNil()
-        {
-            using var lisp = new SoltysLispVM();
-            lisp.Initialize();
+    [Fact]
+    public void Do_Println_ResultIsNil()
+    {
+        using var lisp = new SoltysLispVM();
+        lisp.Initialize();
 
-            var result = lisp.Do(@"(println ""Hello, World!"")");
+        var result = lisp.Do(@"(println ""Hello, World!"")");
 
-            Assert.Equal("nil", result);
-        }
+        Assert.Equal("nil", result);
+    }
 
-        [Theory]
-        [InlineData("'(1 2 3)")]
-        [InlineData("(quote (1 2 3))")]
-        public void Do_QuoteFunction_ResultIsListItself(string input)
-        {
-            using var lisp = new SoltysLispVM();
-            lisp.Initialize();
+    [Theory]
+    [InlineData("'(1 2 3)")]
+    [InlineData("(quote (1 2 3))")]
+    public void Do_QuoteFunction_ResultIsListItself(string input)
+    {
+        using var lisp = new SoltysLispVM();
+        lisp.Initialize();
 
-            var result = lisp.Do(input);
+        var result = lisp.Do(input);
 
-            Assert.IsType<List<object>>(result);
-            var theList = (List<object>)result;
-            Assert.Equal(3, theList.Count);
-            Assert.Equal(new object[] { 1, 2, 3 }, theList);
-        }
+        Assert.IsType<List<object>>(result);
+        var theList = (List<object>)result;
+        Assert.Equal(3, theList.Count);
+        Assert.Equal(new object[] { 1, 2, 3 }, theList);
     }
 }

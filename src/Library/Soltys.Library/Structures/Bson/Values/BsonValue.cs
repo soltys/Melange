@@ -1,14 +1,11 @@
-using System;
+namespace Soltys.Library.Bson;
 
-namespace Soltys.Library.Bson
+public abstract class BsonValue
 {
-    public abstract class BsonValue
+    internal abstract ElementType Type
     {
-        internal abstract ElementType Type
-        {
-            get;
-        }
-
-        public abstract ReadOnlySpan<byte> GetBytes();
+        get;
     }
+
+    public abstract ReadOnlySpan<byte> GetBytes();
 }
